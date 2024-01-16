@@ -1,0 +1,41 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id         String  @id @default(cuid())
+  phone      String  @unique
+  name       String
+  password   String
+  image      Image?  @relation(fields: [imageId], references: [id])
+  role       Role    @default(USER)
+  isVerified Boolean @default(false)
+
+  verificationCode Int?
+  verificationDate DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  imageId   String?
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+model Image {
+  id         String   @id @default(cuid())
+  url        String   @db.Text
+  key        String   @db.Text
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  User User[]
+}
