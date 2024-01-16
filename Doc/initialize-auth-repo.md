@@ -1,0 +1,1 @@
+[Initialized Atuh shadcn prisma Repo](https://github.com/nextArtDev/grider-next14/commit/b374b7be0f333f3563571d82788974e89612578e)
