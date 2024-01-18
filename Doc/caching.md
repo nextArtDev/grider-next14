@@ -105,3 +105,22 @@ export async function generateStaticParams() {
   });
 }
 ```
+
+## Important note about caching auth()
+
+When we define a header and that header fetches server side _await auth()_, in this situation next-auth modifies cookies and make the page dynamic.
+
+### static caching using auth()
+
+we create a client-side header and authenticate user by __useSession()__ and we handle delay by _session.status==='loading'_
+
+```typescript
+const session = useSession()
+
+let authContent: React.ReactNode;
+if(session.status ==='loading'){
+  authContent=null
+} else if (session.data?.user) {
+  //...
+}
+```
