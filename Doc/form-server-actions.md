@@ -188,4 +188,4 @@ export async function editSnippet(id: number, code: string) {
   redirect(`/snippets/${id}`);
 }
 
-```
+``` 

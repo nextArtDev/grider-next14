@@ -49,3 +49,9 @@ export async function createTopic(){
 }
 
 ```
+
+## how we call them
+
+```typescript
+ redirect(paths.topicShow(topic.slug));
+ ```
