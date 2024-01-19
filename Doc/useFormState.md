@@ -333,3 +333,24 @@ export async function createTopic(
 }
 
 ```
+
+## How we send additional information with useFormState
+
+we add this _.bind_ method to our useFormState action and _accept that as a first argument in server action_
+
+```typescript
+const [formState, action]= useFormState(actions.createPost.bind(null, slub),{
+  errors:{}
+})
+
+'use server'
+
+export async function createPost(
+  slug:string,
+  formState:CreatePostFormState,
+  formData:FormData
+):Promise<CreatePostFormState>{
+  return ...
+}
+
+```
