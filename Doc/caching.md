@@ -124,3 +124,42 @@ if(session.status ==='loading'){
   //...
 }
 ```
+
+## Request Memoization
+
+- The cache memoization system is cleared out between incoming requests
+- Automatically used with build-in 'fetch' function.
+- Can be used with other functions(like db queries) by using the '__cache__' function
+
+## Deduplicating Requests with __cache__ function
+
+We just wrap all the query function with _cache_ which is from _react_
+_cache((postId: string): Promise<CommentWithAuthor[]> => )_
+
+```typescript
+import type { Comment } from '@prisma/client';
+import { cache } from 'react';
+import { db } from '@/db';
+
+export type CommentWithAuthor = Comment & {
+  user: { name: string | null; image: string | null };
+};
+
+export const fetchCommentsByPostId = cache(
+  (postId: string): Promise<CommentWithAuthor[]> => {
+    return db.comment.findMany({
+      where: { postId },
+      include: {
+        user: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+    });
+  }
+);
+
+```
+
