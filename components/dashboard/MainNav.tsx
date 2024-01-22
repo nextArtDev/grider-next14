@@ -20,7 +20,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { useState } from 'react'
-import RouteSwitcher from './RouteSwitcher'
+import RouteSwitcher from './StoreMenu'
+import StoreMenu from './StoreMenu'
 
 export function MainNav({
   className,
@@ -85,7 +86,7 @@ export function MainNav({
       {...props}
     >
       <div className="md:hidden">
-        <RouteSwitcher routes={routes} />
+        <StoreMenu routes={routes} />
       </div>
       {routes.map((route) => (
         <Link

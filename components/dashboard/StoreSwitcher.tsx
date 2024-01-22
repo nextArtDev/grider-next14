@@ -59,7 +59,7 @@ export default function StoreSwitcher({
   //instead of just selecting, it routes to our store, so we should pass our store id, as a value for routing
   const onStoreSelect = (store: { value: string; label: string }) => {
     setOpen(false)
-    router.push(`/${store.value}`)
+    router.push(`/dashboard/${store.value}`)
   }
 
   return (
