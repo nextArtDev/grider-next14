@@ -6,7 +6,7 @@ import { useParams, usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 import { Check, ChevronsUpDown } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   Command,
   CommandEmpty,
@@ -93,6 +93,7 @@ export function MainNav({
           key={route.href}
           href={route.href}
           className={cn(
+            buttonVariants({ variant: 'ghost' }),
             'hidden md:block text-sm font-medium transition-colors hover:text-primary',
             route.active
               ? 'text-black underline underline-offset-8 dark:text-white'

@@ -26,8 +26,8 @@ export default async function SetupLayout({
   })
   // const store = getStoreById(params.storeId, userId)
 
-  if (!store) {
-    redirect('/dashboard')
+  if (store) {
+    redirect(`/${store.id}`)
   }
 
   return (
