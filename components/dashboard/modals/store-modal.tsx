@@ -6,7 +6,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ErrorOption, useForm } from 'react-hook-form'
 
 import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useTransition } from 'react'
 
 import { useAppSelector } from '@/redux/store'
 import { AppDispatch } from '@/redux/store'
@@ -31,7 +31,7 @@ import { onClose } from '@/redux/slices/modalSlice'
 import { useCustomToasts } from '@/hooks/use-custom-toasts'
 import { createStoreSchema } from '@/lib/schema/store'
 import { useFormState, useFormStatus } from 'react-dom'
-import { createStore } from '@/lib/actions/store'
+import { createStore } from '@/lib/actions/dashboard/store'
 import { toast } from 'sonner'
 import { Loader2 } from 'lucide-react'
 import { SubmitButton } from '../SubmitButton'
@@ -59,8 +59,24 @@ export const StoreModal = () => {
   const [formState, action] = useFormState(createStore.bind(null, pathname), {
     errors: {},
   })
+  // const  =useTransition()
   const { pending } = useFormStatus()
 
+  useEffect(() => {
+    if (formState.errors.name) {
+      form.setError('name', {
+        type: 'custom',
+        message: formState.errors.name?.join(' و'),
+      })
+    } else if (formState.errors._form) {
+      toast.error(formState.errors._form?.join(' و'))
+      form.setError('root', {
+        type: 'custom',
+        message: formState.errors._form?.join(' و'),
+      })
+    }
+    return () => form.clearErrors()
+  }, [form, formState])
   // console.log()
   // console.log(formState.errors.name)
   // console.log(form.formState.errors)
@@ -152,23 +168,23 @@ export const StoreModal = () => {
                       <FormLabel>نام فروشگاه</FormLabel>
                       <FormControl>
                         <Input
-                          disabled={pending}
+                          disabled={form.formState.isLoading}
                           placeholder="مثلا: کتاب فروشی فردا"
                           {...field}
                         />
                       </FormControl>
-                      {/* <FormMessage
+                      <FormMessage
                       // resource={formState.errors.name?.join(' و')}
                       // content={formState.errors.name?.join(' و')}
                       // title={formState.errors.name?.join(' و')}
-                      /> */}
-                      <FormMessage>
+                      />
+                      {/* <FormMessage>
                         {formState.errors.name?.join(' و ')}
-                      </FormMessage>
+                      </FormMessage> */}
                     </FormItem>
                   )}
                 />
-                <FormMessage>{formState.errors._form?.join(' و ')}</FormMessage>
+                {/* <FormMessage>{formState.errors._form?.join(' و ')}</FormMessage> */}
                 {/* {formState.errors._form
                   ? // <div className="rounded p-2 bg-red-200 border border-red-400">
                     //   {formState.errors._form?.join(', ')}

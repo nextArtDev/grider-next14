@@ -3,19 +3,14 @@ import { notFound, redirect } from 'next/navigation'
 import { prisma } from '@/lib/prisma'
 import Navbar from '@/components/dashboard/Navbar'
 import { auth } from '@/auth'
-// import { getAuthSession } from '@/lib/auth'
-// import Navbar from '@/components/Navbar'
 
-// import Navbar from '@/components/navbar'
+import { ModalProvider } from '@/providers/modal-providers'
 
-export default async function DashboardLayout({
+export default async function SetupLayout({
   children,
-  params,
 }: {
   children: React.ReactNode
-  params: { storeId: string }
 }) {
-  //   const session = await getAuthSession()
   const session = await auth()
   const userId = session?.user.id
 
@@ -24,20 +19,20 @@ export default async function DashboardLayout({
     return notFound()
   }
 
-  //   const store = await prisma.store.findFirst({
-  //     where: {
-  //       id: params.storeId,
-  //       userId,
-  //     },
-  //   })
+  const store = await prisma.store.findFirst({
+    where: {
+      userId,
+    },
+  })
+  // const store = getStoreById(params.storeId, userId)
 
-  //   if (!store) {
-  //     redirect('/')
-  //   }
+  if (!store) {
+    redirect('/dashboard')
+  }
 
   return (
     <>
-      <Navbar />
+      <ModalProvider />
       {children}
     </>
   )

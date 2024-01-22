@@ -20,21 +20,21 @@ const Navbar = async () => {
     redirect('/')
   }
   // //fetching all stores which this user owns
-  // const stores = await prisma.store.findMany({
-  //   where: {
-  //     userId,
-  //   },
-  // })
+  const stores = await prisma.store.findMany({
+    where: {
+      userId,
+    },
+  })
 
   return (
     <div className="border-b">
-      <div className="flex h-16 items-center px-4">
-        {/* <StoreSwitcher items={stores} /> */}
+      <div className="flex h-16 items-center px-4 ">
+        <StoreSwitcher items={stores} />
         <MainNav className="mx-6" />
         {/* ml-auto push everything to the right */}
         <div className="mr-auto flex items-center text-right gap-4 space-x-4">
           <UserButton />
-          <div className="hidden sm:block">{session.user.name}</div>
+          {/* <div className="hidden sm:block">{session.user.name}</div> */}
           <ThemeToggle />
           {/* <UserButton afterSignOutUrl="/" /> */}
         </div>

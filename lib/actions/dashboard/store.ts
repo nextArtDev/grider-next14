@@ -1,8 +1,8 @@
 'use server'
 
 import { auth } from '@/auth'
-import { createStoreSchema } from '../schema/store'
-import { prisma } from '../prisma'
+import { createStoreSchema } from '../../schema/store'
+import { prisma } from '../../prisma'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { Store } from '@prisma/client'
@@ -38,6 +38,17 @@ export async function createStore(
     }
   }
   //   console.log(result)
+  const isExisting = await prisma.store.findFirst({
+    where: { name: result.data.name, userId: session.user.id },
+  })
+
+  if (isExisting) {
+    return {
+      errors: {
+        _form: ['فروشگاه با این نام موجود است!'],
+      },
+    }
+  }
 
   let store: Store
   try {
@@ -48,18 +59,18 @@ export async function createStore(
       },
     })
   } catch (err: unknown) {
-    if (err instanceof Error) {
-      return {
-        errors: {
-          _form: [err.message],
-        },
-      }
-    } else {
-      return {
-        errors: {
-          _form: ['مشکلی پیش آمده، لطفا دوباره امتحان کنید!'],
-        },
-      }
+    // if (err instanceof Error) {
+    //   return {
+    //     errors: {
+    //       _form: [err.message],
+    //     },
+    //   }
+    // } else {
+    return {
+      errors: {
+        _form: ['مشکلی پیش آمده، لطفا دوباره امتحان کنید!'],
+      },
+      // }
     }
   }
 
