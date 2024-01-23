@@ -1,7 +1,7 @@
 'use server'
 
 import { auth } from '@/auth'
-import { createStoreSchema } from '../../schema/store'
+import { createStoreSchema, updateStoreSchema } from '../../schema/store'
 import { prisma } from '../../prisma'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
@@ -38,20 +38,21 @@ export async function createStore(
     }
   }
   //   console.log(result)
-  const isExisting = await prisma.store.findFirst({
-    where: { name: result.data.name, userId: session.user.id },
-  })
-
-  if (isExisting) {
-    return {
-      errors: {
-        _form: ['فروشگاه با این نام موجود است!'],
-      },
-    }
-  }
 
   let store: Store
   try {
+    const isExisting = await prisma.store.findFirst({
+      where: { name: result.data.name, userId: session.user.id },
+    })
+
+    if (isExisting) {
+      return {
+        errors: {
+          _form: ['فروشگاه با این نام موجود است!'],
+        },
+      }
+    }
+
     store = await prisma.store.create({
       data: {
         name: result.data.name,
@@ -76,6 +77,150 @@ export async function createStore(
 
   revalidatePath(path)
   redirect(`/dashboard/${store.id}`)
+}
+
+interface EditStoreFormState {
+  errors: {
+    name?: string[]
+    // description?: string[]
+    _form?: string[]
+  }
+}
+export async function editStore(
+  path: string,
+  storeId: string,
+  formState: EditStoreFormState,
+  formData: FormData
+): Promise<EditStoreFormState> {
+  const result = updateStoreSchema.safeParse({
+    name: formData.get('name'),
+  })
+  // console.log(result)
+  if (!result.success) {
+    // console.log(result.error.flatten().fieldErrors.name)
+    return {
+      errors: result.error.flatten().fieldErrors,
+    }
+  }
+
+  const session = await auth()
+  if (!session || !session.user || session.user.role !== 'ADMIN') {
+    return {
+      errors: {
+        _form: ['شما اجازه دسترسی ندارید!'],
+      },
+    }
+  }
+
+  let store: Store
+  try {
+    const isExisting = await prisma.store.findUnique({
+      where: { id: storeId, userId: session.user.id },
+    })
+
+    if (!isExisting) {
+      return {
+        errors: {
+          _form: ['فروشگاه با این نام موجود نیست!'],
+        },
+      }
+    }
+
+    store = await prisma.store.update({
+      where: { id: storeId, userId: session.user.id },
+      data: {
+        name: result.data.name,
+      },
+    })
+    // console.log(store)
+  } catch (err: unknown) {
+    // if (err instanceof Error) {
+    //   return {
+    //     errors: {
+    //       _form: [err.message],
+    //     },
+    //   }
+    // } else {
+    return {
+      errors: {
+        _form: ['مشکلی پیش آمده، لطفا دوباره امتحان کنید!'],
+      },
+      // }
+    }
+  }
+
+  revalidatePath(path)
+  redirect(`/dashboard/${store.id}`)
+}
+interface DeleteStoreFormState {
+  errors: {
+    name?: string[]
+    // description?: string[]
+    _form?: string[]
+  }
+}
+export async function deleteStore(
+  path: string,
+  storeId: string,
+  formState: DeleteStoreFormState,
+  formData: FormData
+): Promise<DeleteStoreFormState> {
+  // const result = updateStoreSchema.safeParse({
+  //   name: formData.get('name'),
+  // })
+  // console.log(result)
+  // if (!result.success) {
+  //   // console.log(result.error.flatten().fieldErrors.name)
+  //   return {
+  //     errors: result.error.flatten().fieldErrors,
+  //   }
+  // }
+
+  const session = await auth()
+  if (!session || !session.user || session.user.role !== 'ADMIN') {
+    return {
+      errors: {
+        _form: ['شما اجازه دسترسی ندارید!'],
+      },
+    }
+  }
+
+  let store: Store
+  try {
+    const isExisting = await prisma.store.findUnique({
+      where: { id: storeId, userId: session.user.id },
+    })
+
+    if (!isExisting) {
+      return {
+        errors: {
+          _form: ['فروشگاه با این نام موجود نیست!'],
+        },
+      }
+    }
+
+    store = await prisma.store.delete({
+      where: { id: storeId, userId: session.user.id },
+    })
+    // console.log(store)
+  } catch (err: unknown) {
+    // if (err instanceof Error) {
+    //   return {
+    //     errors: {
+    //       _form: [err.message],
+    //     },
+    //   }
+    // } else {
+    return {
+      errors: {
+        _form: ['مشکلی پیش آمده، لطفا دوباره امتحان کنید!'],
+      },
+      // }
+    }
+  }
+
+  revalidatePath(path)
+  redirect(`/dashboard`)
 }
 // import type { Topic } from '@prisma/client'
 // import { revalidatePath } from 'next/cache'

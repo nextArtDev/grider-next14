@@ -9,3 +9,10 @@ export const createStoreSchema = z.object({
     })
     .max(128, { message: 'نام فروشگاه نمی‌تواند بیش از 128 حرف باشد.' }),
 })
+
+export const updateStoreSchema = z.object({
+  name: z.string().min(2, { message: 'حداقل 2 کاراکتر برای نام الزامیست' }),
+  // storeId: z.string(),
+})
+
+// export const deleteStoreSchema = updateStoreSchema.pick({ storeId: true })

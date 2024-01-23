@@ -55,24 +55,23 @@ export const StoreModal = () => {
       name: '',
     },
   })
+  // const { pending } = useFormStatus()
 
   const [formState, action] = useFormState(createStore.bind(null, pathname), {
     errors: {},
   })
-  // const  =useTransition()
-  const { pending } = useFormStatus()
 
   useEffect(() => {
-    if (formState.errors.name) {
+    if (formState.errors?.name) {
       form.setError('name', {
         type: 'custom',
         message: formState.errors.name?.join(' و'),
       })
-    } else if (formState.errors._form) {
+    } else if (formState.errors?._form) {
       toast.error(formState.errors._form?.join(' و'))
       form.setError('root', {
         type: 'custom',
-        message: formState.errors._form?.join(' و'),
+        message: formState.errors?._form?.join(' و'),
       })
     }
     return () => form.clearErrors()
@@ -198,7 +197,7 @@ export const StoreModal = () => {
                   </Button> */}
                   <SubmitButton>{'تایید'}</SubmitButton>
                   <Button
-                    disabled={pending}
+                    // disabled={pending}
                     variant="outline"
                     onClick={() => dispatch(onClose())}
                   >

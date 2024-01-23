@@ -30,7 +30,7 @@ export default async function DashboardLayout({
   return (
     <>
       <Navbar />
-      <ModalProvider />
+      {!store && <ModalProvider />}
       {children}
     </>
   )

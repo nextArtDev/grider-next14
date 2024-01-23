@@ -36,42 +36,42 @@ export function MainNav({
   const routes = [
     {
       //just redirecting to dashboard, it can be home or everything
-      href: `/${params.storeId}`,
+      href: `/dashboard/${params.storeId}`,
       label: 'وضعیت',
       active: pathname === `/dashboard/${params.storeId}`,
     },
     {
-      href: `/${params.storeId}/billboards`,
+      href: `/dashboard/${params.storeId}/billboards`,
       label: 'بیلبوردها',
       active: pathname === `/dashboard/${params.storeId}/billboards`,
     },
     {
-      href: `/${params.storeId}/categories`,
+      href: `/dashboard/${params.storeId}/categories`,
       label: 'دسته‌بندی‌ها',
       active: pathname === `/dashboard/${params.storeId}/categories`,
     },
     {
-      href: `/${params.storeId}/sizes`,
+      href: `/dashboard/${params.storeId}/sizes`,
       label: 'سایزها',
       active: pathname === `/dashboard/${params.storeId}/sizes`,
     },
     {
-      href: `/${params.storeId}/colors`,
+      href: `/dashboard/${params.storeId}/colors`,
       label: 'رنگ‌ها',
       active: pathname === `/dashboard/${params.storeId}/colors`,
     },
     {
-      href: `/${params.storeId}/products`,
+      href: `/dashboard/${params.storeId}/products`,
       label: 'محصولات',
       active: pathname === `/dashboard/${params.storeId}/products`,
     },
     {
-      href: `/${params.storeId}/orders`,
+      href: `/dashboard/${params.storeId}/orders`,
       label: 'سفارشات',
       active: pathname === `/dashboard/${params.storeId}/orders`,
     },
     {
-      href: `/${params.storeId}/settings`,
+      href: `/dashboard/${params.storeId}/settings`,
       label: 'تنظیمات',
       active: pathname === `/dashboard/${params.storeId}/settings`,
     },
@@ -94,7 +94,7 @@ export function MainNav({
           href={route.href}
           className={cn(
             buttonVariants({ variant: 'ghost' }),
-            'hidden md:block text-sm font-medium transition-colors hover:text-primary',
+            'hidden  md:flex md:items-center w-full text-sm font-medium transition-colors hover:text-primary',
             route.active
               ? 'text-black underline underline-offset-8 dark:text-white'
               : 'text-muted-foreground'
