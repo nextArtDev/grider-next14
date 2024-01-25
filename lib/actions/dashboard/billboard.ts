@@ -30,24 +30,22 @@ export async function createBillboard(
   })
 
   console.log(result)
-  console.log(storeId)
-  console.log(path)
   console.log(formData.get('image'))
 
-  if (!result.success) {
-    console.log(result.error.flatten().fieldErrors.image)
-    return {
-      errors: result.error.flatten().fieldErrors,
-    }
-  }
-  const session = await auth()
-  if (!session || !session.user || session.user.role !== 'ADMIN') {
-    return {
-      errors: {
-        _form: ['شما اجازه دسترسی ندارید!'],
-      },
-    }
-  }
+  // if (!result.success) {
+  //   console.log(result.error.flatten().fieldErrors.image)
+  //   return {
+  //     errors: result.error.flatten().fieldErrors,
+  //   }
+  // }
+  // const session = await auth()
+  // if (!session || !session.user || session.user.role !== 'ADMIN') {
+  //   return {
+  //     errors: {
+  //       _form: ['شما اجازه دسترسی ندارید!'],
+  //     },
+  //   }
+  // }
   // console.log(result)
 
   let billboard: Billboard
@@ -63,13 +61,13 @@ export async function createBillboard(
     //   }
     // }
     // console.log(isExisting)
-    billboard = await prisma.billboard.create({
-      data: {
-        label: result.data.label,
-        storeId,
-      },
-    })
-    console.log(billboard)
+    // billboard = await prisma.billboard.create({
+    //   data: {
+    //     label: result.data.label,
+    //     storeId,
+    //   },
+    // })
+    // console.log(billboard)
   } catch (err: unknown) {
     if (err instanceof Error) {
       return {
@@ -87,7 +85,7 @@ export async function createBillboard(
   }
 
   revalidatePath(path)
-  redirect(`/dashboard/${storeId}/billboards`)
+  // redirect(`/dashboard/${storeId}/billboards`)
 }
 
 interface UploadImageFormState {

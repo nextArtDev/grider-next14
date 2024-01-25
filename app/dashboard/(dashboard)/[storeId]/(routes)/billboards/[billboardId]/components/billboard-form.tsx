@@ -57,7 +57,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
   const [open, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
   const [files, setFiles] = useState('')
-  const [imageUrl, setImageUrl] = useState<File | null>(null)
+  // const [files, setFiles] = useState<File | null>(null)
 
   //Based on we get "new" or no billboard data, or we get billboardId as params we create or update billboard
   const title = initialData ? 'ویرایش بیلبورد' : 'ایجاد بیلبورد'
@@ -81,10 +81,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       errors: {},
     }
   )
-  const [state, formAction] = useFormState(uploadImage, {
-    errors: {},
-    urls: {},
-  })
+  // const [state, formAction] = useFormState(uploadImage, {
+  //   errors: {},
+  //   urls: {},
+  // })
   useEffect(() => {
     if (formState?.errors?.image) {
       form.setError('image', {
@@ -173,7 +173,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
           // onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
-          {files ? (
+          {files && (
             <div
               // ratio={}
               className="relative mx-auto rounded-lg  h-96 w-96"
@@ -186,47 +186,56 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                 className="object-cover rounded-lg"
               />
             </div>
-          ) : (
-            <>
-              <label
-                htmlFor="image"
-                className="max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow  "
-              >
-                <span
-                  className={cn(
-                    buttonVariants({ variant: 'ghost' }),
-                    'flex flex-col items-center justify-center gap-2 h-64 w-64'
-                  )}
-                >
-                  <UploadCloud />
-                  انتخاب عکس
-                </span>
-              </label>
-              <input
-                name="image"
-                id="image"
-                className="hidden"
-                type="file"
-                // value={imageUrl}
-                // onChange={(e) => setImageUrl(e.target?.files?.[0])}
-                // formAction={formAction}
-                accept="images/*"
-                // onChange={(event) => {
-                //   const file = event.target.files ? event.target.files[0] : null
-                //   console.log(event.target?.files?.[0])
-
-                //   form.setValue('image', event.target.files?.[0])
-                //   if (file) {
-                //     const reader = new FileReader()
-                //     reader.onloadend = () => {
-                //       setFiles(reader.result as string)
-                //     }
-                //     reader.readAsDataURL(file)
-                //   }
-                // }}
-              />
-            </>
           )}
+          {/* // ) : ( */}
+          {/* <> */}
+          <label
+            htmlFor="image"
+            className={cn(
+              'max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow ',
+              files.length > 0 ? 'hidden' : ''
+            )}
+          >
+            <span
+              className={cn(
+                buttonVariants({ variant: 'ghost' }),
+
+                'flex flex-col items-center justify-center gap-2 h-64 w-64'
+              )}
+            >
+              <UploadCloud />
+              انتخاب عکس
+            </span>
+          </label>
+          <input
+            name="image"
+            id="image"
+            className="hidden"
+            type="file"
+            onChange={(e) => {
+              const file = e.target.files ? e.target.files[0] : null
+              if (file) {
+                form.setValue('image', URL.createObjectURL(file))
+                setFiles(URL.createObjectURL(file))
+              }
+            }}
+
+            // formAction={formAction}
+            // accept="images/*"
+            // onChange={async (event) => {
+            //   event.preventDefault()
+            //   // const dataTransfer = new DataTransfer()
+
+            //   // dataTransfer.items.add(event?.target?.files?.[0])
+
+            //   // Validate and update uploaded file
+            //   // const newFiles = dataTransfer.files[0]
+
+            //   setFiles(event?.target?.files?.[0])
+            // }}
+          />
+          {/* </> */}
+          {/* )} */}
           <FormField
             control={form.control}
             name="label"
@@ -251,63 +260,71 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             >
               <Image
                 alt="billboard-pic"
-                src={files}
-                // src={URL.createObjectURL(files)}
+                // src={files}
+                src={URL.createObjectURL(files)}
                 fill
                 className="object-cover rounded-lg"
               />
             </div>
           ) : (
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field: { onChange }, ...field }) => (
-                <FormItem>
-                  <FormLabel className="max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow  ">
- 
-                    <span
-                      className={cn(
-                        buttonVariants({ variant: 'ghost' }),
-                        'flex flex-col items-center justify-center gap-2 h-96 w-96'
-                      )}
-                    >
-                      <UploadCloud />
-                      انتخاب عکس
-                    </span>
-                  </FormLabel>
-                  <FormControl>
-                    <Input
-                      type="file"
-                      accept="image/*"
-                      className="hidden"
-                      // formAction={formAction}
-                      {...field}
-                      // multiple={true}
-                      disabled={form.formState.isSubmitting}
-                      onChange={(event) => {
-                        const file = event.target.files
-                          ? event.target.files[0]
-                          : null
-                        console.log(event.target?.files?.[0])
-                        onChange(event.target?.files?.[0])
+             )} */}
+          {/* <FormField
+            control={form.control}
+            name="image"
+            render={({ field: { onChange }, ...field }) => (
+              <FormItem>
+                <FormLabel
+                  className={cn(
+                    'max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow ',
+                    !!files ? 'hidden' : ''
+                  )}
+                >
+                  <span
+                    className={cn(
+                      buttonVariants({ variant: 'ghost' }),
+                      'flex flex-col items-center justify-center gap-2 h-96 w-96'
+                    )}
+                  >
+                    <UploadCloud />
+                    انتخاب عکس
+                  </span>
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    // formAction={formAction}
+                    // {...field}
+                    // multiple={true}
+                    // disabled={form.formState.isSubmitting}
+                    onChange={async (event) => {
+                      event.preventDefault()
 
-                        form.setValue('image', event.target.files?.[0])
-                        if (file) {
-                          const reader = new FileReader()
-                          reader.onloadend = () => {
-                            setFiles(reader.result as string)
-                          }
-                          reader.readAsDataURL(file)
+                      const file = event.target.files
+                        ? event.target.files[0]
+                        : null
+
+                      console.log(file)
+                      onChange(file)
+
+                      // setFiles(file)
+                      form.setValue('image', file)
+                      if (file) {
+                        const reader = new FileReader()
+                        reader.onloadend = () => {
+                          setFiles(reader.result as string)
                         }
-                      }}
-                    />
-                  </FormControl>
+                        reader.readAsDataURL(file)
+                      }
+                    }}
+                  />
+                </FormControl>
 
-                  <FormMessage className="dark:text-rose-400" />
-                </FormItem>
-              )}
-            />
-          )} */}
+                <FormMessage className="dark:text-rose-400" />
+              </FormItem>
+            )}
+          /> */}
 
           {/* <div className="md:grid md:grid-cols-3 gap-8"> */}
 

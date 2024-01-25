@@ -17,7 +17,7 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
   //   },
   // })
   const billboards = await getAllBillboards(params.storeId)
-  console.log(billboards)
+
   if (!billboards) {
     return notFound()
   }
