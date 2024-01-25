@@ -41,6 +41,8 @@ model Image {
   Product   Product?    @relation(fields: [productId], references: [id])
   productId String?
   Billboard Billboard[]
+
+  @@index([productId])
 }
 
 model Store {

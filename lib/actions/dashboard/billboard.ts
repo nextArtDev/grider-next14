@@ -10,6 +10,7 @@ import {
   createBillboardSchema,
   imageUploadSchema,
 } from '@/lib/schema/billboard'
+import { uploadFileToS3 } from './s3Upload'
 
 interface CreateBillboardFormState {
   errors: {
@@ -29,45 +30,51 @@ export async function createBillboard(
     image: formData.get('image'),
   })
 
-  console.log(result)
-  console.log(formData.get('image'))
+  // console.log(result)
+  // console.log(formData.get('image'))
 
-  // if (!result.success) {
-  //   console.log(result.error.flatten().fieldErrors.image)
-  //   return {
-  //     errors: result.error.flatten().fieldErrors,
-  //   }
-  // }
-  // const session = await auth()
-  // if (!session || !session.user || session.user.role !== 'ADMIN') {
-  //   return {
-  //     errors: {
-  //       _form: ['شما اجازه دسترسی ندارید!'],
-  //     },
-  //   }
-  // }
+  if (!result.success) {
+    console.log(result.error.flatten().fieldErrors.image)
+    return {
+      errors: result.error.flatten().fieldErrors,
+    }
+  }
+  const session = await auth()
+  if (!session || !session.user || session.user.role !== 'ADMIN') {
+    return {
+      errors: {
+        _form: ['شما اجازه دسترسی ندارید!'],
+      },
+    }
+  }
   // console.log(result)
 
   let billboard: Billboard
   try {
-    // const isExisting = await prisma.billboard.findFirst({
-    //   where: { label: result.data.label, storeId },
-    // })
-    // if (isExisting) {
-    //   return {
-    //     errors: {
-    //       _form: ['فروشگاه با این نام موجود است!'],
-    //     },
-    //   }
-    // }
+    const isExisting = await prisma.billboard.findFirst({
+      where: { label: result.data.label, storeId },
+    })
+    if (isExisting) {
+      return {
+        errors: {
+          _form: ['بیلبورد با این نام موجود است!'],
+        },
+      }
+    }
     // console.log(isExisting)
-    // billboard = await prisma.billboard.create({
-    //   data: {
-    //     label: result.data.label,
-    //     storeId,
-    //   },
-    // })
     // console.log(billboard)
+
+    const buffer = Buffer.from(await result.data.image.arrayBuffer())
+    const res = await uploadFileToS3(buffer, result.data.image.name)
+
+    billboard = await prisma.billboard.create({
+      data: {
+        label: result.data.label,
+        storeId,
+        imageId: res?.imageId,
+      },
+    })
+    // console.log(res?.url)
   } catch (err: unknown) {
     if (err instanceof Error) {
       return {
@@ -85,7 +92,7 @@ export async function createBillboard(
   }
 
   revalidatePath(path)
-  // redirect(`/dashboard/${storeId}/billboards`)
+  redirect(`/dashboard/${storeId}/billboards`)
 }
 
 interface UploadImageFormState {
