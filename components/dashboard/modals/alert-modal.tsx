@@ -59,9 +59,6 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         <Button disabled={pending} variant="outline" onClick={onClose}>
           انصراف
         </Button>
-        <Button disabled={pending} variant="outline" onClick={onClose}>
-          انصراف
-        </Button>
       </div>
     </Modal>
   )

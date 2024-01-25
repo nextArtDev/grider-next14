@@ -198,11 +198,13 @@ export const StoreModal = () => {
                   <SubmitButton>{'تایید'}</SubmitButton>
                   <Button
                     // disabled={pending}
+                    disabled={form.formState.isLoading}
                     variant="outline"
                     onClick={() => dispatch(onClose())}
                   >
                     انصراف
                   </Button>
+                  {/* {form.formState.isLoading} */}
                 </div>
               </form>
             </Form>

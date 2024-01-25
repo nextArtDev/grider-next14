@@ -59,7 +59,7 @@ export const SettingsForm: React.FC<SettingsFormProps> = ({ initialData }) => {
   const [open, setOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const pathname = usePathname()
-
+  const loading = () => {}
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(createStoreSchema),
     defaultValues: initialData,
