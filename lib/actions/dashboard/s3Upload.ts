@@ -1,6 +1,10 @@
 'use server'
 import { revalidatePath } from 'next/cache'
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
+import {
+  S3Client,
+  PutObjectCommand,
+  DeleteObjectCommand,
+} from '@aws-sdk/client-s3'
 import { prisma } from '@/lib/prisma'
 import { randomUUID } from 'crypto'
 // import sharp from 'sharp'
@@ -55,6 +59,34 @@ export async function uploadFileToS3(file: Buffer, fileName: string) {
       imageId: prismaUpload?.id,
       imageKey: prismaUpload?.key,
       imageUrl: prismaUpload?.url,
+    }
+  } catch (error) {
+    console.log(error)
+    throw error
+  }
+}
+export async function deleteFileFromS3(key: string) {
+  const params = {
+    Bucket: process.env.NEXT_AWS_S3_BUCKET_NAME,
+    Key: key,
+    ContentType: 'image/jpg',
+  }
+
+  const command = new DeleteObjectCommand(params)
+  try {
+    const response = await s3Client.send(command)
+
+    await prisma.image.deleteMany({
+      where: {
+        key,
+      },
+    })
+
+    // console.log(response)
+
+    // console.log('File uploaded successfully:', response)
+    return {
+      success: true,
     }
   } catch (error) {
     console.log(error)

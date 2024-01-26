@@ -1,8 +1,13 @@
-export default function Loading() {
-  // Or a custom loading skeleton component
+'use client'
+
+import { Loader } from '@/components/dashboard/Loader'
+
+const Loading = () => {
   return (
-    <p className="text-7xl tex-center flex items-center justify-center w-full h-full bg-back/40 ">
-      Loading...
-    </p>
+    <div className="flex h-full w-full items-center justify-center">
+      <Loader />
+    </div>
   )
 }
+
+export default Loading

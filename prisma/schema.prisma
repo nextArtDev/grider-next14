@@ -33,7 +33,7 @@ enum Role {
 model Image {
   id         String   @id @default(cuid())
   url        String   @db.Text
-  key        String   @db.Text
+  key        String   @unique @db.Text
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 

@@ -4,7 +4,7 @@
 import { useState } from 'react'
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react'
 
-import { useParams, useRouter } from 'next/navigation'
+import { useParams, usePathname, useRouter } from 'next/navigation'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -16,8 +16,11 @@ import {
 } from '@/components/ui/dropdown-menu'
 
 import { BillboardColumn } from './columns'
-import { toast } from '@/components/ui/use-toast'
+
 import { AlertModal } from '@/components/dashboard/modals/alert-modal'
+import { useFormState } from 'react-dom'
+import { deleteBillboard } from '@/lib/actions/dashboard/billboard'
+import { toast } from 'sonner'
 
 interface CellActionProps {
   data: BillboardColumn
@@ -26,35 +29,43 @@ interface CellActionProps {
 export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const router = useRouter()
   const params = useParams()
+  const path = usePathname()
   const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
+  // const [loading, setLoading] = useState(false)
+
+  // console.log(params)
 
   //How to delete by AlertModal and a button
-  const onConfirm = async () => {
-    try {
-      setLoading(true)
-      // we don't have access to "billboadrId" here
-      // await axios.delete(`/api/${params.storeId}/billboards/${data.id}`)
-      toast({
-        title: 'بیلبورد حذف شد.',
-        variant: 'default',
-      })
-      router.refresh()
-    } catch (error) {
-      toast({
-        title:
-          'مطمئن شوید ابتدا همه دسته‌بندی‌هایی که از این بیلبود استفاده می‌کنند را حذف کرده‌اید.',
-        variant: 'destructive',
-      })
-    } finally {
-      setOpen(false)
-      setLoading(false)
+  // const onConfirm = async () => {
+  //   try {
+  //     setLoading(true)
+  //     // we don't have access to "billboadrId" here
+  //     // await axios.delete(`/api/${params.storeId}/billboards/${data.id}`)
+  //     toast({
+  //       title: 'بیلبورد حذف شد.',
+  //       variant: 'default',
+  //     })
+  //     router.refresh()
+  //   } catch (error) {
+  //     toast({
+  //       title:
+  //         'مطمئن شوید ابتدا همه دسته‌بندی‌هایی که از این بیلبود استفاده می‌کنند را حذف کرده‌اید.',
+  //       variant: 'destructive',
+  //     })
+  //   } finally {
+  //     setOpen(false)
+  //     setLoading(false)
+  //   }
+  // }
+  const [deleteState, deleteAction] = useFormState(
+    deleteBillboard.bind(null, path, params.storeId as string, data.id),
+    {
+      errors: {},
     }
-  }
-
+  )
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
-    toast({ title: 'ID کپی شد', variant: 'default' })
+    toast.success('ID کپی شد')
   }
 
   return (
@@ -63,8 +74,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={() => {}}
-        // onConfirm={onConfirm}
+        onConfirm={deleteAction}
         // loading={loading}
       />
       <DropdownMenu dir="rtl">
@@ -83,7 +93,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           <DropdownMenuItem
             onClick={() =>
               // we just redirect to form that we created, but instead of new, we go to the billboardId page, it equals edit not create
-              router.push(`/${params.storeId}/billboards/${data.id}`)
+              router.push(`/dashboard/${params.storeId}/billboards/${data.id}`)
             }
           >
             <Edit className="ml-2 h-4 w-4" /> آپدیت

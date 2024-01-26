@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Trash, UploadCloud } from 'lucide-react'
-import { Billboard } from '@prisma/client'
+import { Billboard, Image } from '@prisma/client'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
 import { Input } from '@/components/ui/input'
@@ -31,10 +31,14 @@ import { Heading } from '@/components/dashboard/Heading'
 import { cn } from '@/lib/utils'
 import { createBillboardSchema } from '@/lib/schema/billboard'
 import { AspectRatio } from '@/components/ui/aspect-ratio'
-import Image from 'next/image'
+import NextImage from 'next/image'
 import { useFormState } from 'react-dom'
 import { toast } from 'sonner'
-import { createBillboard, uploadImage } from '@/lib/actions/dashboard/billboard'
+import {
+  createBillboard,
+  deleteBillboard,
+  editBillboard,
+} from '@/lib/actions/dashboard/billboard'
 import { SubmitButton } from '@/components/dashboard/SubmitButton'
 
 type BillboardFormValues = z.infer<typeof createBillboardSchema>
@@ -42,7 +46,7 @@ type BillboardFormValues = z.infer<typeof createBillboardSchema>
 //if there is any billboard its Billboard, else its null
 interface BillboardFormProps {
   //there is a chance to have no initial data and in fact we're creating one.
-  initialData: Billboard | null
+  initialData: (Billboard & { image: Partial<Image> | null }) | null
 }
 
 export const BillboardForm: React.FC<BillboardFormProps> = ({
@@ -50,6 +54,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
 }) => {
   const params = useParams()
   const { storeId } = params
+  const billboardId = initialData?.id
 
   const router = useRouter()
   const path = usePathname()
@@ -72,7 +77,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     //the second part is for 'null' cases
     defaultValues: initialData || {
       label: '',
-      // image: [],
+      // image: null,
     },
   })
   const [formState, createAction] = useFormState(
@@ -81,12 +86,26 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       errors: {},
     }
   )
-  // const [state, formAction] = useFormState(uploadImage, {
-  //   errors: {},
-  //   urls: {},
-  // })
+  const [editFormState, editAction] = useFormState(
+    editBillboard.bind(null, path, storeId as string, billboardId as string),
+    {
+      errors: {},
+    }
+  )
+  const [deleteState, deleteAction] = useFormState(
+    deleteBillboard.bind(null, path, storeId as string, billboardId as string),
+    {
+      errors: {},
+    }
+  )
+
   useEffect(() => {
-    if (formState?.errors?.image) {
+    if (formState?.errors?.label) {
+      form.setError('label', {
+        type: 'custom',
+        message: formState?.errors.label?.join(' و '),
+      })
+    } else if (formState?.errors?.image) {
       form.setError('image', {
         type: 'custom',
         message: formState?.errors.image?.join(' و '),
@@ -100,6 +119,27 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
     }
     return () => form.clearErrors()
   }, [form, formState])
+
+  useEffect(() => {
+    if (editFormState?.errors?.label) {
+      form.setError('label', {
+        type: 'custom',
+        message: editFormState?.errors.label?.join(' و '),
+      })
+    } else if (editFormState?.errors?.image) {
+      form.setError('image', {
+        type: 'custom',
+        message: editFormState?.errors.image?.join(' و '),
+      })
+    } else if (editFormState?.errors?._form) {
+      toast.error(editFormState?.errors._form?.join(' و '))
+      form.setError('root', {
+        type: 'custom',
+        message: editFormState?.errors?._form?.join(' و '),
+      })
+    }
+    return () => form.clearErrors()
+  }, [form, editFormState])
 
   const onSubmit = async (data: BillboardFormValues) => {
     try {
@@ -149,7 +189,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        onConfirm={onDelete}
+        onConfirm={deleteAction}
         // loading={loading}
       />
       <div className="flex items-center justify-between">
@@ -169,21 +209,32 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
       <Separator />
       <Form {...form}>
         <form
-          action={createAction}
+          action={initialData ? editAction : createAction}
           // onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >
           {files && (
             <div
               // ratio={}
-              className="relative mx-auto rounded-lg  h-96 w-96"
+              className="relative mx-auto rounded-lg  h-96 w-[95%] max-w-xl "
             >
-              <Image
+              <NextImage
                 alt="billboard-pic"
+                // src={initialData?.image ? initialData?.image?.url : files}
                 src={files}
                 // src={URL.createObjectURL(files)}
                 fill
                 className="object-cover rounded-lg"
+              />
+              <Trash
+                className={cn(
+                  buttonVariants({ variant: 'destructive', size: 'sm' }),
+                  'absolute -top-1 -left-1 w-10 h-10 cursor-pointer '
+                )}
+                onClick={() => {
+                  form.reset({ ...form.getValues(), image: null })
+                  setFiles('')
+                }}
               />
             </div>
           )}
@@ -200,7 +251,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
 
-                'flex flex-col items-center justify-center gap-2 h-64 w-64'
+                'flex flex-col items-center justify-center gap-2 h-64 w-full'
               )}
             >
               <UploadCloud />
@@ -234,6 +285,10 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
             //   setFiles(event?.target?.files?.[0])
             // }}
           />
+          {/* <FormMessage>{form.formState?.errors?.image?.message}</FormMessage> */}
+          <FormMessage>
+            {form.getFieldState('image')?.error?.message}
+          </FormMessage>
           {/* </> */}
           {/* )} */}
           <FormField
@@ -298,6 +353,7 @@ export const BillboardForm: React.FC<BillboardFormProps> = ({
                     // {...field}
                     // multiple={true}
                     // disabled={form.formState.isSubmitting}
+                    // value={field.value ? [field.value] : []}
                     onChange={async (event) => {
                       event.preventDefault()
 
