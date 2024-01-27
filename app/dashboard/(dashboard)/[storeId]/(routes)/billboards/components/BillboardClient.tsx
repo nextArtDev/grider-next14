@@ -20,7 +20,6 @@ interface BillboardClientProps {
 
 export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
   const params = useParams()
-  const router = useRouter()
 
   return (
     <>
@@ -32,12 +31,8 @@ export const BillboardClient: React.FC<BillboardClientProps> = ({ data }) => {
         <Link
           className={cn(buttonVariants())}
           href={`/dashboard/${params.storeId}/billboards/new`}
-          //we use "new" here to create it, and any other id of billboards to update or delete an existing one
-          // onClick={() =>
-          //   router.push(`/dashboard/${params.storeId}/billboards/new`)
-          // }
         >
-          اضافه کردن <Plus className="mr-2 h-4 w-4" />
+          <Plus className="ml-2 h-4 w-4 shadow-inner " /> اضافه کنید
         </Link>
       </div>
       <Separator />

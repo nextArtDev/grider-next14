@@ -31,7 +31,7 @@ export async function createBillboard(
   // console.log(formData.get('image'))
 
   if (!result.success) {
-    console.log(result.error.flatten().fieldErrors)
+    // console.log(result.error.flatten().fieldErrors)
     return {
       errors: result.error.flatten().fieldErrors,
     }
@@ -44,6 +44,28 @@ export async function createBillboard(
       },
     }
   }
+  if (!storeId) {
+    return {
+      errors: {
+        _form: ['فروشگاه در دسترس نیست!'],
+      },
+    }
+  }
+
+  // const storeByUserId = await prisma.store.findFirst({
+  //   where: {
+  //     id: storeId,
+  //     userId: session.user.id,
+  //   },
+  // })
+  // if (!storeByUserId) {
+  //   return {
+  //     errors: {
+  //       _form: ['شما اجازه دسترسی ندارید!'],
+  //     },
+  //   }
+  // }
+
   // console.log(result)
 
   let billboard: Billboard
@@ -127,6 +149,13 @@ export async function editBillboard(
       },
     }
   }
+  if (!storeId || !billboardId) {
+    return {
+      errors: {
+        _form: ['فروشگاه در دسترس نیست!'],
+      },
+    }
+  }
   // console.log(result)
 
   let billboard: Billboard
@@ -146,6 +175,17 @@ export async function editBillboard(
         },
       }
     }
+    const isNameExisting = await prisma.billboard.findFirst({
+      where: { label: result.data.label, storeId },
+    })
+
+    if (isNameExisting) {
+      return {
+        errors: {
+          _form: ['بیلبورد با این نام موجود است!'],
+        },
+      }
+    }
 
     // console.log(isExisting)
     // console.log(billboard)
@@ -157,7 +197,7 @@ export async function editBillboard(
 
     const buffer = Buffer.from(await result.data.image.arrayBuffer())
     const res = await uploadFileToS3(buffer, result.data.image.name)
-    console.log(res)
+    // console.log(res)
     await prisma.billboard.update({
       where: {
         id: billboardId,
@@ -229,6 +269,13 @@ export async function deleteBillboard(
     }
   }
   // console.log(result)
+  if (!storeId || !billboardId) {
+    return {
+      errors: {
+        _form: ['فروشگاه در دسترس نیست!'],
+      },
+    }
+  }
 
   let billboard: Billboard
   try {

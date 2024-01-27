@@ -4,6 +4,12 @@ import { getStoreById } from '@/lib/queries/dashboard/store'
 import { auth } from '@/auth'
 import Navbar from '@/components/dashboard/Navbar'
 import { ModalProvider } from '@/providers/modal-providers'
+import {
+  numericBoldFont,
+  numericFont,
+  numericRegularFont,
+  primaryFont,
+} from '@/lib/fonts'
 
 // import Navbar from '@/components/navbar'
 
@@ -28,10 +34,10 @@ export default async function DashboardLayout({
   }
 
   return (
-    <>
+    <section className={` ${numericRegularFont.className} adad  `}>
       <Navbar />
       <ModalProvider />
       {children}
-    </>
+    </section>
   )
 }

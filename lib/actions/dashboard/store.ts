@@ -114,14 +114,25 @@ export async function editStore(
 
   let store: Store
   try {
-    const isExisting = await prisma.store.findUnique({
+    const isStoreExisting = await prisma.store.findUnique({
       where: { id: storeId, userId: session.user.id },
     })
 
-    if (!isExisting) {
+    if (!isStoreExisting) {
       return {
         errors: {
-          _form: ['فروشگاه با این نام موجود نیست!'],
+          _form: ['فروشگاه موجود نیست!'],
+        },
+      }
+    }
+    const isNameExisting = await prisma.store.findUnique({
+      where: { name: result.data.name, userId: session.user.id },
+    })
+
+    if (isNameExisting) {
+      return {
+        errors: {
+          _form: ['فروشگاه با این نام موجود است!'],
         },
       }
     }

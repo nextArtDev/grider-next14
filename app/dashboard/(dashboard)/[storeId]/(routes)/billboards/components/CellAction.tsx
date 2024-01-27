@@ -6,7 +6,7 @@ import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react'
 
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
-import { Button } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,6 +21,8 @@ import { AlertModal } from '@/components/dashboard/modals/alert-modal'
 import { useFormState } from 'react-dom'
 import { deleteBillboard } from '@/lib/actions/dashboard/billboard'
 import { toast } from 'sonner'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
 
 interface CellActionProps {
   data: BillboardColumn
@@ -86,21 +88,30 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuLabel>عملیات</DropdownMenuLabel>
-          <DropdownMenuItem onClick={() => onCopy(data.id)}>
-            <Copy className="ml-2 h-4 w-4" /> کپی کردن Id
-          </DropdownMenuItem>
+          {/* <DropdownMenuLabel>عملیات</DropdownMenuLabel> */}
           <DropdownMenuItem
-            onClick={() =>
-              // we just redirect to form that we created, but instead of new, we go to the billboardId page, it equals edit not create
-              router.push(`/dashboard/${params.storeId}/billboards/${data.id}`)
-            }
+          // onClick={() =>
+          //   // we just redirect to form that we created, but instead of new, we go to the billboardId page, it equals edit not create
+          //   router.push(`/dashboard/${params.storeId}/billboards/${data.id}`)
+          // }
           >
-            <Edit className="ml-2 h-4 w-4" /> آپدیت
+            <Link
+              href={`/dashboard/${params.storeId}/billboards/${data.id}`}
+              className={cn(buttonVariants(), 'w-full')}
+            >
+              <Edit className="ml-2 h-4 w-4" /> آپدیت
+            </Link>
           </DropdownMenuItem>
           {/* just open AlertModal for deleting */}
           <DropdownMenuItem onClick={() => setOpen(true)}>
-            <Trash className="ml-2 h-4 w-4" /> حذف
+            <Button className="w-full" variant={'destructive'}>
+              <Trash className="ml-2 h-4 w-4" /> حذف
+            </Button>
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => onCopy(data.id)}>
+            <Button variant={'ghost'}>
+              <Copy className="ml-2 h-4 w-4" /> کپی کردن Id
+            </Button>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

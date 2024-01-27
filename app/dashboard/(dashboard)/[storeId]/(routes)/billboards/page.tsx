@@ -1,8 +1,7 @@
 // import { format } from 'date-fns'
 import { format } from 'date-fns-jalali'
 import { BillboardColumn } from './components/columns'
-// import { BillboardClient } from './components/client'
-import { prisma } from '@/lib/prisma'
+
 import { BillboardClient } from './components/BillboardClient'
 import { getAllBillboards } from '@/lib/queries/dashboard/billboards'
 import { notFound } from 'next/navigation'
@@ -25,7 +24,6 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
     id: item.id,
     label: item.label,
     createdAt: format(item.createdAt, 'dd MMMM yyyy'),
-    // createdAt: format(item.createdAt, ''yyyy/mm/dd''),
   }))
 
   return (
