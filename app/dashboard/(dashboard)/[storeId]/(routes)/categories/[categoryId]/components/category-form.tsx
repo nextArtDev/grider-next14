@@ -194,7 +194,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
       <Form {...form}>
         <form
           // action={initialData ? editAction : createAction}
-          action={(data) => console.log(data.get('image'))}
+          action={(data) => console.log(data.get('billboardId'))}
           // onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 w-full"
         >

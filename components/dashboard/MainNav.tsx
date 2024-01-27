@@ -22,6 +22,7 @@ import {
 import { useState } from 'react'
 import RouteSwitcher from './StoreMenu'
 import StoreMenu from './StoreMenu'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 
 export function MainNav({
   className,
@@ -79,10 +80,7 @@ export function MainNav({
 
   return (
     <nav
-      className={cn(
-        'flex items-center gap-4 lg:gap-6 max-w-sm:overflow-x-scroll',
-        className
-      )}
+      className={cn('flex items-center gap-4 lg:gap-6  ', className)}
       {...props}
     >
       <div className="md:hidden">

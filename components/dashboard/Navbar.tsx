@@ -6,6 +6,7 @@ import StoreSwitcher from './StoreSwitcher'
 import { ThemeToggle } from '../ui/theme-toggle'
 import { auth } from '@/auth'
 import { UserButton } from '../auth/user-button'
+import { ScrollArea, ScrollBar } from '../ui/scroll-area'
 
 // import StoreSwitcher from '@/components/store-switcher'
 // import { MainNav } from '@/components/main-nav'
@@ -28,17 +29,20 @@ const Navbar = async () => {
 
   return (
     <div className="border-b">
-      <div className="flex h-16 items-center px-4 ">
-        <StoreSwitcher items={stores} />
-        <MainNav className="mx-6" />
-        {/* ml-auto push everything to the right */}
-        <div className="mr-auto flex items-center text-right gap-4 space-x-4">
-          <UserButton />
-          {/* <div className="hidden sm:block">{session.user.name}</div> */}
-          <ThemeToggle />
-          {/* <UserButton afterSignOutUrl="/" /> */}
+      <ScrollArea dir="rtl">
+        <div className="flex h-16 items-center px-4 ">
+          <StoreSwitcher items={stores} />
+          <MainNav className="px-8" />
+          <ScrollBar orientation="horizontal" />
+          {/* ml-auto push everything to the right */}
+          <div className="mr-auto flex items-center text-right gap-4 space-x-4">
+            <UserButton />
+            {/* <div className="hidden sm:block">{session.user.name}</div> */}
+            <ThemeToggle />
+            {/* <UserButton afterSignOutUrl="/" /> */}
+          </div>
         </div>
-      </div>
+      </ScrollArea>
     </div>
   )
 }
