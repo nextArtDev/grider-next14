@@ -126,12 +126,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   //   success: '',
   // })
 
-  const [editFormState, editAction] = useFormState(
-    editCategory.bind(null, path, storeId as string, categoryId as string),
-    {
-      errors: {},
-    }
-  )
+  // const [editFormState, editAction] = useFormState(
+  //   editCategory.bind(null, path, storeId as string, categoryId as string),
+  //   {
+  //     errors: {},
+  //   }
+  // )
   const [deleteState, deleteAction] = useFormState(
     deleteCategory.bind(null, path, storeId as string, categoryId as string),
     {
@@ -200,7 +200,42 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
     try {
       if (initialData) {
-        console.log({ data, initialData })
+        // console.log({ data, initialData })
+        startTransition(() => {
+          editCategory(
+            formData,
+            params.storeId as string,
+            initialData.id as string,
+            path
+          )
+            .then((res) => {
+              if (res?.errors?.name) {
+                form.setError('name', {
+                  type: 'custom',
+                  message: res?.errors.name?.join(' و '),
+                })
+                form.setError('billboardId', {
+                  type: 'custom',
+                  message: res?.errors.billboardId?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+              }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
       } else {
         startTransition(() => {
           createCategory(formData, params.storeId as string, path)
@@ -298,6 +333,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         >
           {!!files && (
             <div
+              aria-disabled={isPending}
               // ratio={}
               className="relative mx-auto rounded-lg  h-40 w-[95%] max-w-xl "
             >

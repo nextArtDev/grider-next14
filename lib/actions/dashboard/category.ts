@@ -250,14 +250,14 @@ interface EditCategoryFormState {
   }
 }
 export async function editCategory(
-  path: string,
+  formData: FormData,
   storeId: string,
   categoryId: string,
-  formState: EditCategoryFormState,
-  formData: FormData
-): Promise<EditCategoryFormState> {
+  path: string
+): Promise<CreateCategoryFormState> {
   const result = createCategorySchema.safeParse({
     name: formData.get('name'),
+    description: formData.get('description'),
     image: formData.get('image'),
     billboardId: formData.get('billboardId'),
   })
@@ -312,6 +312,7 @@ export async function editCategory(
         name: result.data.name,
         billboardId: result.data.billboardId,
         storeId,
+        NOT: { id: categoryId },
       },
     })
 
@@ -325,47 +326,67 @@ export async function editCategory(
 
     // console.log(isExisting)
     // console.log(billboard)
+    if (
+      typeof result.data.image === 'object' &&
+      result.data.image instanceof File
+    ) {
+      console.log(result.data.image)
+      const buffer = Buffer.from(await result.data.image.arrayBuffer())
+      const res = await uploadFileToS3(buffer, result.data.image.name)
 
-    if (isExisting.image?.key) {
-      const isDeletedFromS3 = await deleteFileFromS3(isExisting.image.key)
-      // console.log(isDeletedFromS3)
+      if (isExisting.image?.key) {
+        await deleteFileFromS3(isExisting.image.key)
+        // console.log(isDeletedFromS3)
+      }
+      // console.log(res)
+      await prisma.category.update({
+        where: {
+          id: categoryId,
+
+          storeId,
+        },
+        data: {
+          image: {
+            disconnect: { id: isExisting.image?.id },
+          },
+          // billboard: {
+          //   disconnect: { id: isExisting.billboard.id },
+          // },
+        },
+      })
+      await prisma.category.update({
+        where: {
+          id: categoryId,
+          storeId,
+        },
+        data: {
+          name: result.data.name,
+          description: result.data.description,
+          //   billboardId: result.data.billboardId,
+          image: {
+            connect: { id: res?.imageId },
+          },
+          billboard: {
+            connect: { id: result.data.billboardId },
+          },
+        },
+      })
+    } else {
+      console.log('not new')
+      await prisma.category.update({
+        where: {
+          id: categoryId,
+          storeId,
+        },
+        data: {
+          name: result.data.name,
+          description: result.data.description,
+          billboard: {
+            connect: { id: result.data.billboardId },
+          },
+        },
+      })
     }
-
-    const buffer = Buffer.from(await result.data.image.arrayBuffer())
-    const res = await uploadFileToS3(buffer, result.data.image.name)
-    // console.log(res)
-    await prisma.category.update({
-      where: {
-        id: categoryId,
-
-        storeId,
-      },
-      data: {
-        image: {
-          disconnect: { id: isExisting.image?.id },
-        },
-        // billboard: {
-        //   disconnect: { id: isExisting.billboard.id },
-        // },
-      },
-    })
-    await prisma.category.update({
-      where: {
-        id: categoryId,
-        storeId,
-      },
-      data: {
-        name: result.data.name,
-        description: result.data.description,
-        //   billboardId: result.data.billboardId,
-        image: {
-          connect: { id: res?.imageId },
-        },
-        billboard: {
-          connect: { id: result.data.billboardId },
-        },
-      },
-    })
     // imageId: res?.imageId,
     // console.log(billboard)
   } catch (err: unknown) {
