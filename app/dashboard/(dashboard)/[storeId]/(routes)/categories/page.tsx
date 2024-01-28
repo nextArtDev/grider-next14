@@ -2,12 +2,11 @@
 import { format } from 'date-fns-jalali'
 import { CategoryColumn } from './components/columns'
 
-import { getAllBillboards } from '@/lib/queries/dashboard/billboards'
-import { notFound } from 'next/navigation'
 import { getAllCategories } from '@/lib/queries/dashboard/categories'
+import { notFound } from 'next/navigation'
 import { CategoriesClient } from './components/CategoriesClient'
 
-const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
+const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
   // const billboards = await prisma.billboard.findMany({
   //   where: {
   //     storeId: params.storeId,
@@ -37,4 +36,4 @@ const BillboardsPage = async ({ params }: { params: { storeId: string } }) => {
   )
 }
 
-export default BillboardsPage
+export default CategoriesPage

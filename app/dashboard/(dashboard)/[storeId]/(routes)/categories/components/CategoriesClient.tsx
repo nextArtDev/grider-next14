@@ -24,7 +24,7 @@ export const CategoriesClient: React.FC<CategoriesClientProps> = ({ data }) => {
     <>
       <div className="flex items-center justify-between">
         <Heading
-          title={`دسته‌ها (${data.length})`}
+          title={`دسته‌بندی‌ها (${data.length})`}
           description="دسته‌های فروشگاه خود را مدیریت کنید."
         />
         <Link

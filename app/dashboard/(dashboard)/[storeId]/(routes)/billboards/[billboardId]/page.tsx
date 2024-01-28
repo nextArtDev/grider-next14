@@ -12,7 +12,7 @@ const BillboardPage = async ({
       id: params.billboardId,
     },
     include: {
-      image: true,
+      image: { select: { url: true } },
     },
   })
 

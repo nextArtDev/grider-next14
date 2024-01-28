@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Loader, Trash, UploadCloud } from 'lucide-react'
-import { Billboard, Category, Image as PrismaImage } from '@prisma/client'
+import { Billboard, Category } from '@prisma/client'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
 import { Input } from '@/components/ui/input'
@@ -86,10 +86,6 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const [isPending, startTransition] = useTransition()
 
-  // const [files, setFiles] = useState<File | null>(null)
-
-  //Based on we get "new" or no billboard data, or we get billboardId as params we create or update billboard
-
   const title = initialData ? 'ویرایش دسته‌بندی' : 'ایجاد دسته‌بندی'
   const description = initialData
     ? 'ویرایش دسته‌بندی.'
@@ -143,56 +139,6 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
       errors: {},
     }
   )
-
-  // useEffect(() => {
-  //   if (formState?.errors?.name) {
-  //     form.setError('name', {
-  //       type: 'custom',
-  //       message: formState?.errors.name?.join(' و '),
-  //     })
-  //     form.setError('billboardId', {
-  //       type: 'custom',
-  //       message: formState?.errors.billboardId?.join(' و '),
-  //     })
-  //   } else if (formState?.errors?.image) {
-  //     form.setError('image', {
-  //       type: 'custom',
-  //       message: formState?.errors.image?.join(' و '),
-  //     })
-  //   } else if (formState?.errors?._form) {
-  //     toast.error(formState?.errors._form?.join(' و '))
-  //     form.setError('root', {
-  //       type: 'custom',
-  //       message: formState?.errors?._form?.join(' و '),
-  //     })
-  //   }
-  //   return () => form.clearErrors()
-  // }, [form, formState])
-
-  // useEffect(() => {
-  //   if (editFormState?.errors?.name) {
-  //     form.setError('name', {
-  //       type: 'custom',
-  //       message: editFormState?.errors.name?.join(' و '),
-  //     })
-  //     form.setError('billboardId', {
-  //       type: 'custom',
-  //       message: editFormState?.errors.billboardId?.join(' و '),
-  //     })
-  //   } else if (editFormState?.errors?.image) {
-  //     form.setError('image', {
-  //       type: 'custom',
-  //       message: editFormState?.errors.image?.join(' و '),
-  //     })
-  //   } else if (editFormState?.errors?._form) {
-  //     toast.error(editFormState?.errors._form?.join(' و '))
-  //     form.setError('root', {
-  //       type: 'custom',
-  //       message: editFormState?.errors?._form?.join(' و '),
-  //     })
-  //   }
-  //   return () => form.clearErrors()
-  // }, [form, editFormState])
 
   const onSubmit = async (data: CategoryFormValues) => {
     const formData = new FormData()
@@ -301,31 +247,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         )}
       </div>
       <Separator />
-      {/* <form id="my-form" action={uploadAction}>
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          onChange={(event) => {
-            const file = event.target.files[0]
-            const reader = new FileReader()
-            reader.onload = (event) => {
-              setImageSrc(event.target.result as string)
-            }
-            reader.readAsDataURL(file)
-            if (submitButtonRef.current) {
-              submitButtonRef.current.click()
-            }
-          }}
-        />
-        <img src={imageSrc} alt="Selected image" />
-        <button
-          id="submit-button"
-          type="submit"
-          style={{ display: 'none' }}
-          ref={submitButtonRef}
-        />
-      </form> */}
+
       <Form {...form}>
         <form
           // action={initialData ? editAction : createAction}

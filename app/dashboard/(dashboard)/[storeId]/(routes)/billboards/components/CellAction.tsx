@@ -99,7 +99,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
               href={`/dashboard/${params.storeId}/billboards/${data.id}`}
               className={cn(buttonVariants(), 'w-full')}
             >
-              <Edit className="ml-2 h-4 w-4" /> آپدیت
+              <Edit className="ml-2 h-4 w-4" /> آپدیت عکس
             </Link>
           </DropdownMenuItem>
           {/* just open AlertModal for deleting */}
