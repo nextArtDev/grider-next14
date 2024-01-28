@@ -2,7 +2,7 @@
 
 // import axios from 'axios'
 import { Copy, Edit, MoreHorizontal, Trash } from 'lucide-react'
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
@@ -19,6 +19,8 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { toast } from 'sonner'
 import { CategoryColumn } from './columns'
+import { deleteCategory } from '@/lib/actions/dashboard/category'
+import { useFormState } from 'react-dom'
 
 interface CellActionProps {
   data: CategoryColumn
@@ -29,6 +31,8 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const params = useParams()
   const path = usePathname()
   const [open, setOpen] = useState(false)
+
+  const [isPending, startTransition] = useTransition()
   // const [loading, setLoading] = useState(false)
 
   // console.log(params)
@@ -55,12 +59,17 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   //     setLoading(false)
   //   }
   // }
-  // const [deleteState, deleteAction] = useFormState(
-  //   deleteBillboard.bind(null, path, params.storeId as string, data.id),
-  //   {
-  //     errors: {},
-  //   }
-  // )
+  const [deleteState, deleteAction] = useFormState(
+    deleteCategory.bind(
+      null,
+      path,
+      params.storeId as string,
+      data.id as string
+    ),
+    {
+      errors: {},
+    }
+  )
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success('ID کپی شد')
@@ -72,8 +81,9 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        // onConfirm={deleteAction}
+        onConfirm={deleteAction}
         // loading={loading}
+        isPending={isPending}
       />
       <DropdownMenu dir="rtl">
         <DropdownMenuTrigger asChild>

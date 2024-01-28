@@ -330,7 +330,6 @@ export async function editCategory(
       typeof result.data.image === 'object' &&
       result.data.image instanceof File
     ) {
-      console.log(result.data.image)
       const buffer = Buffer.from(await result.data.image.arrayBuffer())
       const res = await uploadFileToS3(buffer, result.data.image.name)
 
@@ -372,7 +371,6 @@ export async function editCategory(
         },
       })
     } else {
-      console.log('not new')
       await prisma.category.update({
         where: {
           id: categoryId,
@@ -428,6 +426,7 @@ export async function deleteCategory(
   formState: DeleteBillboardFormState,
   formData: FormData
 ): Promise<DeleteBillboardFormState> {
+  // console.log({ path, storeId, categoryId })
   const session = await auth()
   if (!session || !session.user || session.user.role !== 'ADMIN') {
     return {
@@ -466,7 +465,7 @@ export async function deleteCategory(
     // console.log(billboard)
 
     if (isExisting.image?.key) {
-      const isDeletedFromS3 = await deleteFileFromS3(isExisting.image.key)
+      await deleteFileFromS3(isExisting.image.key)
       // console.log(isDeletedFromS3)
     }
 

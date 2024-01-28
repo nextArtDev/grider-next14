@@ -75,7 +75,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const params = useParams()
   const storeId = params.soreId
   const categoryId = initialData?.id
-
+  // console.log(params.storeId)
   const router = useRouter()
   const path = usePathname()
 
@@ -133,7 +133,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   //   }
   // )
   const [deleteState, deleteAction] = useFormState(
-    deleteCategory.bind(null, path, storeId as string, categoryId as string),
+    deleteCategory.bind(
+      null,
+      path,
+      params.storeId as string,
+      categoryId as string
+    ),
     {
       errors: {},
     }
@@ -279,7 +284,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={deleteAction}
-        // loading={isPending}
+        isPending={isPending}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />

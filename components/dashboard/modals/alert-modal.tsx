@@ -17,6 +17,7 @@ interface DeleteStoreFormState {
 }
 interface AlertModalProps {
   isOpen: boolean
+  isPending?: boolean
   onClose: () => void
   onConfirm: (payload: FormData) => void
   formState?: DeleteStoreFormState
@@ -27,6 +28,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
   onClose,
   onConfirm,
   formState,
+  isPending,
 }) => {
   const [isMounted, setIsMounted] = useState(false)
   const { pending } = useFormStatus()
@@ -56,7 +58,7 @@ export const AlertModal: React.FC<AlertModalProps> = ({
         <form action={onConfirm}>
           <SubmitButton variant="destructive">ادامه</SubmitButton>
         </form>
-        <Button disabled={pending} variant="outline" onClick={onClose}>
+        <Button disabled={isPending} variant="outline" onClick={onClose}>
           انصراف
         </Button>
       </div>
