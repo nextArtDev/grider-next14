@@ -8,9 +8,11 @@ import { redirect } from 'next/navigation'
 import { Billboard, Category, Image, Store } from '@prisma/client'
 import { createBillboardSchema } from '@/lib/schema/billboard'
 import { deleteFileFromS3, uploadFileToS3 } from './s3Upload'
-import { createCategorySchema } from '@/lib/schema/category'
+import { createCategorySchema, upImageSchema } from '@/lib/schema/category'
+import * as z from 'zod'
 
 interface CreateCategoryFormState {
+  success?: string
   errors: {
     name?: string[]
     description?: string[]
@@ -19,11 +21,128 @@ interface CreateCategoryFormState {
     _form?: string[]
   }
 }
+interface UpImageFormState {
+  success?: string
+  errors: {
+    image?: string[]
+    _form?: string[]
+  }
+}
+export async function upImage(formState: UpImageFormState, formData: FormData) {
+  const result = upImageSchema.safeParse({
+    image: formData.get('image'),
+  })
+
+  console.log(result.success)
+  console.log(formData.get('image'))
+}
+// export async function createCategory(
+//   path: string,
+//   storeId: string,
+//   formState: CreateCategoryFormState,
+//   formData: FormData
+// ): Promise<CreateCategoryFormState> {
+//   const result = createCategorySchema.safeParse({
+//     name: formData.get('name'),
+//     description: formData.get('description'),
+//     image: formData.get('image'),
+//     billboardId: formData.get('billboardId'),
+//   })
+
+//   //   console.log(result)
+//   console.log(formData.get('billboardId'))
+
+//   if (!result.success) {
+//     console.log(result.error.flatten().fieldErrors)
+//     return {
+//       errors: result.error.flatten().fieldErrors,
+//     }
+//   }
+//   const session = await auth()
+//   if (!session || !session.user || session.user.role !== 'ADMIN') {
+//     return {
+//       errors: {
+//         _form: ['شما اجازه دسترسی ندارید!'],
+//       },
+//     }
+//   }
+//   if (!storeId) {
+//     return {
+//       errors: {
+//         _form: ['فروشگاه در دسترس نیست!'],
+//       },
+//     }
+//   }
+
+//   const categoryByBillboardId = await prisma.billboard.findFirst({
+//     where: {
+//       id: result.data.billboardId,
+//     },
+//   })
+//   if (!categoryByBillboardId) {
+//     return {
+//       errors: {
+//         _form: ['بیلبورد حذف شده است!'],
+//       },
+//     }
+//   }
+
+//   // console.log(result)
+
+//   let category: Category
+//   try {
+//     const isExisting = await prisma.category.findFirst({
+//       where: {
+//         name: result.data.name,
+//         storeId,
+//         billboardId: result.data.billboardId,
+//       },
+//     })
+//     if (isExisting) {
+//       return {
+//         errors: {
+//           _form: ['دسته‌بندی با این نام موجود است!'],
+//         },
+//       }
+//     }
+//     // console.log(isExisting)
+//     // console.log(billboard)
+
+//     const buffer = Buffer.from(await result.data.image.arrayBuffer())
+//     const res = await uploadFileToS3(buffer, result.data.image.name)
+
+//     category = await prisma.category.create({
+//       data: {
+//         name: result.data.name,
+//         imageId: res?.imageId,
+//         billboardId: result.data.billboardId,
+//         storeId,
+//       },
+//     })
+//     // console.log(res?.url)
+//   } catch (err: unknown) {
+//     if (err instanceof Error) {
+//       return {
+//         errors: {
+//           _form: [err.message],
+//         },
+//       }
+//     } else {
+//       return {
+//         errors: {
+//           _form: ['مشکلی پیش آمده، لطفا دوباره امتحان کنید!'],
+//         },
+//       }
+//     }
+//   }
+
+//   revalidatePath(path)
+//   redirect(`/dashboard/${storeId}/categories`)
+// }
 export async function createCategory(
-  path: string,
+  formData: FormData,
   storeId: string,
-  formState: CreateCategoryFormState,
-  formData: FormData
+  path: string
 ): Promise<CreateCategoryFormState> {
   const result = createCategorySchema.safeParse({
     name: formData.get('name'),
@@ -31,16 +150,14 @@ export async function createCategory(
     image: formData.get('image'),
     billboardId: formData.get('billboardId'),
   })
-
-  //   console.log(result)
-  console.log(formData.get('billboardId'))
-
   if (!result.success) {
     console.log(result.error.flatten().fieldErrors)
     return {
       errors: result.error.flatten().fieldErrors,
     }
   }
+  // console.log(result?.data)
+
   const session = await auth()
   if (!session || !session.user || session.user.role !== 'ADMIN') {
     return {
@@ -102,7 +219,8 @@ export async function createCategory(
         storeId,
       },
     })
-    // console.log(res?.url)
+    // console.log(res?.imageUrl)
+    // console.log(category)
   } catch (err: unknown) {
     if (err instanceof Error) {
       return {

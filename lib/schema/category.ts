@@ -30,3 +30,18 @@ export const createCategorySchema = z.object({
   //   'تنها فرمتهای قابل پشتیبانی .jpg .jpeg .png و webp هستند.'
   // ),
 })
+export const upImageSchema = z.object({
+  image: z
+    .any()
+    .refine((files) => !!files, {
+      message: 'قسمت عکس نمی‌تواند خالی باشد.',
+    })
+    .refine((files) => {
+      return files?.size <= MAX_FILE_SIZE
+    }, `حجم عکس از 5 مگابایت بیشتر است!`)
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
+      // 'Only .jpg, .jpeg, .png and .webp formats are supported.'
+      'تنها فرمتهای قابل پشتیبانی .jpg .jpeg .png و webp هستند.'
+    ),
+})

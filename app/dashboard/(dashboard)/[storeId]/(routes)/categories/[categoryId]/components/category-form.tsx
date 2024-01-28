@@ -2,11 +2,17 @@
 
 import * as z from 'zod'
 // import axios from 'axios'
-import { useEffect, useState } from 'react'
+import {
+  startTransition,
+  useEffect,
+  useRef,
+  useState,
+  useTransition,
+} from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { Trash, UploadCloud } from 'lucide-react'
+import { Loader, Trash, UploadCloud } from 'lucide-react'
 import { Billboard, Category, Image } from '@prisma/client'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
@@ -48,6 +54,7 @@ import {
   createCategory,
   deleteCategory,
   editCategory,
+  upImage,
 } from '@/lib/actions/dashboard/category'
 
 type CategoryFormValues = z.infer<typeof createCategorySchema>
@@ -64,15 +71,20 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   billboards,
 }) => {
   const params = useParams()
-  const { storeId } = params
+  const storeId = params.soreId
   const categoryId = initialData?.id
 
   const router = useRouter()
   const path = usePathname()
 
   const [open, setOpen] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [files, setFiles] = useState('')
+
+  const [isPending, startTransition] = useTransition()
+
+  const [imageSrc, setImageSrc] = useState<string>('')
+  const submitButtonRef = useRef<HTMLButtonElement>(null)
+
   // const [files, setFiles] = useState<File | null>(null)
 
   //Based on we get "new" or no billboard data, or we get billboardId as params we create or update billboard
@@ -95,12 +107,17 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
       // image: undefined,
     },
   })
-  const [formState, createAction] = useFormState(
-    createCategory.bind(null, path, storeId as string),
-    {
-      errors: {},
-    }
-  )
+  // const [formState, createAction] = useFormState(
+  //   createCategory.bind(null, path, storeId as string),
+  //   {
+  //     errors: {},
+  //   }
+  // )
+  // const [imageFormState, uploadAction] = useFormState(upImage, {
+  //   errors: {},
+  //   success: '',
+  // })
+
   const [editFormState, editAction] = useFormState(
     editCategory.bind(null, path, storeId as string, categoryId as string),
     {
@@ -114,58 +131,102 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     }
   )
 
-  useEffect(() => {
-    if (formState?.errors?.name) {
-      form.setError('name', {
-        type: 'custom',
-        message: formState?.errors.name?.join(' و '),
-      })
-      form.setError('billboardId', {
-        type: 'custom',
-        message: formState?.errors.billboardId?.join(' و '),
-      })
-    } else if (formState?.errors?.image) {
-      form.setError('image', {
-        type: 'custom',
-        message: formState?.errors.image?.join(' و '),
-      })
-    } else if (formState?.errors?._form) {
-      toast.error(formState?.errors._form?.join(' و '))
-      form.setError('root', {
-        type: 'custom',
-        message: formState?.errors?._form?.join(' و '),
-      })
-    }
-    return () => form.clearErrors()
-  }, [form, formState])
+  // useEffect(() => {
+  //   if (formState?.errors?.name) {
+  //     form.setError('name', {
+  //       type: 'custom',
+  //       message: formState?.errors.name?.join(' و '),
+  //     })
+  //     form.setError('billboardId', {
+  //       type: 'custom',
+  //       message: formState?.errors.billboardId?.join(' و '),
+  //     })
+  //   } else if (formState?.errors?.image) {
+  //     form.setError('image', {
+  //       type: 'custom',
+  //       message: formState?.errors.image?.join(' و '),
+  //     })
+  //   } else if (formState?.errors?._form) {
+  //     toast.error(formState?.errors._form?.join(' و '))
+  //     form.setError('root', {
+  //       type: 'custom',
+  //       message: formState?.errors?._form?.join(' و '),
+  //     })
+  //   }
+  //   return () => form.clearErrors()
+  // }, [form, formState])
 
-  useEffect(() => {
-    if (editFormState?.errors?.name) {
-      form.setError('name', {
-        type: 'custom',
-        message: editFormState?.errors.name?.join(' و '),
-      })
-      form.setError('billboardId', {
-        type: 'custom',
-        message: editFormState?.errors.billboardId?.join(' و '),
-      })
-    } else if (editFormState?.errors?.image) {
-      form.setError('image', {
-        type: 'custom',
-        message: editFormState?.errors.image?.join(' و '),
-      })
-    } else if (editFormState?.errors?._form) {
-      toast.error(editFormState?.errors._form?.join(' و '))
-      form.setError('root', {
-        type: 'custom',
-        message: editFormState?.errors?._form?.join(' و '),
-      })
-    }
-    return () => form.clearErrors()
-  }, [form, editFormState])
+  // useEffect(() => {
+  //   if (editFormState?.errors?.name) {
+  //     form.setError('name', {
+  //       type: 'custom',
+  //       message: editFormState?.errors.name?.join(' و '),
+  //     })
+  //     form.setError('billboardId', {
+  //       type: 'custom',
+  //       message: editFormState?.errors.billboardId?.join(' و '),
+  //     })
+  //   } else if (editFormState?.errors?.image) {
+  //     form.setError('image', {
+  //       type: 'custom',
+  //       message: editFormState?.errors.image?.join(' و '),
+  //     })
+  //   } else if (editFormState?.errors?._form) {
+  //     toast.error(editFormState?.errors._form?.join(' و '))
+  //     form.setError('root', {
+  //       type: 'custom',
+  //       message: editFormState?.errors?._form?.join(' و '),
+  //     })
+  //   }
+  //   return () => form.clearErrors()
+  // }, [form, editFormState])
 
-  const onSubmit = async (data: any) => {
-    console.log(data)
+  const onSubmit = async (data: CategoryFormValues) => {
+    const formData = new FormData()
+
+    formData.append('image', data.image)
+    formData.append('name', data.name)
+    formData.append('billboardId', data.billboardId)
+    formData.append('description', data.description)
+    // console.log(data.image)
+
+    try {
+      if (initialData) {
+      } else {
+        startTransition(() => {
+          createCategory(formData, params.storeId as string, path)
+            .then((res) => {
+              if (res?.errors?.name) {
+                form.setError('name', {
+                  type: 'custom',
+                  message: res?.errors.name?.join(' و '),
+                })
+                form.setError('billboardId', {
+                  type: 'custom',
+                  message: res?.errors.billboardId?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+              }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
+      }
+    } catch {
+      toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
+    }
   }
 
   return (
@@ -174,14 +235,14 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         isOpen={open}
         onClose={() => setOpen(false)}
         onConfirm={deleteAction}
-        // loading={loading}
+        // loading={isPending}
       />
       <div className="flex items-center justify-between">
         <Heading title={title} description={description} />
         {/* in case there is initial data it means we want to edit it */}
         {initialData && (
           <Button
-            disabled={loading}
+            disabled={isPending}
             variant="destructive"
             size="sm"
             onClick={() => setOpen(true)}
@@ -191,11 +252,39 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
         )}
       </div>
       <Separator />
+      {/* <form id="my-form" action={uploadAction}>
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          onChange={(event) => {
+            const file = event.target.files[0]
+            const reader = new FileReader()
+            reader.onload = (event) => {
+              setImageSrc(event.target.result as string)
+            }
+            reader.readAsDataURL(file)
+            if (submitButtonRef.current) {
+              submitButtonRef.current.click()
+            }
+          }}
+        />
+        <img src={imageSrc} alt="Selected image" />
+        <button
+          id="submit-button"
+          type="submit"
+          style={{ display: 'none' }}
+          ref={submitButtonRef}
+        />
+      </form> */}
       <Form {...form}>
         <form
           // action={initialData ? editAction : createAction}
-          action={(data) => console.log(data.get('billboardId'))}
-          // onSubmit={form.handleSubmit(onSubmit)}
+          // action={(data) => console.log(data.get('billboardId'))}
+          onSubmit={form.handleSubmit(onSubmit)}
+          // action={async (formData: FormData) => {
+          //   console.log(formData.get('billboardId'))
+          // }}
           className="space-y-8 w-full"
         >
           {files && (
@@ -242,6 +331,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             </span>
           </label>
           <input
+            // formAction={}
+
             name="image"
             id="image"
             className="hidden"
@@ -249,7 +340,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             onChange={(e) => {
               const file = e.target.files ? e.target.files[0] : null
               if (file) {
-                form.setValue('image', URL.createObjectURL(file))
+                form.setValue('image', file)
                 setFiles(URL.createObjectURL(file))
               }
             }}
@@ -267,7 +358,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                 <FormLabel>نام</FormLabel>
                 <FormControl>
                   <Input
-                    disabled={loading}
+                    disabled={isPending}
                     placeholder="نام دسته‌بندی"
                     {...field}
                   />
@@ -284,7 +375,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                 <FormLabel>بیلبورد</FormLabel>
                 <Select
                   dir="rtl"
-                  disabled={loading}
+                  disabled={isPending}
                   onValueChange={field.onChange}
                   value={field.value}
                   defaultValue={field.value}
@@ -327,7 +418,13 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             )}
           />
 
-          <SubmitButton className="ml-auto">{action}</SubmitButton>
+          <Button disabled={isPending} className="ml-auto">
+            {isPending ? (
+              <Loader className="animate-spin w-full h-full " />
+            ) : (
+              action
+            )}
+          </Button>
         </form>
       </Form>
     </>
