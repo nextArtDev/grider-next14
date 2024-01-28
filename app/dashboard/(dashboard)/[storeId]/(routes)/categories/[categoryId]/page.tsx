@@ -11,7 +11,7 @@ const CategoryPage = async ({
       id: params.categoryId,
     },
     include: {
-      image: true,
+      image: { select: { url: true } },
     },
   })
   //if any 'billboardId' we'll gonna use that as initial data, if not just we route here to create a new billboard

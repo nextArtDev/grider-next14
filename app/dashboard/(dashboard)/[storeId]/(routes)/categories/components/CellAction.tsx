@@ -92,7 +92,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           // }
           >
             <Link
-              href={`/dashboard/${params.storeId}/billboards/${data.id}`}
+              href={`/dashboard/${params.storeId}/categories/${data.id}`}
               className={cn(buttonVariants(), 'w-full')}
             >
               <Edit className="ml-2 h-4 w-4" /> آپدیت

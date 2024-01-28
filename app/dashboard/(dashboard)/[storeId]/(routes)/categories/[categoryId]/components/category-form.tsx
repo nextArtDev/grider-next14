@@ -13,7 +13,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
 import { Loader, Trash, UploadCloud } from 'lucide-react'
-import { Billboard, Category, Image } from '@prisma/client'
+import { Billboard, Category, Image as PrismaImage } from '@prisma/client'
 import { useParams, usePathname, useRouter } from 'next/navigation'
 
 import { Input } from '@/components/ui/input'
@@ -62,7 +62,7 @@ type CategoryFormValues = z.infer<typeof createCategorySchema>
 //if there is any billboard its Billboard, else its null
 interface CategoryFormProps {
   //there is a chance to have no initial data and in fact we're creating one.
-  initialData: (Category & { image: Partial<Image> | null }) | null
+  initialData: (Partial<Category> & { image: { url: string } | null }) | null
   billboards: Billboard[]
 }
 
@@ -70,6 +70,8 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   initialData,
   billboards,
 }) => {
+  // console.log(initialData?.image?.url)
+
   const params = useParams()
   const storeId = params.soreId
   const categoryId = initialData?.id
@@ -78,12 +80,11 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   const path = usePathname()
 
   const [open, setOpen] = useState(false)
-  const [files, setFiles] = useState('')
+  const [files, setFiles] = useState(
+    initialData?.imageId ? initialData.image?.url : ''
+  )
 
   const [isPending, startTransition] = useTransition()
-
-  const [imageSrc, setImageSrc] = useState<string>('')
-  const submitButtonRef = useRef<HTMLButtonElement>(null)
 
   // const [files, setFiles] = useState<File | null>(null)
 
@@ -100,12 +101,19 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
 
   const form = useForm<CategoryFormValues>({
     resolver: zodResolver(createCategorySchema),
-    defaultValues: {
-      name: '',
-      billboardId: '',
-      description: '',
-      // image: undefined,
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          billboardId: initialData.billboardId,
+          description: initialData?.description || '',
+          image: initialData?.image?.url || '',
+        }
+      : {
+          name: '',
+          billboardId: '',
+          description: '',
+          // image: undefined,
+        },
   })
   // const [formState, createAction] = useFormState(
   //   createCategory.bind(null, path, storeId as string),
@@ -187,11 +195,12 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
     formData.append('image', data.image)
     formData.append('name', data.name)
     formData.append('billboardId', data.billboardId)
-    formData.append('description', data.description)
+    formData.append('description', data.description || '')
     // console.log(data.image)
 
     try {
       if (initialData) {
+        console.log({ data, initialData })
       } else {
         startTransition(() => {
           createCategory(formData, params.storeId as string, path)
@@ -287,15 +296,15 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
           // }}
           className="space-y-8 w-full"
         >
-          {files && (
+          {!!files && (
             <div
               // ratio={}
               className="relative mx-auto rounded-lg  h-40 w-[95%] max-w-xl "
             >
               <NextImage
                 alt="category-pic"
-                // src={initialData?.image ? initialData?.image?.url : files}
                 src={files}
+                // src={initialData?.image?.url}
                 // src={URL.createObjectURL(files)}
                 fill
                 className="object-cover rounded-lg"
@@ -307,6 +316,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                 )}
                 onClick={() => {
                   form.reset({ ...form.getValues(), image: null })
+
                   setFiles('')
                 }}
               />
@@ -316,7 +326,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
             htmlFor="image"
             className={cn(
               'max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow ',
-              files.length > 0 ? 'hidden' : ''
+              !!files ? 'hidden' : ''
             )}
           >
             <span

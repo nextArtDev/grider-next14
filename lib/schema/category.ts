@@ -16,7 +16,7 @@ export const createCategorySchema = z.object({
       message: 'تنها حروف، اعداد و آندرلاین برای اسم مجاز است.',
     })
     .max(128, { message: 'نام دسته‌بندی نمی‌تواند بیش از 128 حرف باشد.' }),
-  description: z.string(),
+  description: z.string().optional(),
   billboardId: z.string().min(1, { message: ' بیلبورد نمی‌تواند خالی باشد.' }),
   image: z.any().refine((files) => !!files, {
     message: 'قسمت عکس نمی‌تواند خالی باشد.',
