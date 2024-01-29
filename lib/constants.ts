@@ -49,3 +49,11 @@ export const cover = [
   { value: 'Cherm', label: 'چرم' },
   { value: 'Parcheh', label: 'پارچه' },
 ]
+
+export const contributor = [
+  { value: 'Writer', label: 'نویسنده' },
+  { value: 'Translator', label: 'مترجم' },
+  { value: 'Editor', label: 'ویراستار' },
+  { value: 'Illustrator', label: 'تصویرساز' },
+  { value: 'Photographer', label: 'عکاس' },
+]

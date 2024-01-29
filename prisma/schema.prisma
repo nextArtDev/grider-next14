@@ -30,7 +30,7 @@ enum Role {
   ADMIN
 }
 
-enum Size {
+enum BookSize {
   Roghei
   Kheshti
   Rahli
@@ -43,7 +43,7 @@ enum Size {
   Beyazee
 }
 
-enum Cover {
+enum BookCover {
   Shomiz
   Kaghazi
   Galingor
@@ -63,16 +63,17 @@ model Image {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  User         User[]
-  Product      Product?       @relation(fields: [productId], references: [id])
-  productId    String?
-  Billboard    Billboard[]
-  Category     Category[]
-  Writer       Writer[]
-  Translator   Translator[]
-  Editor       Editor[]
-  Illustrator  Illustrator[]
-  Photographer Photographer[]
+  User        User[]
+  Product     Product?      @relation(fields: [productId], references: [id])
+  productId   String?
+  Billboard   Billboard[]
+  Category    Category[]
+  // Writer       Writer[]
+  // Translator   Translator[]
+  // Editor       Editor[]
+  // Illustrator  Illustrator[]
+  // Photographer Photographer[]
+  Contributor Contributor[]
 
   @@index([productId])
 }
@@ -124,20 +125,20 @@ model Category {
 }
 
 model Product {
-  id                String    @id @default(uuid())
+  id                String     @id @default(uuid())
   name              String
   originalName      String?
-  description       String?   @db.Text
+  description       String?    @db.Text
   price             Decimal
-  isFeatured        Boolean   @default(false)
-  isArchived        Boolean   @default(false)
-  size              String
+  isFeatured        Boolean    @default(false)
+  isArchived        Boolean    @default(false)
+  size              BookSize?
   shabak            Decimal?
   publishDate       DateTime?
   recentPublishDate DateTime?
   pages             Int?
   weight            Int?
-  coverType         String?
+  cover             BookCover?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -148,65 +149,89 @@ model Product {
   categoryId String // Foreign Key to Category
   images     Image[] // Relation to Image model
 
-  orderItems   OrderItem[] // Relation to Order model
-  writer       Writer[]
-  translator   Translator[]
-  editor       Editor[]
-  illustrator  Illustrator[]
-  photographer Photographer[]
+  orderItems OrderItem[] // Relation to Order model
+
+  writer       Contributor[] @relation("writer")
+  translator   Contributor[] @relation("translator")
+  editor       Contributor[] @relation("editor")
+  illustrator  Contributor[] @relation("illustrator")
+  photographer Contributor[] @relation("photographer")
 
   @@index([storeId])
   @@index([categoryId])
 }
 
-model Writer {
-  id      String    @id @default(uuid())
+enum ContributorRole {
+  Writer
+  Translator
+  Editor
+  Illustrator
+  Photographer
+}
+
+model Contributor {
+  id      String          @id @default(uuid())
   name    String
   bio     String?
-  image   Image?    @relation(fields: [imageId], references: [id])
-  product Product[]
+  role    ContributorRole
+  image   Image?          @relation(fields: [imageId], references: [id])
   imageId String?
+
+  writer       Product[] @relation("writer")
+  Translator   Product[] @relation("translator")
+  editor       Product[] @relation("editor")
+  illustrator  Product[] @relation("illustrator")
+  photographer Product[] @relation("photographer")
 }
 
-model Translator {
-  id    String  @id @default(uuid())
-  name  String
-  bio   String?
-  image Image?  @relation(fields: [imageId], references: [id])
+// model Writer {
+//   id      String    @id @default(uuid())
+//   name    String
+//   bio     String?
+//   image   Image?    @relation(fields: [imageId], references: [id])
+//   product Product[]
+//   imageId String?
+// }
 
-  product Product[]
-  imageId String?
-}
+// model Translator {
+//   id    String  @id @default(uuid())
+//   name  String
+//   bio   String?
+//   image Image?  @relation(fields: [imageId], references: [id])
 
-model Editor {
-  id    String  @id @default(uuid())
-  name  String
-  bio   String?
-  image Image?  @relation(fields: [imageId], references: [id])
+//   product Product[]
+//   imageId String?
+// }
 
-  product Product[]
-  imageId String?
-}
+// model Editor {
+//   id    String  @id @default(uuid())
+//   name  String
+//   bio   String?
+//   image Image?  @relation(fields: [imageId], references: [id])
 
-model Illustrator {
-  id    String  @id @default(uuid())
-  name  String
-  bio   String?
-  image Image?  @relation(fields: [imageId], references: [id])
+//   product Product[]
+//   imageId String?
+// }
 
-  product Product[]
-  imageId String?
-}
+// model Illustrator {
+//   id    String  @id @default(uuid())
+//   name  String
+//   bio   String?
+//   image Image?  @relation(fields: [imageId], references: [id])
 
-model Photographer {
-  id    String  @id @default(uuid())
-  name  String
-  bio   String?
-  image Image?  @relation(fields: [imageId], references: [id])
+//   product Product[]
+//   imageId String?
+// }
 
-  product Product[]
-  imageId String?
-}
+// model Photographer {
+//   id    String  @id @default(uuid())
+//   name  String
+//   bio   String?
+//   image Image?  @relation(fields: [imageId], references: [id])
+
+//   product Product[]
+//   imageId String?
+// }
 
 model Order {
   id         String      @id @default(uuid())
