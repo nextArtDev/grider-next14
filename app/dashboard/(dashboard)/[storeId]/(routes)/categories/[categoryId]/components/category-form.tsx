@@ -70,7 +70,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
   initialData,
   billboards,
 }) => {
-  // console.log(initialData?.image?.url)
+  console.log(billboards)
 
   const params = useParams()
   const storeId = params.soreId

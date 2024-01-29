@@ -30,6 +30,32 @@ enum Role {
   ADMIN
 }
 
+enum Size {
+  Roghei
+  Kheshti
+  Rahli
+  Vaziri
+  Soltani
+  Gibi
+  Paltoei
+  Hamayeli
+  Janamazi
+  Beyazee
+}
+
+enum Cover {
+  Shomiz
+  Kaghazi
+  Galingor
+  Sakht
+  Narm
+  Ghalaf
+  Zarrin
+  Makhmal
+  Cherm
+  Parcheh
+}
+
 model Image {
   id         String   @id @default(cuid())
   url        String   @db.Text
@@ -37,11 +63,16 @@ model Image {
   created_at DateTime @default(now())
   updated_at DateTime @updatedAt
 
-  User      User[]
-  Product   Product?    @relation(fields: [productId], references: [id])
-  productId String?
-  Billboard Billboard[]
-  Category  Category[]
+  User         User[]
+  Product      Product?       @relation(fields: [productId], references: [id])
+  productId    String?
+  Billboard    Billboard[]
+  Category     Category[]
+  Writer       Writer[]
+  Translator   Translator[]
+  Editor       Editor[]
+  Illustrator  Illustrator[]
+  Photographer Photographer[]
 
   @@index([productId])
 }
@@ -53,7 +84,6 @@ model Store {
   billboards Billboard[] @relation("StoreToBillboard")
   categories Category[]  @relation("StoreToCategory")
   products   Product[]   @relation("StoreToProduct")
-  sizes      Size[]      @relation("StoreToSize")
   orders     Order[]     @relation("StoreToOrder")
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @updatedAt
@@ -94,44 +124,88 @@ model Category {
 }
 
 model Product {
-  id           String   @id @default(uuid())
-  storeId      String // Foreign Key to Store
-  store        Store    @relation("StoreToProduct", fields: [storeId], references: [id])
-  categoryId   String // Foreign Key to Category
-  category     Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
-  name         String
-  originalName String?
-  description  String?  @db.Text
-  price        Decimal
-  isFeatured   Boolean  @default(false)
-  isArchived   Boolean  @default(false)
-  sizeId       String // Foreign Key to Size
-  size         Size     @relation(fields: [sizeId], references: [id])
-
-  images     Image[] // Relation to Image model
-  orderItems OrderItem[] // Relation to Order model
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
-
+  id                String    @id @default(uuid())
+  name              String
+  originalName      String?
+  description       String?   @db.Text
+  price             Decimal
+  isFeatured        Boolean   @default(false)
+  isArchived        Boolean   @default(false)
+  size              String
   shabak            Decimal?
   publishDate       DateTime?
   recentPublishDate DateTime?
   pages             Int?
   weight            Int?
+  coverType         String?
 
-  coverType    Cover      @relation(fields: [coverId], references: [id])
-  writer       Writer     @relation(fields: [writerId], references: [id])
-  translator   Translator @relation(fields: [translatorId], references: [id])
-  coverId      String
-  writerId     String
-  translatorId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  store      Store    @relation("StoreToProduct", fields: [storeId], references: [id])
+  category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
+  storeId    String // Foreign Key to Store
+  categoryId String // Foreign Key to Category
+  images     Image[] // Relation to Image model
+
+  orderItems   OrderItem[] // Relation to Order model
+  writer       Writer[]
+  translator   Translator[]
+  editor       Editor[]
+  illustrator  Illustrator[]
+  photographer Photographer[]
 
   @@index([storeId])
   @@index([categoryId])
-  @@index([sizeId])
-  @@index([coverId])
-  @@index([writerId])
-  @@index([translatorId])
+}
+
+model Writer {
+  id      String    @id @default(uuid())
+  name    String
+  bio     String?
+  image   Image?    @relation(fields: [imageId], references: [id])
+  product Product[]
+  imageId String?
+}
+
+model Translator {
+  id    String  @id @default(uuid())
+  name  String
+  bio   String?
+  image Image?  @relation(fields: [imageId], references: [id])
+
+  product Product[]
+  imageId String?
+}
+
+model Editor {
+  id    String  @id @default(uuid())
+  name  String
+  bio   String?
+  image Image?  @relation(fields: [imageId], references: [id])
+
+  product Product[]
+  imageId String?
+}
+
+model Illustrator {
+  id    String  @id @default(uuid())
+  name  String
+  bio   String?
+  image Image?  @relation(fields: [imageId], references: [id])
+
+  product Product[]
+  imageId String?
+}
+
+model Photographer {
+  id    String  @id @default(uuid())
+  name  String
+  bio   String?
+  image Image?  @relation(fields: [imageId], references: [id])
+
+  product Product[]
+  imageId String?
 }
 
 model Order {
@@ -148,39 +222,6 @@ model Order {
   @@index([storeId])
 }
 
-model Writer {
-  id       String    @id @default(uuid())
-  name     String
-  bio      String?
-  birthDay DateTime?
-  death    DateTime?
-  Product  Product[]
-}
-
-model Translator {
-  id       String    @id @default(uuid())
-  name     String
-  bio      String?
-  birthDay DateTime?
-  death    DateTime?
-  Product  Product[]
-}
-
-model Editor {
-  id       String    @id @default(uuid())
-  name     String
-  bio      String?
-  birthDay DateTime?
-  death    DateTime?
-}
-
-model Cover {
-  id          String    @id @default(uuid())
-  name        String
-  discription String?
-  Product     Product[]
-}
-
 // Intermediary for a many-to-many relationship
 model OrderItem {
   id        String  @id @default(uuid())
@@ -191,17 +232,4 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
-}
-
-model Size {
-  id        String    @id @default(uuid())
-  storeId   String // Foreign Key to Store
-  store     Store     @relation("StoreToSize", fields: [storeId], references: [id])
-  name      String
-  value     String
-  products  Product[] // Relation to Product model
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-
-  @@index([storeId])
 }
