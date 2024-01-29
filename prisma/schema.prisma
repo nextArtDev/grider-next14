@@ -79,15 +79,17 @@ model Image {
 }
 
 model Store {
-  id         String      @id @default(uuid())
-  name       String      @unique
-  userId     String
-  billboards Billboard[] @relation("StoreToBillboard")
-  categories Category[]  @relation("StoreToCategory")
-  products   Product[]   @relation("StoreToProduct")
-  orders     Order[]     @relation("StoreToOrder")
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @updatedAt
+  id           String        @id @default(uuid())
+  name         String        @unique
+  userId       String
+  billboards   Billboard[]   @relation("StoreToBillboard")
+  categories   Category[]    @relation("StoreToCategory")
+  products     Product[]     @relation("StoreToProduct")
+  orders       Order[]       @relation("StoreToOrder")
+  contributors Contributor[] @relation("StoreToContributor")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Billboard {
@@ -170,11 +172,13 @@ enum ContributorRole {
 }
 
 model Contributor {
-  id      String          @id @default(uuid())
-  name    String
-  bio     String?
-  role    ContributorRole
-  image   Image?          @relation(fields: [imageId], references: [id])
+  id   String  @id @default(uuid())
+  name String
+  bio  String?
+
+  role ContributorRole[]
+
+  image   Image?  @relation(fields: [imageId], references: [id])
   imageId String?
 
   writer       Product[] @relation("writer")
@@ -182,6 +186,11 @@ model Contributor {
   editor       Product[] @relation("editor")
   illustrator  Product[] @relation("illustrator")
   photographer Product[] @relation("photographer")
+
+  store   Store  @relation("StoreToContributor", fields: [storeId], references: [id])
+  storeId String
+
+  @@index([storeId])
 }
 
 // model Writer {

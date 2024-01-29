@@ -24,6 +24,21 @@ export enum Cover {
   Parcheh = 'پارچه',
 }
 
+export enum Contributor {
+  'Writer',
+  'Translator',
+  'Editor',
+  'Illustrator',
+  'Photographer',
+}
+// export enum Contributor {
+//   Writer = 'نویسنده',
+//   Translator = 'مترجم',
+//   Editor = 'ویراستار',
+//   Illustrator = 'تصویرساز',
+//   Photographer = 'عکاس',
+// }
+
 export const size = [
   { value: 'Roghei', label: 'رقعی' },
   { value: 'Kheshti', label: 'خشتی' },
@@ -56,4 +71,4 @@ export const contributor = [
   { value: 'Editor', label: 'ویراستار' },
   { value: 'Illustrator', label: 'تصویرساز' },
   { value: 'Photographer', label: 'عکاس' },
-]
+] as const

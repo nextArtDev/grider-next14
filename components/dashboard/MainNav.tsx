@@ -52,9 +52,9 @@ export function MainNav({
       active: pathname === `/dashboard/${params.storeId}/categories`,
     },
     {
-      href: `/dashboard/${params.storeId}/sizes`,
-      label: 'سایزها',
-      active: pathname === `/dashboard/${params.storeId}/sizes`,
+      href: `/dashboard/${params.storeId}/contributors`,
+      label: 'فعالین',
+      active: pathname === `/dashboard/${params.storeId}/contributors`,
     },
     {
       href: `/dashboard/${params.storeId}/colors`,
