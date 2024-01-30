@@ -12,7 +12,7 @@ import {
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 
-import { Loader, Trash, UploadCloud } from 'lucide-react'
+import { CalendarIcon, Loader, Trash, UploadCloud } from 'lucide-react'
 import {
   Billboard,
   Category,
@@ -67,6 +67,18 @@ import { createProductSchema } from '@/lib/schema/product'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Textarea } from '@/components/ui/textarea'
 import { MultiSelect } from './MultiSelect'
+import { AspectRatio } from '@/components/ui/aspect-ratio'
+import ImageSlider from '@/components/dashboard/ImageSlider'
+import { covers, sizes } from '@/lib/constants'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { format } from 'date-fns-jalali'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
+import { primaryFont } from '@/lib/fonts'
 
 type ProductFormValues = z.infer<typeof createProductSchema>
 
@@ -103,10 +115,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   // console.log({ writers, translators, editors, illustrators, photographers })
   const [open, setOpen] = useState(false)
-  const [files, setFiles] = useState(
-    initialData?.images?.[0].url ? initialData.images?.[0].url : ''
-  )
-
+  // const [files, setFiles] = useState(
+  //   initialData?.images?.[0].url ? initialData.images?.[0].url : ''
+  // )
+  const [files, setFiles] = useState<File[]>([])
   const [isPending, startTransition] = useTransition()
 
   const title = initialData ? 'ویرایش کتاب' : 'ایجاد کتاب'
@@ -252,6 +264,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   }
 
+  const validUrls = files
+    .map((file) => URL.createObjectURL(file))
+    .filter(Boolean) as string[]
+
   return (
     <>
       <AlertModal
@@ -286,71 +302,71 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           // }}
           className="grid grid-cols-2 lg:grid-cols-4 space-y-8 gap-x-4 w-full"
         >
-          {!!files && (
-            <div
-              aria-disabled={isPending}
-              // ratio={}
-              className="col-span-2 lg:cols-span-4 relative mx-auto rounded-lg  h-40 w-[95%] max-w-xl "
-            >
-              <NextImage
-                alt="category-pic"
-                src={files}
-                // src={initialData?.image?.url}
-                // src={URL.createObjectURL(files)}
-                fill
-                className="object-cover rounded-lg"
-              />
-              <Trash
-                className={cn(
-                  buttonVariants({ variant: 'destructive', size: 'sm' }),
-                  'absolute -top-1 -left-1 w-10 h-10 cursor-pointer '
+          <div className="col-span-2 lg:col-span-4 max-w-md ">
+            {files.length > 0 ? (
+              <div className="h-96 md:h-[450px] overflow-hidden rounded-md">
+                <AspectRatio ratio={1 / 1} className="relative h-full">
+                  <ImageSlider urls={validUrls} />
+                </AspectRatio>
+              </div>
+            ) : (
+              <FormField
+                control={form.control}
+                name="image"
+                render={({ field: { onChange }, ...field }) => (
+                  <FormItem>
+                    <FormLabel className="mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow  ">
+                      {/* <FileUp size={42} className=" " /> */}
+                      <span
+                        className={cn(buttonVariants({ variant: 'ghost' }))}
+                      >
+                        انتخاب عکس
+                      </span>
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        multiple={true}
+                        disabled={form.formState.isSubmitting}
+                        {...field}
+                        onChange={async (event) => {
+                          // Triggered when user uploaded a new file
+                          // FileList is immutable, so we need to create a new one
+                          const dataTransfer = new DataTransfer()
+
+                          // Add old images
+                          if (files) {
+                            Array.from(files).forEach((image) =>
+                              dataTransfer.items.add(image)
+                            )
+                          }
+
+                          // Add newly uploaded images
+                          Array.from(event.target.files!).forEach((image) =>
+                            dataTransfer.items.add(image)
+                          )
+
+                          // Validate and update uploaded file
+                          const newFiles = dataTransfer.files
+
+                          setFiles(Array.from(newFiles))
+
+                          onChange(newFiles)
+                        }}
+                      />
+                    </FormControl>
+                    <FormDescription className="flex justify-center items-center"></FormDescription>
+                    {/* <FormMessage className="dark:text-rose-400" /> */}
+                    <FormMessage>
+                      {form.getFieldState('image')?.error?.message}
+                    </FormMessage>
+                  </FormItem>
                 )}
-                onClick={() => {
-                  form.reset({ ...form.getValues(), image: null })
-
-                  setFiles('')
-                }}
               />
-            </div>
-          )}
-          <label
-            htmlFor="image"
-            className={cn(
-              'max-w-md mx-auto cursor-pointer bg-transparent rounded-xl flex flex-col justify-center gap-4 items-center border-2 border-black/20 dark:border-white/20 border-dashed w-full h-24 shadow ',
-              !!files ? 'hidden' : ''
             )}
-          >
-            <span
-              className={cn(
-                buttonVariants({ variant: 'ghost' }),
-
-                'flex flex-col items-center justify-center gap-2 h-64 w-full'
-              )}
-            >
-              <UploadCloud />
-              انتخاب عکس
-            </span>
-          </label>
-          <input
-            // formAction={}
-
-            name="image"
-            id="image"
-            className="hidden"
-            type="file"
-            onChange={(e) => {
-              const file = e.target.files ? e.target.files[0] : null
-              if (file) {
-                form.setValue('image', file)
-                setFiles(URL.createObjectURL(file))
-              }
-            }}
-          />
-
-          <FormMessage>
-            {form.getFieldState('image')?.error?.message}
-          </FormMessage>
-
+          </div>
           <FormField
             control={form.control}
             name="title"
@@ -404,6 +420,39 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           />
           <FormField
             control={form.control}
+            name="categoryId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>دسته‌بندی</FormLabel>
+                <Select
+                  dir="rtl"
+                  // disabled={loading}
+                  onValueChange={field.onChange}
+                  value={field.value}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue
+                        defaultValue={field.value}
+                        placeholder="یک دسته را انتخاب کنید"
+                      />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category.id} value={category.id}>
+                        {category.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="originalTitle"
             render={({ field }) => (
               <FormItem className="max-w-md">
@@ -443,11 +492,29 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>قطع کتاب</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled={isPending}
-                    placeholder="نام دسته‌بندی"
-                    {...field}
-                  />
+                  <Select
+                    dir="rtl"
+                    // disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="انتخاب قطع کتاب"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {sizes.map((size) => (
+                        <SelectItem key={size.value} value={size.value}>
+                          {size.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -494,17 +561,35 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>نوع جلد</FormLabel>
                 <FormControl>
-                  <Input
-                    disabled={isPending}
-                    placeholder="نام دسته‌بندی"
-                    {...field}
-                  />
+                  <Select
+                    dir="rtl"
+                    // disabled={loading}
+                    onValueChange={field.onChange}
+                    value={field.value}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue
+                          defaultValue={field.value}
+                          placeholder="انتخاب سایز"
+                        />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {covers.map((size) => (
+                        <SelectItem key={size.value} value={size.value}>
+                          {size.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <FormField
+          {/* <FormField
             control={form.control}
             name="publishDate"
             render={({ field }) => (
@@ -517,6 +602,71 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          /> */}
+          <FormField
+            control={form.control}
+            name="publishDate"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>تاریخ انتشار</FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={'outline'}
+                        className={cn(
+                          'w-[240px] pl-3 text-left font-normal',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value ? (
+                          format(field.value, 'MMMM yyyy')
+                        ) : (
+                          <span>یک تاریخ را انتخاب کنید</span>
+                        )}
+                        <CalendarIcon className="mr-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    {/* <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date > new Date() || date < new Date('1900-01-01')
+                      }
+                      initialFocus
+                    /> */}
+                    <Calendar
+                      locale="fa-IR"
+                      calendarType="islamic"
+                      maxDetail="year"
+                      // minDate={new Date()}
+                      className={cn(
+                        primaryFont.className,
+                        'react-calendar'
+                        // 'REACT-CALENDAR p-2  text-primary bg-primary-foreground hover:text-primary hover:bg-primary-foreground focus:text-primary focus:bg-primary-foreground  rounded-md [&:has([aria-selected].day-range-end)]:rounded-r-md [&:has([aria-selected].day-outside)]:bg-accent/50 [&:has([aria-selected])]:bg-accent first:[&:has([aria-selected])]:rounded-l-md last:[&:has([aria-selected])]:rounded-r-md'
+                      )}
+                      // view="month"
+                      maxDate={new Date()}
+                      onChange={field.onChange}
+                      value={field.value}
+                      // onClickDay={(date) => setSelectedDate(date)}
+                      // tileClassName={({ date }) => {
+                      //   return closedDays?.includes(formatISO(date))
+                      //     ? 'closed-day'
+                      //     : null
+                      // }}
+                    />
+                  </PopoverContent>
+                </Popover>
+                {/* <FormDescription>
+                  Your date of birth is used to calculate your age.
+                </FormDescription> */}
                 <FormMessage />
               </FormItem>
             )}

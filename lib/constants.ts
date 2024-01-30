@@ -39,7 +39,7 @@ export enum Contributor {
 //   Photographer = 'عکاس',
 // }
 
-export const size = [
+export const sizes = [
   { value: 'Roghei', label: 'رقعی' },
   { value: 'Kheshti', label: 'خشتی' },
   { value: 'Rahli', label: 'رحلی' },
@@ -52,7 +52,7 @@ export const size = [
   { value: 'Beyazee', label: 'بیاضی' },
 ]
 
-export const cover = [
+export const covers = [
   { value: 'Shomiz', label: 'شومیز' },
   { value: 'Kaghazi', label: 'کاغذی' },
   { value: 'Galingor', label: 'گلینگور' },

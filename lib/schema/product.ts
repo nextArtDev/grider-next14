@@ -80,13 +80,14 @@ export const createProductSchema = z.object({
     // })
     .max(128, { message: 'نوع جلد نمی‌تواند بیش از 128 رقم باشد.' })
     .optional(),
-  publishDate: z
-    .string()
-    .min(1, { message: 'زمان انتشار کتاب باید بیش از یک حرف باشد.' })
+  publishDate: z.coerce
+    .date()
+    // .string()
+    // .min(1, { message: 'زمان انتشار کتاب باید بیش از یک حرف باشد.' })
     // .regex(/^[\u0600-\u06FFa-zA-Z0-9_ ]+$/, {
     //   message: 'تنها حروف، اعداد و آندرلاین برای اسم مجاز است.',
     // })
-    .max(128, { message: 'زمان انتشار کتاب نمی‌تواند بیش از 128 حرف باشد.' })
+    // .max(128, { message: 'زمان انتشار کتاب نمی‌تواند بیش از 128 حرف باشد.' })
     .optional(),
   edition: z
     .string()
@@ -135,11 +136,25 @@ export const createProductSchema = z.object({
   //   .min(1, { message: 'وارد کردن یکی از فعالیتها الزامی است!' })
   //   .max(5),
   //   .max(5),
+  categoryId: z.string().min(1, { message: 'این قسمت نمی‌تواند خالی باشد' }),
   image: z
-    .any()
-    .refine((files) => !!files, {
-      message: 'قسمت عکس نمی‌تواند خالی باشد.',
-    })
+    .custom<FileList>(
+      (val) => val instanceof FileList,
+      'قسمت عکس نمی‌تواند خالی باشد'
+    )
+    .refine((files) => files.length > 0, `قسمت عکس نمی‌تواند خالی باشد`)
+    .refine((files) => files.length <= 5, `حداکثر 5 عکس مجاز است.`)
+    .refine(
+      (files) => Array.from(files).every((file) => file.size <= MAX_FILE_SIZE),
+      `هر فایل باید کمتر از 5 مگابایت باشد`
+    )
+    .refine(
+      (files) =>
+        Array.from(files).every((file) =>
+          ACCEPTED_IMAGE_TYPES.includes(file.type)
+        ),
+      'تنها این فرمتها مجاز است: .jpg, .jpeg, .png and .webp'
+    )
     .optional(),
   isFeatured: z.boolean().default(false).optional(),
   isArchived: z.boolean().default(false).optional(),

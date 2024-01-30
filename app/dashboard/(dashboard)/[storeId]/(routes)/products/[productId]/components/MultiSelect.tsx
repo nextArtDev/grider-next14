@@ -57,6 +57,7 @@ function MultiSelect({
           }`}
           onClick={() => setOpen(!open)}
         >
+          {selected.length > 0 ? '' : 'انتخاب کنید...'}
           <div className="flex gap-1 flex-wrap">
             {selected.map((item) => (
               <Badge
