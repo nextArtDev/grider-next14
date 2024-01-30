@@ -7,7 +7,7 @@ import { CellAction } from './CellAction'
 export type ContributorColumn = {
   id: string
   name: string
-  role: string
+  role: string[]
 }
 
 export const columns: ColumnDef<ContributorColumn>[] = [

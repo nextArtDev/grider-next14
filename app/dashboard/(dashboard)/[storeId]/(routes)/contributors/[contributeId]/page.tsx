@@ -6,7 +6,7 @@ const CategoryPage = async ({
 }: {
   params: { contributeId: string; storeId: string }
 }) => {
-  const contributor = await prisma.contributor.findUnique({
+  const contributor = await prisma.contributor.findFirst({
     where: {
       id: params.contributeId,
     },

@@ -19,17 +19,20 @@ const ContributorEnum = z.enum([
 export const createContributeSchema = z.object({
   name: z
     .string()
-    .min(1, { message: 'نام دسته‌بندی باید بیش از یک حرف باشد.' })
+    .min(1, { message: 'نام شخص باید بیش از یک حرف باشد.' })
     .regex(/^[\u0600-\u06FFa-zA-Z0-9_ ]+$/, {
       message: 'تنها حروف، اعداد و آندرلاین برای اسم مجاز است.',
     })
-    .max(128, { message: 'نام دسته‌بندی نمی‌تواند بیش از 128 حرف باشد.' }),
+    .max(128, { message: 'نام شخص نمی‌تواند بیش از 128 حرف باشد.' }),
   //   contributors: z.array(ContributorEnum).min(1).max(5),
-  contributors: z.array(z.string()).min(1).max(5),
+  contributes: z
+    .array(z.string())
+    .min(1, { message: 'وارد کردن یکی از فعالیتها الزامی است!' })
+    .max(5),
 
   bio: z
     .string()
-    .max(1536, { message: 'نام دسته‌بندی نمی‌تواند بیش از 1536 حرف باشد.' })
+    .max(1536, { message: ' بیوگرافی نمی‌تواند بیش از 1536 حرف باشد.' })
     .optional(),
   image: z
     .any()

@@ -57,6 +57,11 @@ import { contributor } from '@/lib/constants'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import { createContributeSchema } from '@/lib/schema/contribute'
+import {
+  createContributor,
+  deleteContributes,
+  updateContributor,
+} from '@/lib/actions/dashboard/contributeor'
 
 type ContributeFormValues = z.infer<typeof createContributeSchema>
 
@@ -71,10 +76,11 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
 }) => {
   const params = useParams()
   const storeId = params.soreId
-  const categoryId = initialData?.id
   // console.log(params.storeId)
   const router = useRouter()
   const path = usePathname()
+  // console.log(params)
+  // console.log(initialData)
 
   const [open, setOpen] = useState(false)
   const [files, setFiles] = useState(
@@ -89,21 +95,22 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
   const action = initialData ? 'ذخیره تغییرات' : 'ایجاد'
 
   const form = useForm<ContributeFormValues>({
-    resolver: zodResolver(createCategorySchema),
-    // defaultValues: initialData || { contributors: [] },
-    defaultValues: { name: '', bio: '', contributors: [] },
-    // ? {
-    //     name: initialData.name,
-    //     bio: initialData.bio,
-    //     description: initialData?.description || '',
-    //     image: initialData?.image?.url || '',
-    //   }
-    // : {
-    //     name: '',
-    //     billboardId: '',
-    //     description: '',
-    //     // image: undefined,
-    //   },
+    resolver: zodResolver(createContributeSchema),
+    // defaultValues: initialData || { name: '', bio: '', contributors: [] },
+    // defaultValues: { name: '', bio: '', contributes: [] },
+    defaultValues: initialData
+      ? {
+          name: initialData.name,
+          bio: initialData.bio || '',
+          contributes: initialData?.role,
+          image: initialData?.image?.url || '',
+        }
+      : {
+          name: '',
+          bio: '',
+          contributes: [],
+          // image: undefined,
+        },
   })
   // const [formState, createAction] = useFormState(
   //   createCategory.bind(null, path, storeId as string),
@@ -123,11 +130,11 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
   //   }
   // )
   const [deleteState, deleteAction] = useFormState(
-    deleteCategory.bind(
+    deleteContributes.bind(
       null,
       path,
       params.storeId as string,
-      categoryId as string
+      params.contributeId as string
     ),
     {
       errors: {},
@@ -135,86 +142,88 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
   )
 
   const onSubmit = async (data: ContributeFormValues) => {
-    console.log('45')
-    // const formData = new FormData()
+    // console.log(data)
+    const formData = new FormData()
 
-    // formData.append('image', data.image)
-    // // formData.append('name', data.name)
-    // // formData.append('bio', data.bio || '')
-    // contributor.map((contribute, i) => {
-    //   formData.append(`${contribute.value}`, data.contributors[i] || '')
-    // })
+    formData.append('image', data.image)
+    formData.append('name', data.name)
+    formData.append('bio', data.bio || '')
+    data.contributes.map((contribute) => {
+      formData.append(`contributes`, contribute)
+    })
+    // console.log(formData.getAll('contributes'))
 
     try {
-      console.log(data)
       if (initialData) {
         // console.log({ data, initialData })
-        // startTransition(() => {
-        //   editCategory(
-        //     formData,
-        //     params.storeId as string,
-        //     initialData.id as string,
-        //     path
-        //   )
-        //     .then((res) => {
-        //       if (res?.errors?.name) {
-        //         form.setError('name', {
-        //           type: 'custom',
-        //           message: res?.errors.name?.join(' و '),
-        //         })
-        //         form.setError('billboardId', {
-        //           type: 'custom',
-        //           message: res?.errors.billboardId?.join(' و '),
-        //         })
-        //       } else if (res?.errors?.image) {
-        //         form.setError('image', {
-        //           type: 'custom',
-        //           message: res?.errors.image?.join(' و '),
-        //         })
-        //       } else if (res?.errors?._form) {
-        //         toast.error(res?.errors._form?.join(' و '))
-        //         form.setError('root', {
-        //           type: 'custom',
-        //           message: res?.errors?._form?.join(' و '),
-        //         })
-        //       }
-        //       // if (res?.success) {
-        //       //    toast.success(toastMessage)
-        //       // }
-        //     })
-        //     .catch(() => toast.error('مشکلی پیش آمده.'))
-        // })
+        startTransition(() => {
+          updateContributor(
+            formData,
+            params.storeId as string,
+            initialData.id as string,
+            path
+          )
+            .then((res) => {
+              if (res?.errors?.name) {
+                form.setError('name', {
+                  type: 'custom',
+                  message: res?.errors.name?.join(' و '),
+                })
+              } else if (res?.errors?.contributes) {
+                form.setError('contributes', {
+                  type: 'custom',
+                  message: res?.errors.contributes?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+              }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
       } else {
-        // startTransition(() => {
-        //   createCategory(formData, params.storeId as string, path)
-        //     .then((res) => {
-        //       if (res?.errors?.name) {
-        //         form.setError('name', {
-        //           type: 'custom',
-        //           message: res?.errors.name?.join(' و '),
-        //         })
-        //         form.setError('billboardId', {
-        //           type: 'custom',
-        //           message: res?.errors.billboardId?.join(' و '),
-        //         })
-        //       } else if (res?.errors?.image) {
-        //         form.setError('image', {
-        //           type: 'custom',
-        //           message: res?.errors.image?.join(' و '),
-        //         })
-        //       } else if (res?.errors?._form) {
-        //         toast.error(res?.errors._form?.join(' و '))
-        //         form.setError('root', {
-        //           type: 'custom',
-        //           message: res?.errors?._form?.join(' و '),
-        //         })
-        //       }
-        //       // if (res?.success) {
-        //       //    toast.success(toastMessage)
-        //       // }
-        //     })
-        //     .catch(() => toast.error('مشکلی پیش آمده.'))
-        // })
+        startTransition(() => {
+          createContributor(formData, params.storeId as string, path)
+            .then((res) => {
+              if (res?.errors?.name) {
+                form.setError('name', {
+                  type: 'custom',
+                  message: res?.errors.name?.join(' و '),
+                })
+              } else if (res?.errors?.contributes) {
+                form.setError('contributes', {
+                  type: 'custom',
+                  message: res?.errors.contributes?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+              }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
       }
     } catch {
       toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')
@@ -340,7 +349,7 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-6 gap-8">
             <FormField
               control={form.control}
-              name="contributors"
+              name="contributes"
               render={({ field }) => (
                 <FormItem className="max-w-md ">
                   {contributor.map((contribute) => (
@@ -363,14 +372,14 @@ export const ContributeForm: React.FC<ContributeFormProps> = ({
                           checked={field.value.includes(contribute.value)}
                           onCheckedChange={(checked) => {
                             if (checked) {
-                              form.setValue('contributors', [
+                              form.setValue('contributes', [
                                 ...field.value,
                                 contribute.value,
                               ])
                               // console.log(form.getValues('contributors'))
                             } else {
                               form.setValue(
-                                'contributors',
+                                'contributes',
                                 field.value.filter(
                                   (v) => v !== contribute.value
                                 )

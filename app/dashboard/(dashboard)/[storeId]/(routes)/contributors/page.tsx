@@ -6,6 +6,7 @@ import { getAllCategories } from '@/lib/queries/dashboard/categories'
 import { notFound } from 'next/navigation'
 import { getAllContributions } from '@/lib/queries/dashboard/contributors'
 import { ContributorsClient } from './components/ContributorsClient'
+import { translateArray } from '@/lib/utils'
 
 const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
   const categories = await getAllContributions(params.storeId)
@@ -16,7 +17,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
   const formattedContributors: ContributorColumn[] = categories.map((item) => ({
     id: item.id,
     name: item.name,
-    role: item.role,
+    role: translateArray(item.role),
     // createdAt: format(item.createdAt, 'dd MMMM yyyy'),
   }))
 

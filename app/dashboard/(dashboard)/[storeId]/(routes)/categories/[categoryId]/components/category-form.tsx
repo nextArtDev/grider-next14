@@ -163,6 +163,7 @@ export const CategoryForm: React.FC<CategoryFormProps> = ({
                   type: 'custom',
                   message: res?.errors.name?.join(' و '),
                 })
+              } else if (res.errors?.billboardId) {
                 form.setError('billboardId', {
                   type: 'custom',
                   message: res?.errors.billboardId?.join(' و '),

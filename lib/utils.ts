@@ -10,3 +10,23 @@ export const formatter = new Intl.NumberFormat('fa-IR', {
   //   style: 'currency',
   currency: 'IRT',
 })
+
+export function translateArray(inputArray: string[]): string[] {
+  const translationMap: { [key: string]: string } = {
+    Translator: 'مترجم',
+    Editor: 'ویراستار',
+    Writer: 'نویسنده',
+    Illustrator: 'تصویرگر',
+    Photographer: 'عکاس',
+  }
+
+  const translatedArray: string[] = []
+
+  inputArray.forEach((item: string) => {
+    const translatedItem: string = translationMap[item] || item
+
+    translatedArray.push(translatedItem)
+  })
+
+  return translatedArray
+}

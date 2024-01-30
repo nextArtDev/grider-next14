@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { deleteCategory } from '@/lib/actions/dashboard/category'
 import { useFormState } from 'react-dom'
 import { ContributorColumn } from './columns'
+import { deleteContributes } from '@/lib/actions/dashboard/contributeor'
 
 interface CellActionProps {
   data: ContributorColumn
@@ -47,6 +48,18 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   //     errors: {},
   //   }
   // )
+  const [deleteState, deleteAction] = useFormState(
+    deleteContributes.bind(
+      null,
+      path,
+      params.storeId as string,
+      data.id as string
+    ),
+    {
+      errors: {},
+    }
+  )
+
   const onCopy = (id: string) => {
     navigator.clipboard.writeText(id)
     toast.success('ID کپی شد')
@@ -58,7 +71,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
       <AlertModal
         isOpen={open}
         onClose={() => setOpen(false)}
-        // onConfirm={deleteAction}
+        onConfirm={deleteAction}
         // loading={loading}
         isPending={isPending}
       />
@@ -79,7 +92,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
           // }
           >
             <Link
-              href={`/dashboard/${params.storeId}/categories/${data.id}`}
+              href={`/dashboard/${params.storeId}/contributors/${data.id}`}
               className={cn(buttonVariants(), 'w-full')}
             >
               <Edit className="ml-2 h-4 w-4" /> آپدیت
