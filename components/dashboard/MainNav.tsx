@@ -52,20 +52,20 @@ export function MainNav({
       active: pathname === `/dashboard/${params.storeId}/categories`,
     },
     {
-      href: `/dashboard/${params.storeId}/contributors`,
-      label: 'فعالین',
-      active: pathname === `/dashboard/${params.storeId}/contributors`,
-    },
-    {
-      href: `/dashboard/${params.storeId}/colors`,
-      label: 'رنگ‌ها',
-      active: pathname === `/dashboard/${params.storeId}/colors`,
-    },
-    {
       href: `/dashboard/${params.storeId}/products`,
       label: 'محصولات',
       active: pathname === `/dashboard/${params.storeId}/products`,
     },
+    {
+      href: `/dashboard/${params.storeId}/contributors`,
+      label: 'فعالین',
+      active: pathname === `/dashboard/${params.storeId}/contributors`,
+    },
+    // {
+    //   href: `/dashboard/${params.storeId}/colors`,
+    //   label: 'رنگ‌ها',
+    //   active: pathname === `/dashboard/${params.storeId}/colors`,
+    // },
     {
       href: `/dashboard/${params.storeId}/orders`,
       label: 'سفارشات',

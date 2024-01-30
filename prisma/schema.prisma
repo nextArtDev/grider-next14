@@ -128,20 +128,24 @@ model Category {
 }
 
 model Product {
-  id                String     @id @default(uuid())
-  name              String
-  originalName      String?
-  description       String?    @db.Text
-  price             Decimal
-  isFeatured        Boolean    @default(false)
-  isArchived        Boolean    @default(false)
-  size              BookSize?
-  shabak            Decimal?
-  publishDate       DateTime?
-  recentPublishDate DateTime?
-  pages             Int?
-  weight            Int?
-  cover             BookCover?
+  id            String     @id @default(uuid())
+  isbn          String?
+  title         String
+  subTitle      String?
+  originalTitle String?
+  description   String?    @db.Text
+  price         Decimal?
+  isFeatured    Boolean    @default(false)
+  isArchived    Boolean    @default(false)
+  size          BookSize?
+  publishDate   DateTime?
+  pages         Int?
+  weight        Int?
+  cover         BookCover?
+  edition       String?
+  printSeries   String?
+  summary       String?    @db.Text
+  images        Image[] // Relation to Image model
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -150,7 +154,6 @@ model Product {
   category   Category @relation("CategoryToProduct", fields: [categoryId], references: [id])
   storeId    String // Foreign Key to Store
   categoryId String // Foreign Key to Category
-  images     Image[] // Relation to Image model
 
   orderItems OrderItem[] // Relation to Order model
 
