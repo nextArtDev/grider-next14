@@ -79,7 +79,7 @@ import { format } from 'date-fns-jalali'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { primaryFont } from '@/lib/fonts'
-import { createProduct } from '@/lib/actions/dashboard/products'
+import { createProduct, editProduct } from '@/lib/actions/dashboard/products'
 
 type ProductFormValues = z.infer<typeof createProductSchema>
 
@@ -87,9 +87,15 @@ type ProductFormValues = z.infer<typeof createProductSchema>
 interface ProductFormProps {
   //there is a chance to have no initial data and in fact we're creating one.
   initialData:
-    | (Product & {
-        images: Image[]
-      })
+    | (Product & { images: { url: string }[] } & {
+        translator: { id: string }[]
+      } & {
+        category: { id: string }
+      } & {
+        illustrator: { id: string }[]
+      } & { photographer: { id: string }[] } & {
+        writer: { id: string }[]
+      } & { editor: { id: string }[] })
     | null
   categories: Category[]
   writers: Contributor[]
@@ -131,15 +137,39 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     resolver: zodResolver(createProductSchema),
     defaultValues: initialData
       ? {
-          ...initialData,
+          // ...initialData,
+          isbn: initialData.isbn || '',
+          title: initialData.title,
+          subTitle: initialData.subTitle || '',
+          originalTitle: initialData.originalTitle || '',
+          description: initialData.description || '',
+          size: initialData.size || '',
+          pages: initialData.pages || '',
+          weight: initialData.weight || '',
+          cover: initialData.cover || '',
+          publishDate: initialData.publishDate || '' || undefined,
+          edition: initialData.edition || '',
+          summary: initialData.summary || '',
+          categoryId: initialData.categoryId,
           price: parseFloat(String(initialData?.price)),
+          // price:+ initialData.price || 0 ,
+
+          // images:initialData.images.map(image=>image.url)|| [],
+          translatorId: initialData.translator.map((t) => t.id) || [],
+          editorId: initialData.editor.map((e) => e.id) || [],
+          illustratorId: initialData.illustrator.map((i) => i.id) || [],
+          photographerId: initialData.photographer.map((p) => p.id) || [],
+          writerId: initialData.writer.map((w) => w.id) || [],
+          isArchived: initialData.isArchived,
+          isFeatured: initialData.isFeatured,
+
           // description: initialData?.description || '',
           // image: initialData?.image?.url || '',
         }
       : {
           title: '',
-          subtitle: '',
-          images: [],
+          subTitle: '',
+          // images: [],
           price: 0,
           categoryId: '',
           translatorId: [],
@@ -181,7 +211,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   )
 
   const onSubmit = async (data: ProductFormValues) => {
-    console.log(data)
+    // console.log(data)
     const formData = new FormData()
 
     // formData.append('image', data.image)
@@ -203,7 +233,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     formData.append('edition', data.edition || '')
     formData.append('summary', data.summary || '')
 
-    formData.append('price', data.price)
+    formData.append('price', String(data.price))
 
     if (data.writerId && data.writerId.length > 0) {
       for (let writers of data.writerId) {
@@ -256,43 +286,49 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
     try {
       if (initialData) {
-        // console.log({ data, initialData })
-        // startTransition(() => {
-        //   editCategory(
-        //     formData,
-        //     params.storeId as string,
-        //     initialData.id as string,
-        //     path
-        //   )
-        //     .then((res) => {
-        //       if (res?.errors?.name) {
-        //         form.setError('name', {
-        //           type: 'custom',
-        //           message: res?.errors.name?.join(' و '),
-        //         })
-        //       } else if (res.errors?.billboardId) {
-        //         form.setError('billboardId', {
-        //           type: 'custom',
-        //           message: res?.errors.billboardId?.join(' و '),
-        //         })
-        //       } else if (res?.errors?.image) {
-        //         form.setError('image', {
-        //           type: 'custom',
-        //           message: res?.errors.image?.join(' و '),
-        //         })
-        //       } else if (res?.errors?._form) {
-        //         toast.error(res?.errors._form?.join(' و '))
-        //         form.setError('root', {
-        //           type: 'custom',
-        //           message: res?.errors?._form?.join(' و '),
-        //         })
-        //       }
-        //       // if (res?.success) {
-        //       //    toast.success(toastMessage)
-        //       // }
-        //     })
-        //     .catch(() => toast.error('مشکلی پیش آمده.'))
-        // })
+        console.log({ data, initialData })
+        startTransition(() => {
+          editProduct(
+            formData,
+            params.storeId as string,
+            initialData.id as string,
+            path
+          )
+            .then((res) => {
+              if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+                // if (res?.errors?.name) {
+                //   form.setError('name', {
+                //     type: 'custom',
+                //     message: res?.errors.name?.join(' و '),
+                //   })
+                // } else if (res.errors?.billboardId) {
+                //   form.setError('billboardId', {
+                //     type: 'custom',
+                //     message: res?.errors.billboardId?.join(' و '),
+                //   })
+                // } else if (res?.errors?.image) {
+                //   form.setError('image', {
+                //     type: 'custom',
+                //     message: res?.errors.image?.join(' و '),
+                //   })
+                // } else if (res?.errors?._form) {
+                //   toast.error(res?.errors._form?.join(' و '))
+                //   form.setError('root', {
+                //     type: 'custom',
+                //     message: res?.errors?._form?.join(' و '),
+                //   })
+                // }
+                // if (res?.success) {
+                //    toast.success(toastMessage)
+              }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
       } else {
         startTransition(() => {
           createProduct(formData, params.storeId as string, path)
@@ -337,9 +373,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     }
   }
 
-  const validUrls = files
-    .map((file) => URL.createObjectURL(file))
-    .filter(Boolean) as string[]
+  const validUrls = initialData
+    ? (initialData.images.map((img) => img.url).filter(Boolean) as string[])
+    : (files
+        .map((file) => URL.createObjectURL(file))
+        .filter(Boolean) as string[])
 
   return (
     <>

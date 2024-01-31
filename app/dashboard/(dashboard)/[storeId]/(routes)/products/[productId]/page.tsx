@@ -1,17 +1,34 @@
 import { prisma } from '@/lib/prisma'
 import { ProductForm } from './components/product-form'
+import { Product } from '@prisma/client'
 
 const ProductPage = async ({
   params,
 }: {
   params: { productId: string; storeId: string }
 }) => {
-  const product = await prisma.product.findUnique({
+  const product:
+    | (Product & { images: { url: string }[] } & {
+        translator: { id: string }[]
+      } & {
+        category: { id: string }
+      } & {
+        illustrator: { id: string }[]
+      } & { photographer: { id: string }[] } & {
+        writer: { id: string }[]
+      } & { editor: { id: string }[] })
+    | null = await prisma.product.findUnique({
     where: {
       id: params.productId,
     },
     include: {
-      images: true,
+      images: { select: { url: true } },
+      translator: { select: { id: true } },
+      category: { select: { id: true } },
+      illustrator: { select: { id: true } },
+      photographer: { select: { id: true } },
+      writer: { select: { id: true } },
+      editor: { select: { id: true } },
     },
   })
   const categories = await prisma.category.findMany({

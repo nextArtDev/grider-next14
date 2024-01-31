@@ -118,7 +118,7 @@ export async function createProduct(
     }
     //     // console.log(isExisting)
     //     // console.log(billboard)
-    const isFeaturedBoolean = result.data.isArchived == 'true'
+    const isFeaturedBoolean = result.data.isFeatured == 'true'
     const isArchivedBoolean = result.data.isArchived == 'true'
 
     let imageIds: string[] = []
@@ -193,26 +193,36 @@ export async function createProduct(
   revalidatePath(path)
   redirect(`/dashboard/${storeId}/products`)
 }
-interface EditCategoryFormState {
-  errors: {
-    name?: string[]
-    description?: string[]
-    billboardId?: string[]
-    image?: string[]
-    _form?: string[]
-  }
-}
-export async function editCategory(
+
+export async function editProduct(
   formData: FormData,
   storeId: string,
-  categoryId: string,
+  productId: string,
   path: string
-): Promise<CreateCategoryFormState> {
-  const result = createCategorySchema.safeParse({
-    name: formData.get('name'),
+): Promise<CreateProductFormState> {
+  const result = createServerProductSchema.safeParse({
+    isbn: formData.get('isbn'),
+    title: formData.get('title'),
+    subTitle: formData.get('subTitle'),
+    originalTitle: formData.get('originalTitle'),
     description: formData.get('description'),
-    image: formData.get('image'),
-    billboardId: formData.get('billboardId'),
+    size: formData.get('size'),
+    pages: formData.get('pages'),
+    weight: formData.get('weight'),
+    cover: formData.get('cover'),
+    publishDate: formData.get('publishDate'),
+    edition: formData.get('edition'),
+    summary: formData.get('summary'),
+    price: formData.get('price'),
+    writerId: formData.getAll('writerId'),
+    translatorId: formData.getAll('translatorId'),
+    editorId: formData.getAll('editorId'),
+    illustratorId: formData.getAll('illustratorId'),
+    photographerId: formData.getAll('photographerId'),
+    categoryId: formData.get('categoryId'),
+    image: formData.getAll('image'),
+    isFeatured: formData.get('isFeatured'),
+    isArchived: formData.get('isArchived'),
   })
 
   // console.log(result)
@@ -232,7 +242,7 @@ export async function editCategory(
       },
     }
   }
-  if (!storeId || !categoryId) {
+  if (!storeId || !productId) {
     return {
       errors: {
         _form: ['دسته‌بندی در دسترس نیست!'],
@@ -242,103 +252,206 @@ export async function editCategory(
   // console.log(result)
 
   try {
-    const isExisting:
-      | (Category & { billboard: { id: string } } & {
-          image: { id: string; key: string } | null
-        })
-      | null = await prisma.category.findFirst({
-      where: { id: categoryId, storeId },
+    let product: Product
+    const isExisting = await prisma.product.findFirst({
+      where: {
+        id: productId,
+        // isbn: result.data.isbn,
+        // title: result.data.title,
+        storeId,
+      },
       include: {
-        image: { select: { id: true, key: true } },
-        billboard: { select: { id: true } },
+        images: true,
+        writer: true,
+        translator: true,
+        editor: true,
+        photographer: true,
+        illustrator: true,
       },
     })
     if (!isExisting) {
       return {
         errors: {
-          _form: ['دسته‌بندی حذف شده است!'],
+          _form: ['کتاب حذف شده است!!'],
         },
       }
     }
-    const isNameExisting = await prisma.category.findFirst({
+
+    const isFeaturedBoolean = result.data.isFeatured == 'true'
+    const isArchivedBoolean = result.data.isArchived == 'true'
+
+    const isNameExisting = await prisma.product.findFirst({
       where: {
-        name: result.data.name,
-        billboardId: result.data.billboardId,
+        title: result.data.title,
+        isbn: result.data.isbn,
+        categoryId: result.data.categoryId,
         storeId,
-        NOT: { id: categoryId },
+        NOT: { id: productId },
       },
     })
 
     if (isNameExisting) {
       return {
         errors: {
-          _form: ['دسته‌بندی با این نام موجود است!'],
+          _form: ['این کتاب موجود است!'],
         },
       }
     }
+    await prisma.product.update({
+      where: {
+        id: productId,
+        storeId,
+      },
+      data: {
+        writer: {
+          disconnect: isExisting.writer.map((writer) => ({ id: writer.id })),
+        },
+        translator: {
+          disconnect: isExisting.translator.map((translator) => ({
+            id: translator.id,
+          })),
+        },
+        editor: {
+          disconnect: isExisting.editor.map((editor) => ({ id: editor.id })),
+        },
+        photographer: {
+          disconnect: isExisting.photographer.map((photographer) => ({
+            id: photographer.id,
+          })),
+        },
+        illustrator: {
+          disconnect: isExisting.illustrator.map((illustrator) => ({
+            id: illustrator.id,
+          })),
+        },
+      },
+    })
 
     // console.log(isExisting)
     // console.log(billboard)
     if (
-      typeof result.data.image === 'object' &&
-      result.data.image instanceof File
+      typeof result.data.image[0] === 'object' &&
+      result.data.image[0] instanceof File
     ) {
-      const buffer = Buffer.from(await result.data.image.arrayBuffer())
-      const res = await uploadFileToS3(buffer, result.data.image.name)
+      let imageIds: string[] = []
+      for (let img of result.data.image) {
+        const buffer = Buffer.from(await img.arrayBuffer())
+        const res = await uploadFileToS3(buffer, img.name)
 
-      if (isExisting.image?.key) {
-        await deleteFileFromS3(isExisting.image.key)
-        // console.log(isDeletedFromS3)
+        if (res?.imageId && typeof res.imageId === 'string') {
+          imageIds.push(res.imageId)
+        }
       }
+      // const buffer = Buffer.from(await result.data.image.arrayBuffer())
+      // const res = await uploadFileToS3(buffer, result.data.image.name)
+
+      // if (isExisting.image?.key) {
+      //   await deleteFileFromS3(isExisting.image.key)
+      //   // console.log(isDeletedFromS3)
+      // }
       // console.log(res)
-      await prisma.category.update({
+      await prisma.product.update({
         where: {
-          id: categoryId,
+          id: productId,
 
           storeId,
         },
         data: {
-          image: {
-            disconnect: { id: isExisting.image?.id },
+          images: {
+            //  connect: result.data.writerId?.map((id) => ({ id: id })),
+            disconnect: isExisting.images.map((image) => ({ id: image.id })),
           },
-          // billboard: {
-          //   disconnect: { id: isExisting.billboard.id },
-          // },
         },
       })
-      await prisma.category.update({
+      await prisma.product.update({
         where: {
-          id: categoryId,
+          id: productId,
           storeId,
         },
         data: {
-          name: result.data.name,
+          isbn: result.data.isbn,
+          title: result.data.title,
+          subTitle: result.data.subTitle,
+          originalTitle: result.data.originalTitle,
           description: result.data.description,
-          //   billboardId: result.data.billboardId,
-          image: {
-            connect: { id: res?.imageId },
+          size: result.data.size,
+          pages: result.data.pages,
+          weight: result.data.weight,
+          cover: result.data.cover,
+          publishDate: result.data.publishDate,
+          edition: result.data.edition,
+          summary: result.data.summary,
+          categoryId: result.data.categoryId,
+          isArchived: isArchivedBoolean,
+          isFeatured: isFeaturedBoolean,
+          price: +result.data.price,
+          images: {
+            connect: imageIds.map((id) => ({
+              id: id,
+            })),
           },
-          billboard: {
-            connect: { id: result.data.billboardId },
+          storeId,
+          writer: {
+            connect: result.data.writerId?.map((id) => ({ id: id })),
+          },
+          translator: {
+            connect: result.data.translatorId?.map((id) => ({ id: id })),
+          },
+          editor: {
+            connect: result.data.editorId?.map((id) => ({ id: id })),
+          },
+          photographer: {
+            connect: result.data.photographerId?.map((id) => ({ id: id })),
+          },
+          illustrator: {
+            connect: result.data.illustratorId?.map((id) => ({ id: id })),
           },
         },
       })
     } else {
-      await prisma.category.update({
+      await prisma.product.update({
         where: {
-          id: categoryId,
+          id: productId,
           storeId,
         },
         data: {
-          name: result.data.name,
+          isbn: result.data.isbn,
+          title: result.data.title,
+          subTitle: result.data.subTitle,
+          originalTitle: result.data.originalTitle,
           description: result.data.description,
-          billboard: {
-            connect: { id: result.data.billboardId },
+          size: result.data.size,
+          pages: result.data.pages,
+          weight: result.data.weight,
+          cover: result.data.cover,
+          publishDate: result.data.publishDate,
+          edition: result.data.edition,
+          summary: result.data.summary,
+          categoryId: result.data.categoryId,
+          isArchived: isArchivedBoolean,
+          isFeatured: isFeaturedBoolean,
+          price: +result.data.price,
+          // images: result.data.image,
+          storeId,
+          writer: {
+            connect: result.data.writerId?.map((id) => ({ id: id })),
+          },
+          translator: {
+            connect: result.data.translatorId?.map((id) => ({ id: id })),
+          },
+          editor: {
+            connect: result.data.editorId?.map((id) => ({ id: id })),
+          },
+          photographer: {
+            connect: result.data.photographerId?.map((id) => ({ id: id })),
+          },
+          illustrator: {
+            connect: result.data.illustratorId?.map((id) => ({ id: id })),
           },
         },
       })
     }
-    // imageId: res?.imageId,
+
     // console.log(billboard)
   } catch (err: unknown) {
     if (err instanceof Error) {
@@ -357,7 +470,7 @@ export async function editCategory(
   }
 
   revalidatePath(path)
-  redirect(`/dashboard/${storeId}/categories`)
+  redirect(`/dashboard/${storeId}/products`)
 }
 
 //////////////////////
@@ -409,7 +522,7 @@ export async function deleteCategory(
     if (!isExisting) {
       return {
         errors: {
-          _form: ['دسته‌بندی حذف شده است!'],
+          _form: ['کتاب حذف شده است!'],
         },
       }
     }
@@ -448,5 +561,5 @@ export async function deleteCategory(
   }
 
   revalidatePath(path)
-  redirect(`/dashboard/${storeId}/categories`)
+  redirect(`/dashboard/${storeId}/products`)
 }
