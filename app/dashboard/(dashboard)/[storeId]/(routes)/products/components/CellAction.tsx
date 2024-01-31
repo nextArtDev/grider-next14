@@ -22,6 +22,7 @@ import { toast } from 'sonner'
 import { deleteCategory } from '@/lib/actions/dashboard/category'
 import { useFormState } from 'react-dom'
 import { ProductColumn } from './columns'
+import { deleteProduct } from '@/lib/actions/dashboard/products'
 
 interface CellActionProps {
   data: ProductColumn
@@ -39,12 +40,7 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   // console.log(params)
 
   const [deleteState, deleteAction] = useFormState(
-    deleteCategory.bind(
-      null,
-      path,
-      params.storeId as string,
-      data.id as string
-    ),
+    deleteProduct.bind(null, path, params.storeId as string, data.id as string),
     {
       errors: {},
     }

@@ -79,7 +79,11 @@ import { format } from 'date-fns-jalali'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { primaryFont } from '@/lib/fonts'
-import { createProduct, editProduct } from '@/lib/actions/dashboard/products'
+import {
+  createProduct,
+  deleteProduct,
+  editProduct,
+} from '@/lib/actions/dashboard/products'
 
 type ProductFormValues = z.infer<typeof createProductSchema>
 
@@ -147,7 +151,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           pages: initialData.pages || '',
           weight: initialData.weight || '',
           cover: initialData.cover || '',
-          publishDate: initialData.publishDate || '' || undefined,
+          // publishDate: initialData.publishDate || '' || undefined,
           edition: initialData.edition || '',
           summary: initialData.summary || '',
           categoryId: initialData.categoryId,
@@ -155,11 +159,14 @@ export const ProductForm: React.FC<ProductFormProps> = ({
           // price:+ initialData.price || 0 ,
 
           // images:initialData.images.map(image=>image.url)|| [],
-          translatorId: initialData.translator.map((t) => t.id) || [],
-          editorId: initialData.editor.map((e) => e.id) || [],
-          illustratorId: initialData.illustrator.map((i) => i.id) || [],
-          photographerId: initialData.photographer.map((p) => p.id) || [],
-          writerId: initialData.writer.map((w) => w.id) || [],
+          translatorId:
+            initialData.translator.map((t: { id: string }) => t.id) || [],
+          editorId: initialData.editor.map((e: { id: string }) => e.id) || [],
+          illustratorId:
+            initialData.illustrator.map((i: { id: string }) => i.id) || [],
+          photographerId:
+            initialData.photographer.map((p: { id: string }) => p.id) || [],
+          writerId: initialData.writer.map((w: { id: string }) => w.id) || [],
           isArchived: initialData.isArchived,
           isFeatured: initialData.isFeatured,
 
@@ -199,11 +206,11 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   //   }
   // )
   const [deleteState, deleteAction] = useFormState(
-    deleteCategory.bind(
+    deleteProduct.bind(
       null,
       path,
       params.storeId as string,
-      categoryId as string
+      params.productId as string
     ),
     {
       errors: {},
@@ -374,7 +381,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
   }
 
   const validUrls = initialData
-    ? (initialData.images.map((img) => img.url).filter(Boolean) as string[])
+    ? (initialData.images
+        .map((img: { url: string }) => img.url)
+        .filter(Boolean) as string[])
     : (files
         .map((file) => URL.createObjectURL(file))
         .filter(Boolean) as string[])
@@ -842,7 +851,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormLabel>نویسنده</FormLabel>
 
                 <MultiSelect
-                  selected={field.value}
+                  selected={field.value!}
                   options={writers.map((writer) => {
                     return { value: writer.id, label: writer.name }
                   })}
@@ -863,7 +872,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>مترجم</FormLabel>
                 <MultiSelect
-                  selected={field.value}
+                  selected={field.value!}
                   options={translators.map((translator) => {
                     return { value: translator.id, label: translator.name }
                   })}
@@ -883,7 +892,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>ویراستار</FormLabel>
                 <MultiSelect
-                  selected={field.value}
+                  selected={field.value!}
                   options={editors.map((editor) => {
                     return { value: editor.id, label: editor.name }
                   })}
@@ -903,7 +912,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>تصویرساز</FormLabel>
                 <MultiSelect
-                  selected={field.value}
+                  selected={field.value!}
                   options={illustrators.map((illustrator) => {
                     return { value: illustrator.id, label: illustrator.name }
                   })}
@@ -922,7 +931,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
               <FormItem className="max-w-md">
                 <FormLabel>عکاس</FormLabel>
                 <MultiSelect
-                  selected={field.value}
+                  selected={field.value!}
                   options={photographers.map((photographer) => {
                     return { value: photographer.id, label: photographer.name }
                   })}

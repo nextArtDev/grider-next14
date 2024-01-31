@@ -304,25 +304,35 @@ export async function editProduct(
       },
       data: {
         writer: {
-          disconnect: isExisting.writer.map((writer) => ({ id: writer.id })),
+          disconnect: isExisting.writer.map((writer: { id: string }) => ({
+            id: writer.id,
+          })),
         },
         translator: {
-          disconnect: isExisting.translator.map((translator) => ({
-            id: translator.id,
-          })),
+          disconnect: isExisting.translator.map(
+            (translator: { id: string }) => ({
+              id: translator.id,
+            })
+          ),
         },
         editor: {
-          disconnect: isExisting.editor.map((editor) => ({ id: editor.id })),
+          disconnect: isExisting.editor.map((editor: { id: string }) => ({
+            id: editor.id,
+          })),
         },
         photographer: {
-          disconnect: isExisting.photographer.map((photographer) => ({
-            id: photographer.id,
-          })),
+          disconnect: isExisting.photographer.map(
+            (photographer: { id: string }) => ({
+              id: photographer.id,
+            })
+          ),
         },
         illustrator: {
-          disconnect: isExisting.illustrator.map((illustrator) => ({
-            id: illustrator.id,
-          })),
+          disconnect: isExisting.illustrator.map(
+            (illustrator: { id: string }) => ({
+              id: illustrator.id,
+            })
+          ),
         },
       },
     })
@@ -359,7 +369,9 @@ export async function editProduct(
         data: {
           images: {
             //  connect: result.data.writerId?.map((id) => ({ id: id })),
-            disconnect: isExisting.images.map((image) => ({ id: image.id })),
+            disconnect: isExisting.images.map((image: { id: string }) => ({
+              id: image.id,
+            })),
           },
         },
       })
@@ -475,7 +487,7 @@ export async function editProduct(
 
 //////////////////////
 
-interface DeleteBillboardFormState {
+interface DeleteProductFormState {
   errors: {
     name?: string[]
     description?: string[]
@@ -485,13 +497,13 @@ interface DeleteBillboardFormState {
   }
 }
 
-export async function deleteCategory(
+export async function deleteProduct(
   path: string,
   storeId: string,
-  categoryId: string,
-  formState: DeleteBillboardFormState,
+  productId: string,
+  formState: DeleteProductFormState,
   formData: FormData
-): Promise<DeleteBillboardFormState> {
+): Promise<DeleteProductFormState> {
   // console.log({ path, storeId, categoryId })
   const session = await auth()
   if (!session || !session.user || session.user.role !== 'ADMIN') {
@@ -502,21 +514,21 @@ export async function deleteCategory(
     }
   }
   // console.log(result)
-  if (!storeId || !categoryId) {
+  if (!storeId || !productId) {
     return {
       errors: {
-        _form: ['فروشگاه در دسترس نیست!'],
+        _form: ['کتاب در دسترس نیست!'],
       },
     }
   }
 
   try {
     const isExisting:
-      | (Category & { image: { id: string; key: string } | null })
-      | null = await prisma.category.findFirst({
-      where: { id: categoryId, storeId },
+      | (Product & { image: { id: string; key: string } | null })
+      | null = await prisma.product.findFirst({
+      where: { id: productId, storeId },
       include: {
-        image: { select: { id: true, key: true } },
+        images: { select: { id: true, key: true } },
       },
     })
     if (!isExisting) {
@@ -527,17 +539,17 @@ export async function deleteCategory(
       }
     }
 
-    // console.log(isExisting)
+    console.log(isExisting)
     // console.log(billboard)
-
-    if (isExisting.image?.key) {
-      await deleteFileFromS3(isExisting.image.key)
-      // console.log(isDeletedFromS3)
+    for (let image of isExisting.images) {
+      if (image.key) {
+        await deleteFileFromS3(image.key)
+      }
     }
 
-    const deleteBillboard = await prisma.category.delete({
+    await prisma.product.delete({
       where: {
-        id: categoryId,
+        id: productId,
         storeId,
       },
     })
