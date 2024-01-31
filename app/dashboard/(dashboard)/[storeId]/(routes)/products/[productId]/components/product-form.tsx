@@ -79,6 +79,7 @@ import { format } from 'date-fns-jalali'
 import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import { primaryFont } from '@/lib/fonts'
+import { createProduct } from '@/lib/actions/dashboard/products'
 
 type ProductFormValues = z.infer<typeof createProductSchema>
 
@@ -181,12 +182,77 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
   const onSubmit = async (data: ProductFormValues) => {
     console.log(data)
-    // const formData = new FormData()
+    const formData = new FormData()
 
     // formData.append('image', data.image)
     // formData.append('name', data.name)
     // formData.append('billboardId', data.billboardId)
     // formData.append('description', data.description || '')
+    formData.append('isbn', data.isbn || '')
+    formData.append('title', data.title)
+    formData.append('subTitle', data.subTitle || '')
+    formData.append('originalTitle', data.originalTitle || '')
+    formData.append('description', data.description || '')
+    formData.append('size', data.size || '')
+    formData.append('pages', data.pages || '')
+    formData.append('weight', data.weight || '')
+    formData.append('cover', data.cover || '')
+    if (data.publishDate) {
+      formData.append('publishDate', data.publishDate.toISOString())
+    }
+    formData.append('edition', data.edition || '')
+    formData.append('summary', data.summary || '')
+
+    formData.append('price', data.price)
+
+    if (data.writerId && data.writerId.length > 0) {
+      for (let writers of data.writerId) {
+        formData.append('writerId', writers)
+      }
+    }
+    if (data.translatorId && data.translatorId.length > 0) {
+      for (let translators of data.translatorId) {
+        formData.append('translatorId', translators)
+      }
+    }
+
+    if (data.editorId && data.editorId.length > 0) {
+      for (let editors of data.editorId) {
+        formData.append('editorId', editors)
+      }
+    }
+    if (data.illustratorId && data.illustratorId.length > 0) {
+      for (let illustrators of data.illustratorId) {
+        formData.append('illustratorId', illustrators)
+      }
+    }
+    if (data.photographerId && data.photographerId.length > 0) {
+      for (let photographers of data.photographerId) {
+        formData.append('photographerId', photographers)
+      }
+    }
+    formData.append('categoryId', data.categoryId)
+    console.log(formData.get('categoryId'))
+
+    if (data.image && data.image.length > 0) {
+      for (let i = 0; i < data.image.length; i++) {
+        formData.append('image', data.image[i])
+      }
+    }
+    // formData.append('image', data.image)
+    // if (data.isFeatured) {
+    //   formData.append('isFeatured', data.isFeatured)
+    // }
+    if (data.isArchived) {
+      formData.append('isArchived', 'true')
+    } else {
+      formData.append('isArchived', 'false')
+    }
+    if (data.isFeatured) {
+      formData.append('isFeatured', 'true')
+    } else {
+      formData.append('isFeatured', 'false')
+    }
 
     try {
       if (initialData) {
@@ -228,36 +294,43 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         //     .catch(() => toast.error('مشکلی پیش آمده.'))
         // })
       } else {
-        // startTransition(() => {
-        //   createCategory(formData, params.storeId as string, path)
-        //     .then((res) => {
-        //       if (res?.errors?.name) {
-        //         form.setError('name', {
-        //           type: 'custom',
-        //           message: res?.errors.name?.join(' و '),
-        //         })
-        //         form.setError('billboardId', {
-        //           type: 'custom',
-        //           message: res?.errors.billboardId?.join(' و '),
-        //         })
-        //       } else if (res?.errors?.image) {
-        //         form.setError('image', {
-        //           type: 'custom',
-        //           message: res?.errors.image?.join(' و '),
-        //         })
-        //       } else if (res?.errors?._form) {
-        //         toast.error(res?.errors._form?.join(' و '))
-        //         form.setError('root', {
-        //           type: 'custom',
-        //           message: res?.errors?._form?.join(' و '),
-        //         })
-        //       }
-        //       // if (res?.success) {
-        //       //    toast.success(toastMessage)
-        //       // }
-        //     })
-        //     .catch(() => toast.error('مشکلی پیش آمده.'))
-        // })
+        startTransition(() => {
+          createProduct(formData, params.storeId as string, path)
+            .then((res) => {
+              if (res?.errors?._form) {
+                toast.error(res?.errors._form?.join(' و '))
+                form.setError('root', {
+                  type: 'custom',
+                  message: res?.errors?._form?.join(' و '),
+                })
+              }
+              // if (res?.errors?.name) {
+              //   form.setError('name', {
+              //     type: 'custom',
+              //     message: res?.errors.name?.join(' و '),
+              //   })
+              //   form.setError('billboardId', {
+              //     type: 'custom',
+              //     message: res?.errors.billboardId?.join(' و '),
+              //   })
+              // } else if (res?.errors?.image) {
+              //   form.setError('image', {
+              //     type: 'custom',
+              //     message: res?.errors.image?.join(' و '),
+              //   })
+              // } else if (res?.errors?._form) {
+              //   toast.error(res?.errors._form?.join(' و '))
+              //   form.setError('root', {
+              //     type: 'custom',
+              //     message: res?.errors?._form?.join(' و '),
+              //   })
+              // }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
+            })
+            .catch(() => toast.error('مشکلی پیش آمده.'))
+        })
       }
     } catch {
       toast.error('مشکلی پیش آمده، لطفا دوباره امتحان کنید!')

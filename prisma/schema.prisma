@@ -128,23 +128,23 @@ model Category {
 }
 
 model Product {
-  id            String     @id @default(uuid())
+  id            String    @id @default(uuid())
   isbn          String?
   title         String
   subTitle      String?
   originalTitle String?
-  description   String?    @db.Text
+  description   String?   @db.Text
   price         Decimal?
-  isFeatured    Boolean    @default(false)
-  isArchived    Boolean    @default(false)
-  size          BookSize?
+  isFeatured    Boolean   @default(false)
+  isArchived    Boolean   @default(false)
+  size          String?
   publishDate   DateTime?
-  pages         Int?
-  weight        Int?
-  cover         BookCover?
+  pages         String?
+  weight        String?
+  cover         String?
   edition       String?
   printSeries   String?
-  summary       String?    @db.Text
+  summary       String?   @db.Text
   images        Image[] // Relation to Image model
 
   createdAt DateTime @default(now())
