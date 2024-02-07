@@ -7,13 +7,13 @@ import { CellAction } from './CellAction'
 export type ProductColumn = {
   id: string
   title: string
-  price: string
+  price: string | null
   writer: string | undefined
   translator: string | undefined
   category: string
   createdAt: string
-  isFeatured: boolean
-  isArchived: boolean
+  isFeatured: boolean | string
+  isArchived: boolean | string
 }
 
 export const columns: ColumnDef<ProductColumn>[] = [

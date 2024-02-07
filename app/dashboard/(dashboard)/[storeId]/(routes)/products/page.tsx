@@ -29,7 +29,7 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
     translator: item?.translator?.[0]?.name,
     isFeatured: getFarsiBoolean(item.isFeatured),
     isArchived: getFarsiBoolean(item.isArchived),
-    price: formatter.format(item.price.toNumber()),
+    price: formatter.format(item.price!.toNumber()),
     category: item.category.name,
     createdAt: format(item.createdAt, 'dd MMMM yyyy'),
   }))
