@@ -3,7 +3,7 @@ import { format } from 'date-fns-jalali'
 
 import { notFound } from 'next/navigation'
 import { getAllProducts } from '@/lib/queries/dashboard/products'
-import { formatter } from '@/lib/utils'
+import { formatter, getFarsiBoolean } from '@/lib/utils'
 import { ProductsClient } from './components/ProductClient'
 import { ProductColumn } from './components/columns'
 
@@ -27,8 +27,8 @@ const CategoriesPage = async ({ params }: { params: { storeId: string } }) => {
     title: item.title,
     writer: item?.writer?.[0]?.name,
     translator: item?.translator?.[0]?.name,
-    isFeatured: item.isFeatured,
-    isArchived: item.isArchived,
+    isFeatured: getFarsiBoolean(item.isFeatured),
+    isArchived: getFarsiBoolean(item.isArchived),
     price: formatter.format(item.price.toNumber()),
     category: item.category.name,
     createdAt: format(item.createdAt, 'dd MMMM yyyy'),

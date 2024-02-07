@@ -145,6 +145,7 @@ export const createProductSchema = z.object({
   //   .max(5),
   categoryId: z
     .string()
+    .min(1, { message: 'یک دسته‌بندی را انتخاب کنید.' })
     .max(512, { message: 'این قسمت نمی‌تواند بیش از 512 باشد' }),
   image: z
     .any()
@@ -316,6 +317,7 @@ export const createServerProductSchema = z.object({
   //   .max(5),
   categoryId: z
     .string()
+    .min(1, { message: 'یک دسته‌بندی را انتخاب کنید.' })
     .max(512, { message: 'این قسمت نمی‌تواند بیش از 512 باشد' }),
   image: z
     .any()

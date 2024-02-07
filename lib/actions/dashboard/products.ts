@@ -18,10 +18,28 @@ import {
 interface CreateProductFormState {
   success?: string
   errors: {
-    name?: string[]
+    isbn?: string[]
+    title?: string[]
+    subTitle?: string[]
+    originalTitle?: string[]
     description?: string[]
-    billboardId?: string[]
+    size?: string[]
+    pages?: string[]
+    weight?: string[]
+    cover?: string[]
+    publishDate?: string[]
+    edition?: string[]
+    summary?: string[]
+    price?: string[]
+    writerId?: string[]
+    translatorId?: string[]
+    editorId?: string[]
+    illustratorId?: string[]
+    photographerId?: string[]
+    categoryId?: string[]
     image?: string[]
+    isFeatured?: string[]
+    isArchived?: string[]
     _form?: string[]
   }
 }
@@ -524,7 +542,7 @@ export async function deleteProduct(
 
   try {
     const isExisting:
-      | (Product & { image: { id: string; key: string } | null })
+      | (Product & { images: { id: string; key: string }[] | null })
       | null = await prisma.product.findFirst({
       where: { id: productId, storeId },
       include: {
@@ -539,14 +557,15 @@ export async function deleteProduct(
       }
     }
 
-    console.log(isExisting)
+    // console.log(isExisting)
     // console.log(billboard)
-    for (let image of isExisting.images) {
-      if (image.key) {
-        await deleteFileFromS3(image.key)
+    if (isExisting.images) {
+      for (let image of isExisting.images) {
+        if (image.key) {
+          await deleteFileFromS3(image.key)
+        }
       }
     }
-
     await prisma.product.delete({
       where: {
         id: productId,

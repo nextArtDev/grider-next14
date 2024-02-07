@@ -269,7 +269,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       }
     }
     formData.append('categoryId', data.categoryId)
-    console.log(formData.get('categoryId'))
+    // console.log(formData.get('categoryId'))
 
     if (data.image && data.image.length > 0) {
       for (let i = 0; i < data.image.length; i++) {
@@ -293,7 +293,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
     try {
       if (initialData) {
-        console.log({ data, initialData })
+        // console.log({ data, initialData })
         startTransition(() => {
           editProduct(
             formData,
@@ -302,37 +302,140 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             path
           )
             .then((res) => {
-              if (res?.errors?._form) {
-                toast.error(res?.errors._form?.join(' و '))
-                form.setError('root', {
+              // if (res?.errors?._form) {
+              //   toast.error(res?.errors._form?.join(' و '))
+              //   form.setError('root', {
+              //     type: 'custom',
+              //     message: res?.errors?._form?.join(' و '),
+              //   })
+              // }
+              if (res?.errors?.isbn) {
+                form.setError('isbn', {
                   type: 'custom',
-                  message: res?.errors?._form?.join(' و '),
+                  message: res?.errors.isbn?.join(' و '),
                 })
-                // if (res?.errors?.name) {
-                //   form.setError('name', {
-                //     type: 'custom',
-                //     message: res?.errors.name?.join(' و '),
-                //   })
-                // } else if (res.errors?.billboardId) {
-                //   form.setError('billboardId', {
-                //     type: 'custom',
-                //     message: res?.errors.billboardId?.join(' و '),
-                //   })
-                // } else if (res?.errors?.image) {
-                //   form.setError('image', {
-                //     type: 'custom',
-                //     message: res?.errors.image?.join(' و '),
-                //   })
-                // } else if (res?.errors?._form) {
-                //   toast.error(res?.errors._form?.join(' و '))
-                //   form.setError('root', {
-                //     type: 'custom',
-                //     message: res?.errors?._form?.join(' و '),
-                //   })
-                // }
-                // if (res?.success) {
-                //    toast.success(toastMessage)
+              } else if (res?.errors?.title) {
+                form.setError('title', {
+                  type: 'custom',
+                  message: res?.errors.title?.join(' و '),
+                })
+              } else if (res?.errors?.subTitle) {
+                form.setError('subTitle', {
+                  type: 'custom',
+                  message: res?.errors?.subTitle?.join(' و '),
+                })
               }
+              if (res?.errors?.originalTitle) {
+                form.setError('originalTitle', {
+                  type: 'custom',
+                  message: res?.errors.originalTitle?.join(' و '),
+                })
+              } else if (res?.errors?.description) {
+                form.setError('description', {
+                  type: 'custom',
+                  message: res?.errors.description?.join(' و '),
+                })
+              } else if (res?.errors?.size) {
+                form.setError('size', {
+                  type: 'custom',
+                  message: res?.errors?.size?.join(' و '),
+                })
+              }
+              if (res?.errors?.pages) {
+                form.setError('pages', {
+                  type: 'custom',
+                  message: res?.errors.pages?.join(' و '),
+                })
+              } else if (res?.errors?.weight) {
+                form.setError('weight', {
+                  type: 'custom',
+                  message: res?.errors.weight?.join(' و '),
+                })
+              } else if (res?.errors?.cover) {
+                form.setError('cover', {
+                  type: 'custom',
+                  message: res?.errors?.cover?.join(' و '),
+                })
+              }
+              if (res?.errors?.publishDate) {
+                form.setError('publishDate', {
+                  type: 'custom',
+                  message: res?.errors.publishDate?.join(' و '),
+                })
+              } else if (res?.errors?.edition) {
+                form.setError('edition', {
+                  type: 'custom',
+                  message: res?.errors.edition?.join(' و '),
+                })
+              } else if (res?.errors?.summary) {
+                form.setError('summary', {
+                  type: 'custom',
+                  message: res?.errors?.summary?.join(' و '),
+                })
+              }
+              if (res?.errors?.price) {
+                form.setError('price', {
+                  type: 'custom',
+                  message: res?.errors.price?.join(' و '),
+                })
+              } else if (res?.errors?.writerId) {
+                form.setError('writerId', {
+                  type: 'custom',
+                  message: res?.errors.writerId?.join(' و '),
+                })
+              } else if (res?.errors?.translatorId) {
+                form.setError('translatorId', {
+                  type: 'custom',
+                  message: res?.errors?.translatorId?.join(' و '),
+                })
+              }
+              if (res?.errors?.editorId) {
+                form.setError('editorId', {
+                  type: 'custom',
+                  message: res?.errors.editorId?.join(' و '),
+                })
+              } else if (res?.errors?.illustratorId) {
+                form.setError('illustratorId', {
+                  type: 'custom',
+                  message: res?.errors.illustratorId?.join(' و '),
+                })
+              } else if (res?.errors?.photographerId) {
+                form.setError('photographerId', {
+                  type: 'custom',
+                  message: res?.errors?.photographerId?.join(' و '),
+                })
+              }
+              if (res?.errors?.categoryId) {
+                form.setError('categoryId', {
+                  type: 'custom',
+                  message: res?.errors.categoryId?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?.isFeatured) {
+                form.setError('isFeatured', {
+                  type: 'custom',
+                  message: res?.errors?.isFeatured?.join(' و '),
+                })
+              }
+              if (res?.errors?.isArchived) {
+                form.setError('isArchived', {
+                  type: 'custom',
+                  message: res?.errors.isArchived?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                // form.setError('root', {
+                //   type: 'custom',
+                //   message: res?.errors?._form?.join(' و '),
+                // })
+                toast.error(res?.errors?._form?.join(' و '))
+              }
+              // if (res?.success) {
+              //    toast.success(toastMessage)
+              // }
             })
             .catch(() => toast.error('مشکلی پیش آمده.'))
         })
@@ -340,34 +443,137 @@ export const ProductForm: React.FC<ProductFormProps> = ({
         startTransition(() => {
           createProduct(formData, params.storeId as string, path)
             .then((res) => {
-              if (res?.errors?._form) {
-                toast.error(res?.errors._form?.join(' و '))
-                form.setError('root', {
-                  type: 'custom',
-                  message: res?.errors?._form?.join(' و '),
-                })
-              }
-              // if (res?.errors?.name) {
-              //   form.setError('name', {
-              //     type: 'custom',
-              //     message: res?.errors.name?.join(' و '),
-              //   })
-              //   form.setError('billboardId', {
-              //     type: 'custom',
-              //     message: res?.errors.billboardId?.join(' و '),
-              //   })
-              // } else if (res?.errors?.image) {
-              //   form.setError('image', {
-              //     type: 'custom',
-              //     message: res?.errors.image?.join(' و '),
-              //   })
-              // } else if (res?.errors?._form) {
+              // if (res?.errors?._form) {
               //   toast.error(res?.errors._form?.join(' و '))
               //   form.setError('root', {
               //     type: 'custom',
               //     message: res?.errors?._form?.join(' و '),
               //   })
               // }
+              if (res?.errors?.isbn) {
+                form.setError('isbn', {
+                  type: 'custom',
+                  message: res?.errors.isbn?.join(' و '),
+                })
+              } else if (res?.errors?.title) {
+                form.setError('title', {
+                  type: 'custom',
+                  message: res?.errors.title?.join(' و '),
+                })
+              } else if (res?.errors?.subTitle) {
+                form.setError('subTitle', {
+                  type: 'custom',
+                  message: res?.errors?.subTitle?.join(' و '),
+                })
+              }
+              if (res?.errors?.originalTitle) {
+                form.setError('originalTitle', {
+                  type: 'custom',
+                  message: res?.errors.originalTitle?.join(' و '),
+                })
+              } else if (res?.errors?.description) {
+                form.setError('description', {
+                  type: 'custom',
+                  message: res?.errors.description?.join(' و '),
+                })
+              } else if (res?.errors?.size) {
+                form.setError('size', {
+                  type: 'custom',
+                  message: res?.errors?.size?.join(' و '),
+                })
+              }
+              if (res?.errors?.pages) {
+                form.setError('pages', {
+                  type: 'custom',
+                  message: res?.errors.pages?.join(' و '),
+                })
+              } else if (res?.errors?.weight) {
+                form.setError('weight', {
+                  type: 'custom',
+                  message: res?.errors.weight?.join(' و '),
+                })
+              } else if (res?.errors?.cover) {
+                form.setError('cover', {
+                  type: 'custom',
+                  message: res?.errors?.cover?.join(' و '),
+                })
+              }
+              if (res?.errors?.publishDate) {
+                form.setError('publishDate', {
+                  type: 'custom',
+                  message: res?.errors.publishDate?.join(' و '),
+                })
+              } else if (res?.errors?.edition) {
+                form.setError('edition', {
+                  type: 'custom',
+                  message: res?.errors.edition?.join(' و '),
+                })
+              } else if (res?.errors?.summary) {
+                form.setError('summary', {
+                  type: 'custom',
+                  message: res?.errors?.summary?.join(' و '),
+                })
+              }
+              if (res?.errors?.price) {
+                form.setError('price', {
+                  type: 'custom',
+                  message: res?.errors.price?.join(' و '),
+                })
+              } else if (res?.errors?.writerId) {
+                form.setError('writerId', {
+                  type: 'custom',
+                  message: res?.errors.writerId?.join(' و '),
+                })
+              } else if (res?.errors?.translatorId) {
+                form.setError('translatorId', {
+                  type: 'custom',
+                  message: res?.errors?.translatorId?.join(' و '),
+                })
+              }
+              if (res?.errors?.editorId) {
+                form.setError('editorId', {
+                  type: 'custom',
+                  message: res?.errors.editorId?.join(' و '),
+                })
+              } else if (res?.errors?.illustratorId) {
+                form.setError('illustratorId', {
+                  type: 'custom',
+                  message: res?.errors.illustratorId?.join(' و '),
+                })
+              } else if (res?.errors?.photographerId) {
+                form.setError('photographerId', {
+                  type: 'custom',
+                  message: res?.errors?.photographerId?.join(' و '),
+                })
+              }
+              if (res?.errors?.categoryId) {
+                form.setError('categoryId', {
+                  type: 'custom',
+                  message: res?.errors.categoryId?.join(' و '),
+                })
+              } else if (res?.errors?.image) {
+                form.setError('image', {
+                  type: 'custom',
+                  message: res?.errors.image?.join(' و '),
+                })
+              } else if (res?.errors?.isFeatured) {
+                form.setError('isFeatured', {
+                  type: 'custom',
+                  message: res?.errors?.isFeatured?.join(' و '),
+                })
+              }
+              if (res?.errors?.isArchived) {
+                form.setError('isArchived', {
+                  type: 'custom',
+                  message: res?.errors.isArchived?.join(' و '),
+                })
+              } else if (res?.errors?._form) {
+                // form.setError('root', {
+                //   type: 'custom',
+                //   message: res?.errors?._form?.join(' و '),
+                // })
+                toast.error(res?.errors?._form?.join(' و '))
+              }
               // if (res?.success) {
               //    toast.success(toastMessage)
               // }
@@ -387,7 +593,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
     : (files
         .map((file) => URL.createObjectURL(file))
         .filter(Boolean) as string[])
-
+  // console.log(form.formState.errors)
   return (
     <>
       <AlertModal
@@ -500,7 +706,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('title')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -517,7 +725,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('isbn')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -534,7 +744,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('subTitle')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -567,7 +779,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     ))}
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('categoryId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -584,7 +798,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('originalTitle')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -601,7 +817,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('description')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -636,7 +854,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('size')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -653,7 +873,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('pages')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -670,7 +892,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('weight')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -705,7 +929,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('cover')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -722,7 +948,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                 <FormMessage>
+                  {form.getFieldState('categoryId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           /> */}
@@ -787,7 +1015,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 {/* <FormDescription>
                   Your date of birth is used to calculate your age.
                 </FormDescription> */}
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('publishDate')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -804,7 +1034,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('edition')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -821,7 +1053,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('summary')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -838,7 +1072,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     {...field}
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('price')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -861,7 +1097,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   // className="sm:w-[510px]"
                 />
 
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('writerId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -881,7 +1119,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   {...field}
                   // className="sm:w-[510px]"
                 />
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('translatorId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -901,7 +1141,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   {...field}
                   // className="sm:w-[510px]"
                 />
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('editorId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -921,6 +1163,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   {...field}
                   // className="sm:w-[510px]"
                 />
+                <FormMessage>
+                  {form.getFieldState('illustratorId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -940,7 +1185,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                   {...field}
                   // className="sm:w-[510px]"
                 />
-                <FormMessage />
+                <FormMessage>
+                  {form.getFieldState('photographerId')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -962,6 +1209,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     این محصول در صفحه اول نمایش داده شود.
                   </FormDescription>
                 </div>
+                <FormMessage>
+                  {form.getFieldState('isFeatured')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />
@@ -983,6 +1233,9 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                     این محصول از فروشگاه پنهان شود
                   </FormDescription>
                 </div>
+                <FormMessage>
+                  {form.getFieldState('isArchived')?.error?.message}
+                </FormMessage>
               </FormItem>
             )}
           />

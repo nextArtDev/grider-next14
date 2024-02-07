@@ -30,3 +30,6 @@ export function translateArray(inputArray: string[]): string[] {
 
   return translatedArray
 }
+export function getFarsiBoolean(value: boolean): string {
+  return value ? 'بلی' : 'خیر'
+}
