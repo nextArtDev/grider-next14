@@ -126,7 +126,11 @@ export async function editStore(
       }
     }
     const isNameExisting = await prisma.store.findUnique({
-      where: { name: result.data.name, userId: session.user.id },
+      where: {
+        name: result.data.name,
+        userId: session.user.id,
+        NOT: { id: storeId },
+      },
     })
 
     if (isNameExisting) {
