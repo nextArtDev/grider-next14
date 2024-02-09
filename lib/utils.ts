@@ -33,3 +33,14 @@ export function translateArray(inputArray: string[]): string[] {
 export function getFarsiBoolean(value: boolean): string {
   return value ? 'بلی' : 'خیر'
 }
+
+export function getBooleanFromFarsi(value: string): boolean {
+  switch (value) {
+    case 'بلی':
+      return true
+    case 'خیر':
+      return false
+    default:
+      throw new Error('Invalid Farsi boolean value')
+  }
+}

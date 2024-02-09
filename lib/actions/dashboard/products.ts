@@ -10,10 +10,7 @@ import { createBillboardSchema } from '@/lib/schema/billboard'
 import { deleteFileFromS3, uploadFileToS3 } from './s3Upload'
 import { createCategorySchema, upImageSchema } from '@/lib/schema/category'
 import * as z from 'zod'
-import {
-  createProductSchema,
-  createServerProductSchema,
-} from '@/lib/schema/product'
+import { createServerProductSchema } from '@/lib/schema/product'
 
 interface CreateProductFormState {
   success?: string
@@ -242,7 +239,6 @@ export async function editProduct(
     isFeatured: formData.get('isFeatured'),
     isArchived: formData.get('isArchived'),
   })
-
   // console.log(result)
   // console.log(formData.get('image'))
 
@@ -252,6 +248,8 @@ export async function editProduct(
       errors: result.error.flatten().fieldErrors,
     }
   }
+  // console.log(result.data.isArchived)
+  // console.log(result.data.isFeatured)
   const session = await auth()
   if (!session || !session.user || session.user.role !== 'ADMIN') {
     return {

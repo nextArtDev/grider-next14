@@ -8,6 +8,7 @@ import { ThemeProvider } from '@/providers/ThemeProvider'
 import { numericFont, primaryFont } from '@/lib/fonts'
 import { ReduxProviders } from '@/redux/Providers'
 import { ModalProvider } from '@/providers/modal-providers'
+import Footer from '@/components/home/Footer'
 
 export const metadata: Metadata = {
   title: 'Book Store',
@@ -34,6 +35,7 @@ export default function RootLayout({
             >
               {/* <ModalProvider /> */}
               {children}
+
               <Toaster richColors position="bottom-left" />
             </ThemeProvider>
           </body>
