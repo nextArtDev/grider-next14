@@ -10,6 +10,7 @@ export default async function HomeLayout({
     <>
       <Navbar />
       {children}
+
       <Footer />
     </>
   )

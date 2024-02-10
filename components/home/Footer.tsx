@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { SVGProps } from 'react'
 import { buttonVariants } from '../ui/button'
 import { getBillboardsWithCategories } from '@/lib/queries/home/billboard'
+import { Separator } from '@/components/ui/separator'
 
 const navigation = {
   solutions: [
@@ -98,11 +99,14 @@ export default async function Footer() {
   const billboards = await getBillboardsWithCategories()
   // console.log(billboards)
   return (
-    <footer className="pb-8" aria-labelledby="footer-heading">
-      <h2 id="footer-heading" className="sr-only">
-        Footer
-      </h2>
-      <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
+    <section className="flex flex-col mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32">
+      <Separator className="mb-4" />
+
+      <footer className="pb-8 " aria-labelledby="footer-heading">
+        <h2 id="footer-heading" className="sr-only">
+          Footer
+        </h2>
+        {/* <div className="mx-auto max-w-7xl px-6 pb-8 pt-16 sm:pt-24 lg:px-8 lg:pt-32"> */}
         <div className="xl:grid xl:grid-cols-3 xl:gap-8">
           <div className="space-y-8">
             <img
@@ -179,8 +183,9 @@ export default async function Footer() {
             &copy; 2020 Your Company, Inc. All rights reserved.
           </p>
         </div>
-      </div>
-      <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none"></div>
-    </footer>
+        {/* </div> */}
+        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none"></div>
+      </footer>
+    </section>
   )
 }
