@@ -24,9 +24,9 @@ async function Navbar({}: Props) {
       <div className=" flex gap-x-4 items-center justify-between  ml-8 ">
         <Link
           href={'/dashboard'}
-          className={cn(buttonVariants({ variant: 'destructive' }))}
+          className={cn(buttonVariants({ variant: 'outline' }))}
         >
-          Dashboard
+          دشبورد
         </Link>
         <ThemeToggle />
       </div>
