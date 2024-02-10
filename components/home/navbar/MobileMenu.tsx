@@ -144,7 +144,7 @@ function MobileMenu({ billboards }: MobileMenuProps) {
   // console.log(billboards.map((bi) => bi.categories))
   // console.log(billboards)
   return (
-    <div>
+    <div className="md:hidden">
       <Sheet>
         <SheetTrigger asChild className="m-2">
           <Button className="" variant={'ghost'}>
