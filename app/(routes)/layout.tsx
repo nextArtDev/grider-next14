@@ -1,4 +1,5 @@
 import Footer from '@/components/home/Footer'
+import Navbar from '@/components/home/navbar/Navbar'
 
 export default async function HomeLayout({
   children,
@@ -7,6 +8,7 @@ export default async function HomeLayout({
 }) {
   return (
     <>
+      <Navbar />
       {children}
       <Footer />
     </>
