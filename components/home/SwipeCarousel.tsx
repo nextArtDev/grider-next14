@@ -67,7 +67,7 @@ export const SwipeCarousel = ({ categories }: SwipeCarouselProps) => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto relative overflow-hidden bg-transparent rounded-xl py-8">
+    <div className="max-w-5xl mx-auto relative overflow-hidden bg-transparent dark:bg-primary/10 rounded-xl py-8">
       <motion.div
         drag="x"
         dragConstraints={{
@@ -127,8 +127,9 @@ const Images = ({ imgIndex, images, categoryNames }: ImagesProps) => {
             >
               <motion.p
                 animate={{ opacity: imgIndex === idx ? 1 : 0 }}
+                initial={{ opacity: 0.5 }}
                 transition={SPRING_OPTIONS}
-                className="absolute -top-10 w-full left-1/2 -translate-x-[5%] text-2xl "
+                className="absolute bottom-7 w-fit left-1/2 -translate-x-[50%] text-2xl bg-secondary/50 px-4 py-2 rounded-xl bg-blur-2xl font-extrabold "
               >
                 {categoryName}
               </motion.p>

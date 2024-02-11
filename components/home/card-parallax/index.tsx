@@ -14,16 +14,6 @@ interface CardParallaxProps {
 export default function CardParallax({ categories }: CardParallaxProps) {
   //   console.log(categories)
 
-  //  const projects = [
-  //   {
-  //     title: 'Matthias Leidinger',
-  //     description:
-  //       'Originally hailing from Austria, Berlin-based photographer Matthias Leindinger is a young creative brimming with talent and ideas.',
-  //     src: '1.jpg',
-  //     link: 'https://www.ignant.com/2023/03/25/ad2186-matthias-leidingers-photographic-exploration-of-awe-and-wonder/',
-  //     color: '#BBACAF',
-  //   }
-  // ]
   const container = useRef(null)
   const { scrollYProgress } = useScroll({
     target: container,
@@ -42,7 +32,7 @@ export default function CardParallax({ categories }: CardParallaxProps) {
   })
 
   return (
-    <main ref={container} className="relative mt-[50vh]">
+    <main ref={container} className="relative mt-[10vh]">
       {categories?.map((category, i) => {
         const targetScale = 1 - (projects.length - i) * 0.05
         return (
