@@ -36,7 +36,7 @@ export const SwipeCarousel = ({ categories }: SwipeCarouselProps) => {
   // console.log(images?.map((image) => image?.url))
 
   const [imgIndex, setImgIndex] = useState(0)
-  console.log(categoryNames?.[imgIndex])
+  // console.log(categoryNames?.[imgIndex])
 
   const dragX = useMotionValue(0)
 
@@ -67,7 +67,7 @@ export const SwipeCarousel = ({ categories }: SwipeCarouselProps) => {
   }
 
   return (
-    <div className="max-w-5xl mx-auto relative overflow-hidden bg-transparent dark:bg-primary/10 rounded-xl py-8">
+    <div className="max-w-5xl w-full mx-auto relative overflow-hidden bg-transparent dark:bg-primary/5 rounded-xl py-8">
       <motion.div
         drag="x"
         dragConstraints={{
@@ -129,7 +129,7 @@ const Images = ({ imgIndex, images, categoryNames }: ImagesProps) => {
                 animate={{ opacity: imgIndex === idx ? 1 : 0 }}
                 initial={{ opacity: 0.5 }}
                 transition={SPRING_OPTIONS}
-                className="absolute bottom-7 w-fit left-1/2 -translate-x-[50%] text-2xl bg-secondary/50 px-4 py-2 rounded-xl bg-blur-2xl font-extrabold "
+                className="absolute bottom-7 w-fit left-1/2 -translate-x-[50%] text-2xl bg-secondary/40 px-4 py-2 rounded-xl bg-blur-2xl font-extrabold "
               >
                 {categoryName}
               </motion.p>

@@ -6,7 +6,7 @@ export default async function Home() {
   const categories = await getAllCategories()
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div dir="ltr" className="w-full overflow-x-hidden">
+      <div dir="ltr" className="w-[94vw] overflow-x-hidden">
         <SwipeCarousel categories={categories} />
       </div>
       <CardParallax categories={categories} />

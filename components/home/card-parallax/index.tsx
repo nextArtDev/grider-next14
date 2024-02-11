@@ -4,7 +4,7 @@ import { useScroll } from 'framer-motion'
 import { useEffect, useRef } from 'react'
 import Lenis from '@studio-freight/lenis'
 import Card from './Card'
-import { projects } from './data'
+
 import { Billboard, Category, Image, Product } from '@prisma/client'
 import { CategoryFullStructure } from '@/lib/queries/home/category'
 
@@ -34,7 +34,7 @@ export default function CardParallax({ categories }: CardParallaxProps) {
   return (
     <main ref={container} className="relative mt-[10vh]">
       {categories?.map((category, i) => {
-        const targetScale = 1 - (projects.length - i) * 0.05
+        const targetScale = 1 - (categories.length - i) * 0.05
         return (
           <Card
             key={`p_${i}`}
