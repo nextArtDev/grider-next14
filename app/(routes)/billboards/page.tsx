@@ -1,4 +1,8 @@
 import GridOptions from '@/components/shared/GridOptions'
+import {
+  BentoGrid,
+  BentoGridItem,
+} from '@/components/shared/bento-grid/BentoGrid'
 import { getBillboardsWithCategories } from '@/lib/queries/home/billboard'
 import { cn } from '@/lib/utils'
 import { notFound } from 'next/navigation'
@@ -12,21 +16,21 @@ const page: FC<pageProps> = async ({}) => {
   if (!billboards) notFound()
 
   return (
-    <div className="grid grid-col-2 grid-flow-row-dense md:grid-cols-4 gap-3 m-6">
+    <BentoGrid className="max-w-6xl mx-auto p-4 ">
       {billboards.map((billboard, i) => (
-        <GridOptions
-          key={billboard.id}
+        <BentoGridItem
+          key={i}
           href={`/billboards/${billboard.id}`}
           title={billboard.label}
-          image={billboard.image?.url}
-          className={cn(
-            i % 3 === 0 && 'col-span-3 row-span-3 h-32 ',
-            i % 3 === 1 && 'col-span-2 row-span-3',
-            i % 3 === 2 && 'col-span-2 row-span-2'
-          )}
+          imageSrc={billboard.image?.url}
+          // description={item.description}
+          // header={item.header}
+          // icon={item.icon}
+          className={i % 3 === 0 ? 'md:col-span-2' : ''}
+          // className={i === 3 || i === 6 ? 'md:col-span-2' : ''}
         />
       ))}
-    </div>
+    </BentoGrid>
   )
 }
 
