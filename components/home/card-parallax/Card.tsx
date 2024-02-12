@@ -50,8 +50,10 @@ const Card = ({
           // backgroundColor: color,
           scale,
           top: `calc(-5vh + ${i * 25}px)`,
+          boxShadow:
+            'rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset',
         }}
-        className={styles.card}
+        className={`${styles.card} `}
       >
         <h2>{category?.billboard.label}</h2>
         <div className={styles.body}>
@@ -77,11 +79,17 @@ const Card = ({
           </div>
 
           <div className={styles.imageContainer}>
-            <motion.div className={styles.inner} style={{ scale: imageScale }}>
+            <motion.div
+              className={styles.inner}
+              style={{
+                scale: imageScale,
+              }}
+            >
               <NextImage
                 fill
                 src={category?.products?.[0]?.images?.[0]?.url || ''}
                 alt="image"
+                className=""
               />
               {/* <NextImage fill src={`/parallax-images/${src}`} alt="image" /> */}
             </motion.div>
