@@ -79,6 +79,17 @@
     @apply bg-background text-foreground;
   }
 }
+
+.no-visible-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.no-visible-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 .react-calendar {
   width: 400px;
   max-width: 100%;

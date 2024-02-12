@@ -1,8 +1,5 @@
 import GridOptions from '@/components/shared/GridOptions'
-import {
-  BentoGrid,
-  BentoGridItem,
-} from '@/components/shared/bento-grid/BentoGrid'
+import { BentoGrid, BentoGridItem } from '@/components/shared/BentoGrid'
 import { getBillboardsWithCategories } from '@/lib/queries/home/billboard'
 import { cn } from '@/lib/utils'
 import { notFound } from 'next/navigation'

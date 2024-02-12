@@ -38,3 +38,33 @@ export const getAllCategories = cache(
     return categories
   }
 )
+export const getCategoryByBillboardId = cache(
+  ({
+    billboardId,
+  }: {
+    billboardId: string
+  }): Promise<CategoryFullStructure[] | null> => {
+    const categories = prisma.category.findMany({
+      where: {
+        storeId: process.env.STORE_ID,
+        billboardId,
+      },
+      include: {
+        image: { select: { url: true } },
+        billboard: {
+          include: {
+            image: { select: { url: true } },
+          },
+        },
+        products: {
+          include: { images: { select: { url: true } } },
+        },
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
+
+    return categories
+  }
+)
