@@ -4,7 +4,10 @@ import { cache } from 'react'
 
 export const getBillboardsWithCategories = cache(
   (): Promise<
-    (Billboard & { categories: { id: string; name: string }[] })[] | null
+    | (Billboard & { image: { url: string } | null } & {
+        categories: { id: string; name: string }[]
+      })[]
+    | null
   > => {
     const billboards = prisma.billboard.findMany({
       where: {
@@ -12,6 +15,7 @@ export const getBillboardsWithCategories = cache(
       },
       include: {
         categories: { select: { id: true, name: true } },
+        image: { select: { url: true } },
       },
       orderBy: {
         createdAt: 'desc',
