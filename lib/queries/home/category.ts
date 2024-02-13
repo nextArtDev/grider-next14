@@ -4,9 +4,9 @@ import { cache } from 'react'
 
 type Image = { url: string }
 
-type CategoryWithImage = Category & { image: Image | null }
-type BillboardWithImage = Billboard & { image: Image | null }
-type ProductWithImages = Product & { images: Image[] | null }
+type CategoryWithImage = Category & { image: Partial<Image> | null }
+type BillboardWithImage = Billboard & { image: Partial<Image> | null }
+type ProductWithImages = Product & { images: { url: string }[] }
 
 export type CategoryFullStructure = CategoryWithImage & {
   billboard: BillboardWithImage

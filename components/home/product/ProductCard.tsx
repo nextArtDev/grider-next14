@@ -8,10 +8,17 @@ import { FC } from 'react'
 import FlipCover from './3d-cover/FlipCover'
 
 interface ProductCardProps {
-  products: (Product & { images: { url: string }[] })[]
+  products: (Product & { images: { url: string }[] })[] | null
 }
 
 const ProductCard: FC<ProductCardProps> = ({ products }) => {
+  if (!products) {
+    return (
+      <p className="flex text-2xl items-center justify-center text-center">
+        هنوز کتابی در این دسته‌بندی موجود نیست.
+      </p>
+    )
+  }
   return (
     <div className="">
       <div className="mx-auto max-w-7xl overflow-hidden sm:px-6 lg:px-8">
@@ -23,6 +30,7 @@ const ProductCard: FC<ProductCardProps> = ({ products }) => {
               key={product.id}
               url={product.images?.[0].url}
               title={product.title}
+              cover={product?.cover}
             />
           ))}
           {/* {products.map((product) => (

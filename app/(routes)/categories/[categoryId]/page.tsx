@@ -23,7 +23,7 @@ const page: FC<pageProps> = async ({ params: { categoryId } }) => {
         description={category?.description}
       />
       {/* TODO:Filters  */}
-      <ProductCard products={category.products} />
+      <ProductCard products={category?.products} />
     </section>
   )
 }
