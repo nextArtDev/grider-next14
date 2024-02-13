@@ -31,7 +31,7 @@ export const getAllCategories = cache(
         },
       },
       orderBy: {
-        createdAt: 'desc',
+        name: 'asc',
       },
     })
 
@@ -66,5 +66,33 @@ export const getCategoryByBillboardId = cache(
     })
 
     return categories
+  }
+)
+
+export type CategoryWithProducts = CategoryWithImage & {
+  products: ProductWithImages[] | null
+  billboard: { label: string }
+}
+export const getCategoryById = cache(
+  ({
+    categoryId,
+  }: {
+    categoryId: string
+  }): Promise<CategoryWithProducts | null> => {
+    const category = prisma.category.findFirst({
+      where: {
+        storeId: process.env.STORE_ID,
+        id: categoryId,
+      },
+      include: {
+        image: { select: { url: true } },
+        billboard: { select: { label: true } },
+        products: {
+          include: { images: { select: { url: true } } },
+        },
+      },
+    })
+
+    return category
   }
 )
