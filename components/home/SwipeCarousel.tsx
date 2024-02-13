@@ -101,34 +101,32 @@ const Images = ({ imgIndex, images, categoryNames }: ImagesProps) => {
     <>
       {images?.map((imgSrc, idx) => {
         return (
-          <>
-            <motion.div
-              key={idx}
-              style={{
-                backgroundImage: `url(${imgSrc?.url})`,
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-              }}
-              animate={{
-                scale: imgIndex === idx ? 0.95 : 0.75,
-              }}
+          <motion.div
+            key={idx}
+            style={{
+              backgroundImage: `url(${imgSrc?.url})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+            animate={{
+              scale: imgIndex === idx ? 0.95 : 0.75,
+            }}
+            transition={SPRING_OPTIONS}
+            className="relative aspect-video w-full shrink-0 rounded-md bg-bg-primary/25 object-cover"
+          >
+            <motion.p
+              animate={{ opacity: imgIndex === idx ? 1 : 0 }}
+              initial={{ opacity: 0 }}
               transition={SPRING_OPTIONS}
-              className="relative aspect-video w-full shrink-0 rounded-md bg-bg-primary/25 object-cover"
+              style={{
+                boxShadow:
+                  ' rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset',
+              }}
+              className="absolute -top-8 w-fit left-1/2 -translate-x-[50%] text-2xl bg-secondary/40 px-4 py-2 rounded-xl bg-blur-2xl font-extrabold mix-blend-color-burn "
             >
-              <motion.p
-                animate={{ opacity: imgIndex === idx ? 1 : 0 }}
-                initial={{ opacity: 0 }}
-                transition={SPRING_OPTIONS}
-                style={{
-                  boxShadow:
-                    ' rgba(0, 0, 0, 0.4) 0px 2px 4px, rgba(0, 0, 0, 0.3) 0px 7px 13px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset',
-                }}
-                className="absolute -top-8 w-fit left-1/2 -translate-x-[50%] text-2xl bg-secondary/40 px-4 py-2 rounded-xl bg-blur-2xl font-extrabold mix-blend-color-burn "
-              >
-                {categoryName}
-              </motion.p>
-            </motion.div>
-          </>
+              {categoryName}
+            </motion.p>
+          </motion.div>
         )
       })}
     </>

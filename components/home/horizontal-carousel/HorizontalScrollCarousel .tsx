@@ -66,12 +66,12 @@ const HorizontalScrollCarousel = ({
               <Link
                 href={`/products/${card.id}`}
                 key={card.id}
-                className=" bg-transparent flex items-center justify-center group relative h-fit w-fit md:w-fit overflow-hidden bg-neutral-200 "
+                className=" bg-transparent flex items-center justify-center group relative h-fit w-fit md:w-fit overflow-hidden  "
               >
                 <FlipCover
                   title={card.title}
                   url={card.url}
-                  className="absolute"
+                  className="bg-transparent "
                 />
               </Link>
             )
@@ -86,7 +86,7 @@ const Card = ({ card }: { card: CardType }) => {
   return (
     <div
       key={card.id}
-      className="g-transparent group relative h-[450px] w-[250px] md:w-[450px] overflow-hidden bg-neutral-200  "
+      className="g-transparent group relative h-[450px] w-[250px] md:w-[450px] overflow-hidden  "
     >
       <FlipCover title={card.title} url={card.url} className="" />
       <div
