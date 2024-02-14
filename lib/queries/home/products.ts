@@ -45,28 +45,28 @@ export const getFeaturedProducts = cache(
     return products
   }
 )
-// export const getAllProducts = cache(
-//   (): Promise<CategoryFullStructure[] | null> => {
-//     const categories = prisma.product.findMany({
-//       where: {
-//         storeId: process.env.STORE_ID,
-//       },
-//       include: {
-//         image: { select: { url: true } },
-//         billboard: {
-//           include: {
-//             image: { select: { url: true } },
-//           },
-//         },
-//         products: {
-//           include: { images: { select: { url: true } } },
-//         },
-//       },
-//       orderBy: {
-//         name: 'asc',
-//       },
-//     })
+export const getAllProducts = cache(
+  (): Promise<
+    | (ProductWithImages & { category: Category } & {
+        writer: Partial<Contributor>[]
+      } & { translator: Partial<Contributor>[] })[]
+    | null
+  > => {
+    const products = prisma.product.findMany({
+      where: {
+        storeId: process.env.STORE_ID,
+      },
+      include: {
+        images: { select: { url: true } },
+        writer: { select: { name: true } },
+        translator: { select: { name: true } },
+        category: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    })
 
-//     return categories
-//   }
-// )
+    return products
+  }
+)
