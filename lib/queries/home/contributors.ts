@@ -52,3 +52,25 @@ export const getAllContributors = cache(
     return { writers, translators, editors, photographers, illustrators }
   }
 )
+
+export type ContributorWithImage = Contributor & {
+  image: { url: string } | null
+}
+
+export const getAllContributorsWithoutRole = cache(
+  (): Promise<ContributorWithImage[] | null> => {
+    const contributors = prisma.contributor.findMany({
+      where: {
+        storeId: process.env.STORE_ID,
+      },
+      include: {
+        image: { select: { url: true } },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    })
+
+    return contributors
+  }
+)
