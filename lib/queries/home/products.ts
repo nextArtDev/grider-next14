@@ -70,3 +70,29 @@ export const getAllProducts = cache(
     return products
   }
 )
+export type SingleProductFullStructure = ProductWithImages & {
+  writer: Partial<Contributor>[]
+  translator: Partial<Contributor>[]
+  editor: Partial<Contributor>[]
+  category: Category
+}
+
+export const getProductById = cache(
+  ({ id }: { id: string }): Promise<SingleProductFullStructure | null> => {
+    const product = prisma.product.findFirst({
+      where: {
+        storeId: process.env.STORE_ID,
+        id,
+      },
+      include: {
+        images: { select: { url: true } },
+        writer: { select: { name: true, id: true } },
+        translator: { select: { name: true, id: true } },
+        editor: { select: { name: true, id: true } },
+        category: true,
+      },
+    })
+
+    return product
+  }
+)

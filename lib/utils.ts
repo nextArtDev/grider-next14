@@ -30,6 +30,39 @@ export function translateArray(inputArray: string[]): string[] {
 
   return translatedArray
 }
+export function translateCover(input: string): string {
+  const translationMap: { [key: string]: string } = {
+    Shomiz: 'شومیز',
+    Kaghazi: 'کاغذی',
+    Galingor: 'گلینگور',
+    Sakht: 'سخت',
+    Narm: 'نرم',
+    Ghalaf: 'غلاف',
+    Zarrin: 'زرین',
+    Makhmal: 'مخمل',
+    Cherm: 'چرم',
+    Parcheh: 'پارچه',
+  }
+
+  return translationMap[input]
+}
+export function translateSize(input: string): string {
+  const translationMap: { [key: string]: string } = {
+    Roghei: 'رقعی',
+    Kheshti: 'خشتی',
+    Rahli: 'رحلی',
+    Vaziri: 'وزیری',
+    Soltani: 'سلطانی',
+    Gibi: 'جیبی',
+    Paltoei: 'پالتویی',
+    Hamayeli: 'حمایلی',
+    Janamazi: 'جانمازی',
+    Beyazee: 'بیاضی',
+  }
+
+  return translationMap[input]
+}
+
 export function getFarsiBoolean(value: boolean): string {
   return value ? 'بلی' : 'خیر'
 }
