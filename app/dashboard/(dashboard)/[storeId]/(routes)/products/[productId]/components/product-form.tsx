@@ -865,7 +865,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             name="pages"
             render={({ field }) => (
               <FormItem className="max-w-md">
-                <FormLabel>نام</FormLabel>
+                <FormLabel>صفحات</FormLabel>
                 <FormControl>
                   <Input
                     disabled={isPending}
@@ -916,7 +916,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                       <SelectTrigger>
                         <SelectValue
                           defaultValue={field.value}
-                          placeholder="انتخاب سایز"
+                          placeholder="انتخاب جلد"
                         />
                       </SelectTrigger>
                     </FormControl>
@@ -1030,7 +1030,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 <FormControl>
                   <Input
                     disabled={isPending}
-                    placeholder="نام دسته‌بندی"
+                    placeholder="نوبت ویراست"
                     {...field}
                   />
                 </FormControl>
@@ -1240,7 +1240,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             )}
           />
 
-          <Button disabled={isPending} className="ml-auto">
+          <Button disabled={isPending} className="w-full ml-auto">
             {isPending ? (
               <Loader className="animate-spin w-full h-full " />
             ) : (

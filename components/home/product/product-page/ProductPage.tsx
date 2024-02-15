@@ -5,6 +5,7 @@ import Link from 'next/link'
 
 import React, { FC } from 'react'
 import ProductTable from './ProductTable'
+import { Badge } from '@/components/ui/badge'
 
 interface ProductPageProps {
   product: SingleProductFullStructure
@@ -20,23 +21,24 @@ const ProductPage: FC<ProductPageProps> = ({ product }) => {
           cover={product?.cover}
         />
       </div>
-      <div className="flex flex-col gap-2 justify-center items-start pr-8 md:pr-0 ">
-        <div className="text-base font-bold md:text-lg ">{product.title}</div>
-        <div className="text-sm text-muted font-semibold md:text-base ">
+      <div className="flex flex-col gap-y-4 justify-center items-start pr-8 md:pr-0 ">
+        <p className="text-lg font-bold md:text-2xl ">{product.title}</p>
+        <p className="text-sm text-muted-foreground font-semibold md:text-base ">
           {product.subTitle}
-        </div>
-        <div className="flex gap-1">
+        </p>
+        <div className="flex items-center gap-4">
+          <p>نویسنده:</p>
           {product.writer.map((writer) => (
             <Link href={`/contributors/${writer.id}`} key={writer.id}>
-              <span>{writer.name}</span>
+              <Badge className="px-6 ml-6 text-base ">{writer.name}</Badge>
             </Link>
           ))}
         </div>
-        <div className="flex gap-1">
-          ترجمه:{' '}
+        <div className="flex items-center  gap-4">
+          <p>ترجمه:</p>
           {product.translator.map((translator) => (
             <Link href={`/contributors/${translator.id}`} key={translator.id}>
-              <span>{translator.name}</span>
+              <Badge className="px-5 ml-5 text-base">{translator.name}</Badge>
             </Link>
           ))}
         </div>
