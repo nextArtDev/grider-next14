@@ -6,6 +6,7 @@ import Link from 'next/link'
 import React, { FC } from 'react'
 import ProductTable from './ProductTable'
 import { Badge } from '@/components/ui/badge'
+import Currency from '@/components/shared/Currency'
 
 interface ProductPageProps {
   product: SingleProductFullStructure
@@ -42,8 +43,8 @@ const ProductPage: FC<ProductPageProps> = ({ product }) => {
             </Link>
           ))}
         </div>
-        <div>
-          قیمت: {product.price && formatter.format(product.price?.toNumber())}{' '}
+        <div className="flex items-center gap-2">
+          {product.price && <Currency value={+product?.price} />}
           تومان
         </div>
       </div>

@@ -10,11 +10,6 @@ interface pageProps {
 
 const page: FC<pageProps> = async ({ params: { contributorId } }) => {
   const contributor = await getContributorById({ id: contributorId })
-  console.log(contributor?.writer)
-  console.log(contributor?.Translator)
-  console.log(contributor?.editor)
-  console.log(contributor?.illustrator)
-  console.log(contributor?.photographer)
 
   if (!contributor) return notFound()
 

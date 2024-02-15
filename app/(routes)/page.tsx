@@ -6,7 +6,7 @@ import { getAllCategories } from '@/lib/queries/home/category'
 export default async function Home() {
   const categories = await getAllCategories()
   return (
-    <main className="">
+    <main className="flex-1">
       <div dir="ltr" className="w-[94vw] overflow-x-hidden">
         <SwipeCarousel categories={categories} />
       </div>
