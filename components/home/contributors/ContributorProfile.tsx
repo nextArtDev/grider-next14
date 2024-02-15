@@ -59,7 +59,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({ contributor }) => {
           className="object-contain"
         />
       </BackgroundGradient> */}
-        <Card className="relative justify-self-center w-80 h-80 overflow-hidden ">
+        <Card className="relative flex-shrink-0 w-80 h-80 overflow-hidden ">
           <Image
             fill
             src={contributor.image?.url || NoPic.src}

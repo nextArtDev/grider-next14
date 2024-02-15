@@ -2,12 +2,13 @@
 import { FC } from 'react'
 
 import { useRouter } from 'next/navigation'
-import { Dialog, DialogContent } from '@/components/ui/dialog'
+import { Dialog, DialogClose, DialogContent } from '@/components/ui/dialog'
 import ProductPage from '@/components/home/product/product-page/ProductPage'
 import { SingleProductFullStructure } from '@/lib/queries/home/products'
 import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import Currency from '@/components/shared/Currency'
+import { Button } from '@/components/ui/button'
 
 interface pageProps {
   product: SingleProductFullStructure
@@ -60,6 +61,11 @@ const ProductDialog: FC<pageProps> = ({ product }) => {
               تومان
             </div>
           </div>
+          <Button
+            onClick={() => window.location.assign(`/products/${product.id}`)}
+          >
+            مشاهده
+          </Button>
         </DialogContent>
       </Dialog>
     </div>

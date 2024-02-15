@@ -1,23 +1,12 @@
 'use client'
 import { FC } from 'react'
-import { Minus, Plus } from 'lucide-react'
 
-import { Button } from '@/components/ui/button'
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer'
-import { useRouter } from 'next/navigation'
 import ContributorProfile from '@/components/home/contributors/ContributorProfile'
-import { ContributorFullStructure } from '@/lib/queries/home/contributors'
-import RelatedProducts from '@/components/home/RelatedProducts'
+import { Button } from '@/components/ui/button'
+import { Drawer, DrawerContent } from '@/components/ui/drawer'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { ContributorFullStructure } from '@/lib/queries/home/contributors'
+import { useRouter } from 'next/navigation'
 
 interface pageProps {
   contributor: ContributorFullStructure
@@ -38,10 +27,18 @@ const ContributorDrawer: FC<pageProps> = ({ contributor }) => {
           }
         }}
       >
-        <ScrollArea className="h-[80vh]">
-          <DrawerContent>
+        <ScrollArea className="max-h-[80vh]">
+          <DrawerContent className=" ">
             <ContributorProfile contributor={contributor} />
             {/* <RelatedProducts contributor={contributor} /> */}
+            <Button
+              className="mb-4 w-1/2 mx-auto "
+              onClick={() =>
+                window.location.assign(`/contributors/${contributor.id}`)
+              }
+            >
+              مشاهده
+            </Button>
           </DrawerContent>
         </ScrollArea>
       </Drawer>
