@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Billboard, Contributor } from '@prisma/client'
+import { Billboard, Contributor, Image, Product } from '@prisma/client'
 import { cache } from 'react'
 
 export const getAllContributors = cache(
@@ -72,5 +72,38 @@ export const getAllContributorsWithoutRole = cache(
     })
 
     return contributors
+  }
+)
+
+type ProductWithImages = Product & { images: { url: string }[] | null }
+
+export type ContributorFullStructure = ContributorWithImage & {
+  writer: ProductWithImages[]
+  Translator: ProductWithImages[]
+  editor: ProductWithImages[]
+  photographer: ProductWithImages[]
+  illustrator: ProductWithImages[]
+}
+export const getContributorById = cache(
+  ({ id }: { id: string }): Promise<ContributorFullStructure | null> => {
+    const contributor = prisma.contributor.findFirst({
+      where: {
+        storeId: process.env.STORE_ID,
+        id,
+      },
+      include: {
+        image: { select: { url: true } },
+        writer: { include: { images: { select: { url: true } } } },
+        editor: { include: { images: { select: { url: true } } } },
+        photographer: { include: { images: { select: { url: true } } } },
+        Translator: { include: { images: { select: { url: true } } } },
+        illustrator: { include: { images: { select: { url: true } } } },
+      },
+      orderBy: {
+        name: 'asc',
+      },
+    })
+
+    return contributor
   }
 )
