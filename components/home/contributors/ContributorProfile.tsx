@@ -1,26 +1,15 @@
 'use client'
-import { FC } from 'react'
-import LampHeader from './LampHeader'
-import { ContributorFullStructure } from '@/lib/queries/home/contributors'
-import Image from 'next/image'
-import { BackgroundGradient } from '@/components/shared/BackgrounGradient'
-import NoPic from '../../../public/images/no-profile.webp'
-import { translateArray } from '@/lib/utils'
-import { LampContainer } from '@/components/shared/LampEffect'
-import { motion } from 'framer-motion'
-import { TypewriterEffectSmooth } from '@/components/shared/TypeWriterEffect'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Separator } from '@/components/ui/separator'
 import AddRating from '@/components/shared/AddRating'
-import { User } from '@prisma/client'
 import ListRating from '@/components/shared/ListRating'
+import { TypewriterEffectSmooth } from '@/components/shared/TypeWriterEffect'
+import { Card } from '@/components/ui/card'
+import { Separator } from '@/components/ui/separator'
+import { ContributorFullStructure } from '@/lib/queries/home/contributors'
+import { translateArray } from '@/lib/utils'
+import { User } from '@prisma/client'
+import Image from 'next/image'
+import { FC } from 'react'
+import NoPic from '../../../public/images/no-profile.webp'
 
 interface ContributorProfileProps {
   contributor: ContributorFullStructure

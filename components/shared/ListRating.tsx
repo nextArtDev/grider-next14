@@ -8,11 +8,12 @@ interface ListRatingProps {
 }
 
 const ListRating: FC<ListRatingProps> = ({ product }) => {
+  console.log(product.Reviews)
   return (
     <section className="">
       <div className="text-2xl font-bold">نظرات</div>
       <div className="text-sm mt-2">
-        {product.reviews?.map((review: any) => {
+        {product.Reviews?.map((review: any) => {
           return (
             <div key={review.id} className="max-w-300px">
               <div className="flex gap-2 items-center">

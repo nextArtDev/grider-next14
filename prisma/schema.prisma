@@ -90,6 +90,7 @@ model Store {
   products     Product[]     @relation("StoreToProduct")
   orders       Order[]       @relation("StoreToOrder")
   contributors Contributor[] @relation("StoreToContributor")
+  reviews      Review[]      @relation("StoreToReview")
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -210,8 +211,12 @@ model Review {
   comment String
   rating  Int
 
-  created_at    DateTime     @default(now())
-  updated_at    DateTime     @updatedAt
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  storeId String
+  store   Store  @relation("StoreToReview", fields: [storeId], references: [id])
+
   User          User?        @relation(fields: [userId], references: [id])
   userId        String?
   Product       Product?     @relation(fields: [productId], references: [id])

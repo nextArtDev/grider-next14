@@ -15,17 +15,19 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
-import { toast } from '@/components/ui/use-toast'
 
 import { Contributor, Order, Product, Review, User } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
-import { FC, useState } from 'react'
+import { FC, startTransition, useState, useTransition } from 'react'
 import { Rating } from '@mui/material'
 
 import { Loader } from 'lucide-react'
 import { createReviewSchema } from '@/lib/schema/review'
 import { ContributorFullStructure } from '@/lib/queries/home/contributors'
 import { SingleProductFullStructure } from '@/lib/queries/home/products'
+
+import { createReview } from '@/lib/actions/rating'
+import { toast } from 'sonner'
 
 interface AddRatingContributorProps {
   product: ContributorFullStructure
@@ -42,9 +44,9 @@ const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
   product,
   user,
 }) => {
-  const [isLoading, setIsLoading] = useState(false)
+  const [isPending, startTransition] = useTransition()
   const router = useRouter()
-  const pathname = usePathname()
+  const path = usePathname()
 
   const form = useForm<z.infer<typeof createReviewSchema>>({
     resolver: zodResolver(createReviewSchema),
@@ -54,7 +56,40 @@ const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
     },
   })
 
-  async function onSubmit(data: z.infer<typeof createReviewSchema>) {
+  const onSubmit = async (data: z.infer<typeof createReviewSchema>) => {
+    const formData = new FormData()
+
+    formData.append('comment', data.comment)
+    formData.append('rating', data.rating)
+
+    try {
+      startTransition(() => {
+        createReview(formData, path, user?.id as string, product.id as string)
+          .then((res) => {
+            if (res?.errors?.comment) {
+              form.setError('comment', {
+                type: 'custom',
+                message: res?.errors.comment?.join(' و '),
+              })
+            } else if (res?.errors?.rating) {
+              form.setError('rating', {
+                type: 'custom',
+                message: res?.errors.rating?.join(' و '),
+              })
+            } else if (res?.errors?._form) {
+              toast.error(res?.errors._form?.join(' و '))
+              form.setError('root', {
+                type: 'custom',
+                message: res?.errors?._form?.join(' و '),
+              })
+            }
+            // if (res?.success) {
+            //    toast.success(toastMessage)
+            // }
+          })
+          .catch(() => toast.error('مشکلی پیش آمده.'))
+      })
+    } catch (error) {}
     // setIsLoading(true)
     // try {
     //   const result = await createReviewAction({
@@ -111,8 +146,12 @@ const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
             </FormItem>
           )}
         />
-        <Button disabled={isLoading} type="submit">
-          {isLoading ? <Loader className="animate-spin w-4 h-4 " /> : 'ثبت نظر'}
+        <Button disabled={isPending} className="ml-auto">
+          {isPending ? (
+            <Loader className="animate-spin w-full h-full " />
+          ) : (
+            'ثبت'
+          )}
         </Button>
       </form>
     </Form>
