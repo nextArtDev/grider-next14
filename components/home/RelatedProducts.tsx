@@ -3,20 +3,29 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { ContributorFullStructure } from '@/lib/queries/home/contributors'
 import FlipCover from './product/3d-cover/FlipCover'
 import Link from 'next/link'
-import { writer } from 'repl'
 
 interface RelatedProductsProps {
   contributor: ContributorFullStructure
 }
 
 const RelatedProducts: FC<RelatedProductsProps> = ({ contributor }) => {
+  let defaultValue
+
+  if (contributor?.writer.length > 0) {
+    defaultValue = 'نویسنده'
+  } else if (contributor?.Translator.length > 0) {
+    defaultValue = 'مترجم'
+  } else if (contributor?.editor.length > 0) {
+    defaultValue = 'ویراستار'
+  } else if (contributor?.photographer.length > 0) {
+    defaultValue = 'عکاس'
+  } else if (contributor?.illustrator.length > 0) {
+    defaultValue = 'تصویرساز'
+  }
+
   return (
     <div>
-      <Tabs
-        dir="rtl"
-        defaultValue={contributor?.writer.length > 0 ? 'نویسنده' : 'مترجم'}
-        className="w-full p-8 "
-      >
+      <Tabs dir="rtl" defaultValue={defaultValue} className="w-full p-8 ">
         <TabsList>
           {contributor?.writer.length > 0 && (
             <TabsTrigger value="نویسنده">نویسنده</TabsTrigger>

@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
   motion,
   useScroll,
@@ -12,12 +12,24 @@ import Link from 'next/link'
 import { CategoryFullStructure } from '@/lib/queries/home/category'
 import FlipCover from './product/3d-cover/FlipCover'
 import { Product } from '@prisma/client'
+import Lenis from '@studio-freight/lenis'
 
 export const HeroParallax = ({
   categories,
 }: {
   categories: CategoryFullStructure[] | null
 }) => {
+  useEffect(() => {
+    const lenis = new Lenis()
+
+    function raf(time: any) {
+      lenis.raf(time)
+      requestAnimationFrame(raf)
+    }
+
+    requestAnimationFrame(raf)
+  })
+
   const products = categories?.flatMap((category) =>
     category.products?.map((product) => product)
   )
@@ -35,7 +47,7 @@ export const HeroParallax = ({
   const springConfig = { stiffness: 300, damping: 30, bounce: 100 }
 
   const translateX = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 200]),
+    useTransform(scrollYProgress, [0, 1], [0, 1000]),
     springConfig
   )
   const translateXReverse = useSpring(
@@ -61,7 +73,7 @@ export const HeroParallax = ({
   return (
     <div
       ref={ref}
-      className="h-[400vh] py-8 overflow-hidden  antialiased relative flex flex-col self-auto [perspective:1000px] [transform-style:preserve-3d]"
+      className="py-10 overflow-hidden  antialiased relative flex flex-col self-auto[perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -74,7 +86,6 @@ export const HeroParallax = ({
         className=""
       >
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 mb-4">
-          <h2>پرفروشترینها:</h2>
           {firstRow?.map((product) => (
             <ProductCard
               product={product}
@@ -92,7 +103,7 @@ export const HeroParallax = ({
             />
           ))}
         </motion.div>
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-8">
+        <motion.div className="flex flex-row-reverse space-x-reverse space-x-4">
           {thirdRow?.map((product) => (
             <ProductCard
               product={product}
@@ -108,7 +119,7 @@ export const HeroParallax = ({
 
 export const Header = () => {
   return (
-    <div className="max-w-7xl relative mx-auto py-20 md:py-40 px-4 w-full  left-0 top-0">
+    <div className="max-w-7xl relative mx-auto py-8 md:py-12 px-4 w-full  left-0 top-0">
       <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
         کتابفروشی فردا <br />
       </h1>
@@ -131,11 +142,11 @@ export const ProductCard = ({
       style={{
         x: translate,
       }}
-      whileHover={{
-        y: -20,
-      }}
+      //   whileHover={{
+      //     y: -10,
+      //   }}
       key={product?.title}
-      className="relative group/product  flex-shrink-0"
+      className="relative group/product h-auto w-auto  flex-shrink-0"
     >
       <Link
         href={`/products/${product?.id}`}
