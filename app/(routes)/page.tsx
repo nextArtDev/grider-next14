@@ -7,7 +7,7 @@ import { getAllCategories } from '@/lib/queries/home/category'
 export default async function Home() {
   const categories = await getAllCategories()
   return (
-    <main className="flex-1">
+    <main className="flex-1 ">
       <HeroParallax categories={categories} />
       <div dir="ltr" className="w-[94vw] overflow-x-hidden">
         <SwipeCarousel categories={categories} />

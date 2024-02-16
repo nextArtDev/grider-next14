@@ -47,19 +47,19 @@ export const HeroParallax = ({
   const springConfig = { stiffness: 300, damping: 30, bounce: 100 }
 
   const translateX = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, 1000]),
+    useTransform(scrollYProgress, [0, 1], [0, 300]),
     springConfig
   )
   const translateXReverse = useSpring(
-    useTransform(scrollYProgress, [0, 1], [0, -1000]),
+    useTransform(scrollYProgress, [0, 1], [0, -300]),
     springConfig
   )
   const rotateX = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [15, 0]),
+    useTransform(scrollYProgress, [0, 0.2], [5, 0]),
     springConfig
   )
   const opacity = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [0.2, 1]),
+    useTransform(scrollYProgress, [0, 0.2], [0.4, 1]),
     springConfig
   )
   const rotateZ = useSpring(
@@ -67,13 +67,13 @@ export const HeroParallax = ({
     springConfig
   )
   const translateY = useSpring(
-    useTransform(scrollYProgress, [0, 0.2], [-700, 500]),
+    useTransform(scrollYProgress, [0, 0.2], [-600, 200]),
     springConfig
   )
   return (
     <div
       ref={ref}
-      className="py-10 overflow-hidden  antialiased relative flex flex-col self-auto[perspective:1000px] [transform-style:preserve-3d]"
+      className="h-[250vh] py-1 md:py-2  overflow-hidden  antialiased relative flex flex-col self-auto[perspective:1000px] [transform-style:preserve-3d]"
     >
       <Header />
       <motion.div
@@ -85,7 +85,7 @@ export const HeroParallax = ({
         }}
         className=""
       >
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-4 mb-4">
+        <motion.div className=" flex flex-row-reverse space-x-reverse -space-x-2 mb-1">
           {firstRow?.map((product) => (
             <ProductCard
               product={product}
@@ -94,7 +94,7 @@ export const HeroParallax = ({
             />
           ))}
         </motion.div>
-        <motion.div className="flex flex-row  space-x-4 mb-4 ">
+        <motion.div className="flex flex-row  -space-x-2 mb-1 ">
           {secondRow?.map((product) => (
             <ProductCard
               product={product}
@@ -103,7 +103,7 @@ export const HeroParallax = ({
             />
           ))}
         </motion.div>
-        <motion.div className="flex flex-row-reverse space-x-reverse space-x-4">
+        <motion.div className="flex flex-row-reverse space-x-reverse -space-x-2">
           {thirdRow?.map((product) => (
             <ProductCard
               product={product}
@@ -119,7 +119,7 @@ export const HeroParallax = ({
 
 export const Header = () => {
   return (
-    <div className="max-w-7xl relative mx-auto py-8 md:py-12 px-4 w-full  left-0 top-0">
+    <div className="max-w-7xl relative mx-auto py-4 md:py-6 px-4 w-full  left-0 top-0">
       <h1 className="text-2xl md:text-7xl font-bold dark:text-white">
         کتابفروشی فردا <br />
       </h1>

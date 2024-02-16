@@ -57,7 +57,7 @@ export const SwipeCarousel = ({ categories }: SwipeCarouselProps) => {
   }
 
   return (
-    <div className="max-w-5xl w-full mx-auto relative overflow-hidden bg-transparent dark:bg-primary/5 rounded-xl py-8  ">
+    <div className="my-8 max-w-5xl w-full mx-auto relative overflow-hidden bg-transparent   rounded-xl py-8  ">
       <motion.div
         drag="x"
         dragConstraints={{
