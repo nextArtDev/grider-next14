@@ -18,12 +18,23 @@ import {
   CardTitle,
 } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
+import AddRating from '@/components/shared/AddRating'
+import { User } from '@prisma/client'
+import ListRating from '@/components/shared/ListRating'
 
 interface ContributorProfileProps {
   contributor: ContributorFullStructure
+  user: (User & { image: { url: string } | null }) | null
+  beforeRated?: {
+    rating: number
+  } | null
 }
 
-const ContributorProfile: FC<ContributorProfileProps> = ({ contributor }) => {
+const ContributorProfile: FC<ContributorProfileProps> = ({
+  contributor,
+  beforeRated,
+  user,
+}) => {
   // const splitedName = contributor.name.split(' ').map((word,i)=>
   // return []
   // )
@@ -100,6 +111,15 @@ const ContributorProfile: FC<ContributorProfileProps> = ({ contributor }) => {
       </LampContainer> */}
       </div>
       <Separator />
+      {!beforeRated && (
+        <div className="py-12 px-4 ">
+          <h2 className="text-xl font-semibold">
+            نظر خود راجع به {contributor.name} را ثبت کنید.
+          </h2>
+          <AddRating product={contributor} user={user} />
+        </div>
+      )}
+      <ListRating product={contributor} />
     </section>
   )
 }

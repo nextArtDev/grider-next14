@@ -1,6 +1,12 @@
 import { prisma } from '@/lib/prisma'
 import { cache } from 'react'
-import { Billboard, Category, Contributor, Product } from '@prisma/client'
+import {
+  Billboard,
+  Category,
+  Contributor,
+  Product,
+  Review,
+} from '@prisma/client'
 
 enum OrderByType {
   'asc',
@@ -75,6 +81,7 @@ export type SingleProductFullStructure = ProductWithImages & {
   translator: Partial<Contributor>[]
   editor: Partial<Contributor>[]
   category: Category
+  Reviews: Review[]
 }
 
 export const getProductById = cache(
@@ -90,6 +97,7 @@ export const getProductById = cache(
         translator: { select: { name: true, id: true } },
         editor: { select: { name: true, id: true } },
         category: true,
+        Reviews: true,
       },
     })
 
@@ -124,6 +132,7 @@ export const getProductsByCategoryId = cache(
         translator: { select: { name: true, id: true } },
         editor: { select: { name: true, id: true } },
         category: true,
+        Reviews: true,
       },
     })
 

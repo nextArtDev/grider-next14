@@ -1,6 +1,8 @@
 import RelatedBooks from '@/components/home/product/RelatedBooks'
 import AboutBook from '@/components/home/product/product-page/AboutBook'
 import ProductPage from '@/components/home/product/product-page/ProductPage'
+import { currentUser } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 import {
   getProductById,
   getProductsByCategoryId,
@@ -17,16 +19,34 @@ const page: FC<pageProps> = async ({ params: { productId } }) => {
 
   if (!product) return notFound()
 
+  const user = await currentUser()
+  const beforeRated = await prisma.review.findFirst({
+    where: {
+      userId: user?.id,
+      productId: product.id,
+    },
+    select: {
+      rating: true,
+    },
+  })
+
   const relatedBooks = await getProductsByCategoryId({
     id: productId,
     categoryId: product.categoryId,
   })
 
-  // console.log(product)
+  const userWithPic = await prisma.user.findFirst({
+    where: { id: user?.id },
+    include: { image: { select: { url: true } } },
+  })
 
   return (
     <section className="flex flex-col">
-      <ProductPage product={product} />
+      <ProductPage
+        product={product}
+        user={userWithPic}
+        beforeRated={beforeRated}
+      />
       {product.description && <AboutBook description={product.description} />}
       <RelatedBooks products={relatedBooks} />
     </section>

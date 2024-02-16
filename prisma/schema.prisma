@@ -21,6 +21,8 @@ model User {
   verificationCode Int?
   verificationDate DateTime?
 
+  Reviews Review[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   imageId   String?
@@ -147,6 +149,8 @@ model Product {
   summary       String?   @db.Text
   images        Image[] // Relation to Image model
 
+  Reviews Review[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -186,6 +190,8 @@ model Contributor {
   image   Image?  @relation(fields: [imageId], references: [id])
   imageId String?
 
+  Reviews Review[]
+
   writer       Product[] @relation("writer")
   Translator   Product[] @relation("translator")
   editor       Product[] @relation("editor")
@@ -196,6 +202,26 @@ model Contributor {
   storeId String
 
   @@index([storeId])
+}
+
+model Review {
+  id      Int    @id @default(autoincrement())
+  // name       String
+  comment String
+  rating  Int
+
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  User          User?        @relation(fields: [userId], references: [id])
+  userId        String?
+  Product       Product?     @relation(fields: [productId], references: [id])
+  productId     String?
+  Contributor   Contributor? @relation(fields: [contributorId], references: [id])
+  contributorId String?
+
+  @@index([userId])
+  @@index([productId])
+  @@index([contributorId])
 }
 
 // model Writer {

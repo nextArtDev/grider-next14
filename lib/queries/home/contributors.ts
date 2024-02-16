@@ -1,5 +1,5 @@
 import { prisma } from '@/lib/prisma'
-import { Billboard, Contributor, Image, Product } from '@prisma/client'
+import { Billboard, Contributor, Image, Product, Review } from '@prisma/client'
 import { cache } from 'react'
 
 export const getAllContributors = cache(
@@ -83,6 +83,7 @@ export type ContributorFullStructure = ContributorWithImage & {
   editor: ProductWithImages[]
   photographer: ProductWithImages[]
   illustrator: ProductWithImages[]
+  Reviews: Review[]
 }
 export const getContributorById = cache(
   ({ id }: { id: string }): Promise<ContributorFullStructure | null> => {
@@ -98,6 +99,7 @@ export const getContributorById = cache(
         photographer: { include: { images: { select: { url: true } } } },
         Translator: { include: { images: { select: { url: true } } } },
         illustrator: { include: { images: { select: { url: true } } } },
+        Reviews: true,
       },
       orderBy: {
         name: 'asc',

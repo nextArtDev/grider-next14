@@ -23,7 +23,10 @@ const page: FC<pageProps> = async ({}) => {
           // description={item.description}
           // header={item.header}
           // icon={item.icon}
-          className={i % 3 === 0 ? 'md:col-span-2' : ''}
+          className={cn(
+            i % 3 === 0 ? 'md:col-span-2 lg:col-span-3 ' : ''
+            // i % 3 === 2 ? 'md:col-span-3 lg:col-span-2 ' : ''
+          )}
           // className={i === 3 || i === 6 ? 'md:col-span-2' : ''}
         />
       ))}
