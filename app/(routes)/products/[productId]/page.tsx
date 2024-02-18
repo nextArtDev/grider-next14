@@ -29,7 +29,7 @@ const page: FC<pageProps> = async ({ params: { productId } }) => {
       rating: true,
     },
   })
-  console.log(!beforeRated)
+
   const relatedBooks = await getProductsByCategoryId({
     id: productId,
     categoryId: product.categoryId,
