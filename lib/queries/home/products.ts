@@ -6,6 +6,7 @@ import {
   Contributor,
   Product,
   Review,
+  User,
 } from '@prisma/client'
 
 enum OrderByType {
@@ -76,12 +77,23 @@ export const getAllProducts = cache(
     return products
   }
 )
+
+export type ReviewsWithUserAndImage = Review & {
+  User:
+    | (User & {
+        image: {
+          url: string
+        } | null
+      })
+    | null
+}
+
 export type SingleProductFullStructure = ProductWithImages & {
   writer: Partial<Contributor>[]
   translator: Partial<Contributor>[]
   editor: Partial<Contributor>[]
   category: Category
-  Reviews: Review[]
+  Reviews: ReviewsWithUserAndImage[]
 }
 
 export const getProductById = cache(
@@ -97,7 +109,9 @@ export const getProductById = cache(
         translator: { select: { name: true, id: true } },
         editor: { select: { name: true, id: true } },
         category: true,
-        Reviews: true,
+        Reviews: {
+          include: { User: { include: { image: { select: { url: true } } } } },
+        },
       },
     })
 
@@ -132,7 +146,9 @@ export const getProductsByCategoryId = cache(
         translator: { select: { name: true, id: true } },
         editor: { select: { name: true, id: true } },
         category: true,
-        Reviews: true,
+        Reviews: {
+          include: { User: { include: { image: { select: { url: true } } } } },
+        },
       },
     })
 

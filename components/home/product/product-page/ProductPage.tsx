@@ -70,7 +70,7 @@ const ProductPage: FC<ProductPageProps> = ({ product, user, beforeRated }) => {
           <AddRating reviews={product.Reviews} product={product} user={user} />
         </div>
       )}
-      <ListRating reviews={product.Reviews} user={user} />
+      <ListRating reviews={product.Reviews} />
     </section>
   )
 }

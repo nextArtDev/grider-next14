@@ -112,7 +112,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
           />
         </div>
       )}
-      <ListRating reviews={contributor.Reviews} user={user} />
+      <ListRating reviews={contributor.Reviews} />
     </section>
   )
 }
