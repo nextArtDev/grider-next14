@@ -3,23 +3,23 @@ import { FC } from 'react'
 import { Rating } from '@mui/material'
 import { Separator } from '@/components/ui/separator'
 
-import { User } from '@prisma/client'
+import { Review, User } from '@prisma/client'
 import UserAvatar from './Avatar'
 import { Dot } from 'lucide-react'
 import { formatTimeToNow } from '@/lib/date-utils'
 interface ListRatingProps {
-  product: any
+  reviews: Review[]
   user: (User & { image: { url: string } | null }) | null
 }
 
-const ListRating: FC<ListRatingProps> = ({ product, user }) => {
+const ListRating: FC<ListRatingProps> = ({ reviews, user }) => {
   return (
     <section className="">
       <div className="text-2xl px-8 space-y-4 font-bold">نظرات</div>
       <div className="text-sm mt-2">
-        {product.Reviews?.map((review: any) => {
+        {reviews.map((review: any) => {
           return (
-            <div key={review.id} className="pt-10 px-8 ml-auto max-w-300px">
+            <div key={review.id} className="mt-10 px-8 ml-auto max-w-[300px]">
               <div className="flex gap-2 items-center">
                 <UserAvatar src={user?.image?.url} />
                 {/* <div className='font-semibold' >{review?.user.name}</div> */}
@@ -34,15 +34,15 @@ const ListRating: FC<ListRatingProps> = ({ product, user }) => {
               <div className="mt-2 ">
                 <div className="flex items-center gap-2">
                   <Rating
-                    dir="rtl"
+                    dir="ltr"
                     value={review.rating}
                     readOnly
                     precision={0.5}
                   />
-                  {`(${review.rating}) از 5`}
+                  {`${review.rating} (از 5)`}
                 </div>
                 <div
-                  className="prose prose-sm my-4 mb-16 max-w-none text-gray-500"
+                  className="prose prose-sm my-4 mb-16 max-w-none text-primary/85"
                   dangerouslySetInnerHTML={{ __html: review.comment }}
                 />
                 <Separator className="my-4" />

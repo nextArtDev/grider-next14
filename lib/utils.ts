@@ -77,3 +77,8 @@ export function getBooleanFromFarsi(value: string): boolean {
       throw new Error('Invalid Farsi boolean value')
   }
 }
+
+export const productRating = (data: any) => {
+  data.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) /
+    data.reviews.length
+}

@@ -29,7 +29,7 @@ const ContributorDrawer: FC<pageProps> = ({ contributor }) => {
       >
         <ScrollArea className="max-h-[80vh]">
           <DrawerContent className=" ">
-            <ContributorProfile contributor={contributor} />
+            <ContributorProfile contributor={contributor} user={null} />
             {/* <RelatedProducts contributor={contributor} /> */}
             <Button
               className="mb-4 w-1/2 mx-auto "

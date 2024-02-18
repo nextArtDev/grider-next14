@@ -1,6 +1,6 @@
 import RelatedProducts from '@/components/home/RelatedProducts'
 import ContributorProfile from '@/components/home/contributors/ContributorProfile'
-import AddRating from '@/components/shared/AddRating'
+
 import { currentUser } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { getContributorById } from '@/lib/queries/home/contributors'
@@ -31,7 +31,7 @@ const page: FC<pageProps> = async ({ params: { contributorId } }) => {
     include: { image: { select: { url: true } } },
   })
 
-  console.log(user)
+  // console.log(beforeRated)
   return (
     <div>
       <ContributorProfile

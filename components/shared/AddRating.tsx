@@ -18,7 +18,13 @@ import { Textarea } from '@/components/ui/textarea'
 
 import { Contributor, Order, Product, Review, User } from '@prisma/client'
 import { usePathname, useRouter } from 'next/navigation'
-import { FC, startTransition, useState, useTransition } from 'react'
+import {
+  FC,
+  useOptimistic,
+  startTransition,
+  useState,
+  useTransition,
+} from 'react'
 import { Rating } from '@mui/material'
 
 import { Loader } from 'lucide-react'
@@ -32,17 +38,20 @@ import { toast } from 'sonner'
 interface AddRatingContributorProps {
   product: ContributorFullStructure
   user: (User & { image: { url: string } | null }) | null
+  reviews: Review[]
   //   user: (SafeUser & { orders: Order[] }) | null
 }
 interface AddRatingProductProps {
   product: SingleProductFullStructure
   user: (User & { image: { url: string } | null }) | null
+  reviews: Review[]
   //   user: (SafeUser & { orders: Order[] }) | null
 }
 
 const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
   product,
   user,
+  reviews,
 }) => {
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -55,6 +64,16 @@ const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
       rating: '5',
     },
   })
+  // const [optimisticComments, addOptimisticComment] = useOptimistic<Review[]>(
+  //   reviews,
+  //   // @ts-ignore
+  //   (state: Review[], newComment: string) => [
+  //     { body: newComment, userId: user?.id, productId: product.id, user },
+  //     ...state,
+  //   ]
+  // )
+  // const body = form.watch('comment')
+  // const commentsCount = optimisticComments.length
 
   const onSubmit = async (data: z.infer<typeof createReviewSchema>) => {
     const formData = new FormData()
@@ -62,8 +81,18 @@ const AddRating: FC<AddRatingContributorProps | AddRatingProductProps> = ({
     formData.append('comment', data.comment)
     formData.append('rating', data.rating)
 
+    // const copyComment = formData.get('comment')
+    // const copyRating = formData.get('rating')
+
+    // const valuesCopy = { copyComment, copyRating }
+    // form.reset()
+    // startTransition(() => {
+    //   addOptimisticComment(valuesCopy)
+    // })
+
     try {
       startTransition(() => {
+
         createReview(formData, path, user?.id as string, product.id as string)
           .then((res) => {
             if (res?.errors?.comment) {

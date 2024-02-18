@@ -67,10 +67,10 @@ const ProductPage: FC<ProductPageProps> = ({ product, user, beforeRated }) => {
           <h2 className="text-xl font-semibold">
             نظر خود راجع به {product.title} را ثبت کنید.
           </h2>
-          <AddRating product={product} user={user} />
+          <AddRating reviews={product.Reviews} product={product} user={user} />
         </div>
       )}
-      <ListRating product={product} user={user} />
+      <ListRating reviews={product.Reviews} user={user} />
     </section>
   )
 }

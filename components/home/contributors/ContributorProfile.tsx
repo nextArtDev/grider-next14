@@ -105,10 +105,14 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
           <h2 className="text-xl font-semibold">
             نظر خود راجع به {contributor.name} را ثبت کنید.
           </h2>
-          <AddRating product={contributor} user={user} />
+          <AddRating
+            reviews={contributor.Reviews}
+            product={contributor}
+            user={user}
+          />
         </div>
       )}
-      <ListRating product={contributor} />
+      <ListRating reviews={contributor.Reviews} user={user} />
     </section>
   )
 }
