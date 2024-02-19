@@ -1,7 +1,7 @@
-import { toast } from '@/components/ui/use-toast'
 import { Product } from '@prisma/client'
 // import { Product } from '@/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { toast } from 'sonner'
 type InitialState = {
   items: Product[]
 }
@@ -19,15 +19,24 @@ const cardSlice = createSlice({
       //  if (existingItem) {
       //    return toast({title:'آیتم قبلا به کارت اضافه شده'})
       //   }
-      // state.items = [...state.items, action.payload]
-      state.items?.push(action?.payload)
-      toast({ title: 'آیتم به کارت اضافه شد' })
+      state.items = [...state.items, action.payload]
+      // state.items?.push(action?.payload)
+      toast.success('آیتم به کارت اضافه شد')
     },
     removeItem: (state, action: PayloadAction<Product>) => {
-      ;(state.items = state.items?.filter(
-        (item) => item.id !== action.payload.id
-      )),
-        toast({ title: 'آیتم از کارت حذف شد' })
+      const productToRemove = state.items.findIndex(
+        (item) => (item.id = action.payload.id)
+      )
+
+      const newCart = [...state.items]
+      newCart.splice(productToRemove, 1)
+      state.items = [...newCart]
+      // const removeItem = state.items?.filter(
+      //   (item) => item.id !== action.payload.id
+      // )
+      // state.items = [...removeItem]
+      // console.log(state.items)
+      toast.error('آیتم از کارت حذف شد')
     },
     removeAll: (state) => {
       state.items = []

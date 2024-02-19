@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { cardReducer } from './slices/cardSlice'
-import { modalReducer } from './slices/modalSlice'
+// import { modalReducer } from './slices/modalSlice'
 import { useSelector, TypedUseSelectorHook } from 'react-redux'
 // import localStorageMiddleware from './slices/localStorageMiddleware'
 // import ratingsReducer from './slices/ratingsSlice'
@@ -23,16 +23,22 @@ const persistConfig = {
 }
 
 const persistedReducer = persistReducer(persistConfig, cardReducer)
+
 export const store = configureStore({
-  reducer: {
-    cardReducer: persistedReducer,
-    modalReducer,
-    // ratings: ratingsReducer,
-  },
+  reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+        ignoredActions: [
+          'card/addItem',
+          'card/removeItem',
+          FLUSH,
+          REHYDRATE,
+          PAUSE,
+          PERSIST,
+          PURGE,
+          REGISTER,
+        ],
       },
     }),
   // middleware: (getDefaultMiddleware) => [

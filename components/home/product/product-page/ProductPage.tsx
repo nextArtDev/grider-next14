@@ -11,6 +11,7 @@ import { User } from '@prisma/client'
 import ListRating from '@/components/shared/ListRating'
 import AddRating from '@/components/shared/AddRating'
 import { Separator } from '@/components/ui/separator'
+import AddToCart from '../AddToCart'
 
 interface ProductPageProps {
   product: SingleProductFullStructure
@@ -56,6 +57,7 @@ const ProductPage: FC<ProductPageProps> = ({ product, user, beforeRated }) => {
             {product.price && <Currency value={+product?.price} />}
             تومان
           </div>
+          <AddToCart product={product} />
         </div>
         <div className="">
           <ProductTable product={product} />

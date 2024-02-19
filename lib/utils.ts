@@ -1,3 +1,4 @@
+import { Product } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -81,4 +82,27 @@ export function getBooleanFromFarsi(value: string): boolean {
 export const productRating = (data: any) => {
   data.reviews.reduce((acc: number, item: any) => item.rating + acc, 0) /
     data.reviews.length
+}
+
+export function getCartTotal(products: Product[]) {
+  const total = products.reduce(
+    (acc: number, currentProduct: Product) =>
+      acc + Number(currentProduct.price),
+    0
+  )
+  return total.toFixed(2)
+}
+
+export function groupById(products: Product[]): Record<string, Product[]> {
+  return products?.reduce(
+    (accumulator: Record<string, Product[]>, currentProduct: Product) => {
+      const id = currentProduct.id
+      if (!accumulator[id]) {
+        accumulator[id] = []
+      }
+      accumulator[id].push(currentProduct)
+      return accumulator
+    },
+    {}
+  )
 }
