@@ -3,7 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 
-import { cn } from '@/lib/utils'
+import { cn, getCartTotal } from '@/lib/utils'
 // import { Icons } from '@/components/icons'
 import {
   NavigationMenu,
@@ -14,8 +14,9 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
-import { Billboard, Contributor } from '@prisma/client'
-
+import { Billboard, Contributor, Product } from '@prisma/client'
+import { ShoppingBasket } from 'lucide-react'
+import { AppDispatch, useAppSelector } from '@/redux/store'
 const components: { title: string; href: string; description: string }[] = [
   {
     title: 'Alert Dialog',
@@ -71,6 +72,16 @@ export function DesktopNavigationMenu({
   billboards,
 }: NavigationMenuProps) {
   // console.log(contributors?.writers)
+  const cart = useAppSelector<Product[]>((state) => state.items)
+  const total = getCartTotal(cart)
+  const [mounted, setMounted] = React.useState(false)
+  React.useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return ''
+  }
   return (
     <NavigationMenu
       dir="rtl"
@@ -116,6 +127,22 @@ export function DesktopNavigationMenu({
           <Link href="/docs" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
               ارتباط با ما
+            </NavigationMenuLink>
+          </Link>
+        </NavigationMenuItem>
+        <NavigationMenuItem>
+          <Link href="/order" legacyBehavior passHref>
+            <NavigationMenuLink
+              className={cn(
+                navigationMenuTriggerStyle(),
+                'relative flex items-center space-x-2'
+              )}
+            >
+              <ShoppingBasket size={20} />
+              {/* <p>{total}</p> */}
+              <p className="text-rose-500 absolute top-0 right-[35%] border rounded-full border-rose-400 text-center dark:border-rose-300 w-[16px] h-[16px] ">
+                {cart.length}
+              </p>
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

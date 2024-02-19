@@ -44,7 +44,7 @@ async function Navbar({}: Props) {
         contributors={contributors}
         billboards={billboards}
       />
-      <div className=" flex gap-x-4 items-center justify-between  ml-8 ">
+      <div className=" flex gap-x-4 items-center justify-between mr-auto ">
         <Link
           href={'/dashboard'}
           className={cn(buttonVariants({ variant: 'outline' }))}

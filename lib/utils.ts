@@ -90,7 +90,7 @@ export function getCartTotal(products: Product[]) {
       acc + Number(currentProduct.price),
     0
   )
-  return total.toFixed(2)
+  return total.toFixed(0)
 }
 
 export function groupById(products: Product[]): Record<string, Product[]> {
