@@ -8,7 +8,7 @@ import { ContributorFullStructure } from '@/lib/queries/home/contributors'
 import { translateArray } from '@/lib/utils'
 import { User } from '@prisma/client'
 import Image from 'next/image'
-import { FC } from 'react'
+import { FC, useEffect, useState } from 'react'
 import NoPic from '../../../public/images/no-profile.webp'
 
 interface ContributorProfileProps {
@@ -27,6 +27,11 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
   // const splitedName = contributor.name.split(' ').map((word,i)=>
   // return []
   // )
+  const [isMounted, setIsMounted] = useState(false)
+
+  useEffect(() => {
+    setIsMounted(true)
+  }, [])
   function createWordObjectsFromSentence(sentence: string) {
     const wordsArray = sentence.split(' ').map((word, i) => {
       // return { text: word }
@@ -47,6 +52,9 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
     ' | '
   )
   // const words = contributor.name
+  if (!isMounted) {
+    return null
+  }
   return (
     <section className="flex flex-col">
       <div className="p-4 max-w-7xl flex items-center justify-evenly flex-col md:flex-row gap-4">
