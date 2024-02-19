@@ -8,11 +8,15 @@ import { Product } from '@prisma/client'
 import { getCartTotal, groupById } from '@/lib/utils'
 import AddToCart from './AddToCart'
 import { Separator } from '@/components/ui/separator'
+import { useCartStore } from '@/store'
+import Currency from '@/components/shared/Currency'
+import { Badge } from '@/components/ui/badge'
 interface BasketProps {}
 
 const Basket: FC<BasketProps> = ({}) => {
-  const dispatch = useDispatch<AppDispatch>()
-  const cart = useAppSelector<Product[]>((state) => state.items)
+  // const dispatch = useDispatch<AppDispatch>()
+  // const cart = useAppSelector<Product[]>((state) => state.items)
+  const cart = useCartStore((state) => state.cart)
 
   const grouped = groupById(cart)
   const basketTotal = getCartTotal(cart)
@@ -31,17 +35,23 @@ const Basket: FC<BasketProps> = ({}) => {
                   <p className="line-clamp-2 font-bold"> {item.title}</p>
                 </div>
               </div>
-              <div className="flex flex-col border rounded-md p-5 ">
+              <div className="flex flex-col border rounded-md ">
                 <AddToCart product={item} />
-                <p className="mt-4 font-bold text-right">{total}</p>
               </div>
+              <Badge
+                variant={'secondary'}
+                className="mt-4 font-bold text-canter"
+              >
+                <Currency value={total} />
+              </Badge>
             </li>
           )
         })}
       </ul>
       <Separator />
-      <div className="text-bold text-center mx-auto py-4">
-        <p className="">{basketTotal} تومان </p>
+      <div className="flex items-center justify-center gap-x-8 text-bold text-center mx-auto py-4">
+        {/* <p className="">{basketTotal} تومان </p> */}
+        <Currency value={basketTotal} />
         <Button variant={'destructive'}>تسویه</Button>
       </div>
     </div>

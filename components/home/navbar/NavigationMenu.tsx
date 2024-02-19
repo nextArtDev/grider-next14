@@ -17,6 +17,7 @@ import {
 import { Billboard, Contributor, Product } from '@prisma/client'
 import { ShoppingBasket } from 'lucide-react'
 import { AppDispatch, useAppSelector } from '@/redux/store'
+import { useCartStore } from '@/store'
 const components: { title: string; href: string; description: string }[] = [
   {
     title: 'Alert Dialog',
@@ -72,16 +73,18 @@ export function DesktopNavigationMenu({
   billboards,
 }: NavigationMenuProps) {
   // console.log(contributors?.writers)
-  const cart = useAppSelector<Product[]>((state) => state.items)
-  const total = getCartTotal(cart)
-  const [mounted, setMounted] = React.useState(false)
-  React.useEffect(() => {
-    setMounted(true)
-  }, [])
+  // const cart = useAppSelector<Product[]>((state) => state.items)
+  const cart = useCartStore((state) => state.cart)
 
-  if (!mounted) {
-    return ''
-  }
+  const total = getCartTotal(cart)
+  // const [mounted, setMounted] = React.useState(false)
+  // React.useEffect(() => {
+  //   setMounted(true)
+  // }, [])
+
+  // if (!mounted) {
+  //   return ''
+  // }
   return (
     <NavigationMenu
       dir="rtl"
@@ -140,7 +143,7 @@ export function DesktopNavigationMenu({
             >
               <ShoppingBasket size={20} />
               {/* <p>{total}</p> */}
-              <p className="text-rose-500 absolute top-0 right-[35%] border rounded-full border-rose-400 text-center dark:border-rose-300 w-[16px] h-[16px] ">
+              <p className="text-rose-500 absolute -top-1 right-[35%] border rounded-full border-rose-400 text-center dark:border-rose-300 w-[16px] h-[16px] ">
                 {cart.length}
               </p>
             </NavigationMenuLink>

@@ -1,6 +1,7 @@
 import { Product } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { SingleProductFullStructure } from './queries/home/products'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -84,18 +85,23 @@ export const productRating = (data: any) => {
     data.reviews.length
 }
 
-export function getCartTotal(products: Product[]) {
+export function getCartTotal(products: SingleProductFullStructure[]) {
   const total = products.reduce(
-    (acc: number, currentProduct: Product) =>
+    (acc: number, currentProduct: SingleProductFullStructure) =>
       acc + Number(currentProduct.price),
     0
   )
   return total.toFixed(0)
 }
 
-export function groupById(products: Product[]): Record<string, Product[]> {
+export function groupById(
+  products: SingleProductFullStructure[]
+): Record<string, SingleProductFullStructure[]> {
   return products?.reduce(
-    (accumulator: Record<string, Product[]>, currentProduct: Product) => {
+    (
+      accumulator: Record<string, SingleProductFullStructure[]>,
+      currentProduct: SingleProductFullStructure
+    ) => {
       const id = currentProduct.id
       if (!accumulator[id]) {
         accumulator[id] = []

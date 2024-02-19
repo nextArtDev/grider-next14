@@ -83,7 +83,7 @@ export const getAllContributorsWithoutRole = cache(
   }
 )
 
-type ProductWithImages = Product & { images: { url: string }[] | null }
+export type ProductWithImages = Product & { images: { url: string }[] | null }
 
 export type ContributorFullStructure = ContributorWithImage & {
   writer: ProductWithImages[]

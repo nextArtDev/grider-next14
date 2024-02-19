@@ -28,9 +28,8 @@ const cardSlice = createSlice({
         (item) => (item.id = action.payload.id)
       )
 
-      const newCart = [...state.items]
-      newCart.splice(productToRemove, 1)
-      state.items = [...newCart]
+      // const newCart = [...state.items]
+      state.items.splice(productToRemove, 1)
       // const removeItem = state.items?.filter(
       //   (item) => item.id !== action.payload.id
       // )
