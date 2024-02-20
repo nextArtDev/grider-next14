@@ -85,9 +85,11 @@ export const productRating = (data: any) => {
     data.reviews.length
 }
 
-export function getCartTotal(products: SingleProductFullStructure[]) {
+export function getCartTotal(
+  products: SingleProductFullStructure[] | Product[]
+) {
   const total = products.reduce(
-    (acc: number, currentProduct: SingleProductFullStructure) =>
+    (acc: number, currentProduct: SingleProductFullStructure | Product) =>
       acc + Number(currentProduct.price),
     0
   )

@@ -41,37 +41,10 @@ const Basket: FC<BasketProps> = ({}) => {
               const item = grouped[id][0]
               const total = getCartTotal(grouped[id])
 
-              return (
-                <OrderItem key={id} product={item} total={total} />
-                // <li
-                //   key={id}
-                //   className="p-5 my-2 flex items-center justify-between"
-                // >
-                //   <div className="flex space-x-4 pr-4 ">
-                //     <div>
-                //       <p className="line-clamp-2 font-bold"> {item.title}</p>
-                //     </div>
-                //   </div>
-                //   <div className="flex flex-col border rounded-md ">
-                //     <AddToCart product={item} />
-                //   </div>
-                //   <Badge
-                //     variant={'secondary'}
-                //     className="mt-4 font-bold text-canter"
-                //   >
-                //     <Currency value={total} />
-                //   </Badge>
-                // </li>
-              )
+              return <OrderItem key={id} product={item} total={total} />
             })}
           </ul>
           <Separator />
-          {/* <div className="flex items-center justify-center gap-x-8 text-bold text-center mx-auto py-4">
- 
-            <Currency value={basketTotal} />
-            <Button variant={'destructive'}>تسویه</Button>
-          </div>
-        </div> */}
           <Summary basketTotal={basketTotal} />
         </div>
       </div>

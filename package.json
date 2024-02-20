@@ -48,6 +48,7 @@
     "@studio-freight/lenis": "^1.0.35",
     "@tanstack/react-table": "^8.12.0",
     "@types/recharts": "^1.8.29",
+    "@types/zarinpal-checkout": "^0.2.4",
     "bcryptjs": "^2.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
@@ -79,6 +80,7 @@
     "tailwindcss-animate": "^1.0.7",
     "trez-sms-client": "^1.0.4",
     "vaul": "^0.8.9",
+    "zarinpal-checkout": "^0.2.8",
     "zod": "^3.22.4",
     "zustand": "^4.5.1"
   },

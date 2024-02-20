@@ -280,9 +280,9 @@ model Review {
 
 model Order {
   id         String      @id @default(uuid())
-  storeId    String // Foreign Key to Store
+  storeId    String
   store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
-  orderItems OrderItem[] // Relation to OrderItem model
+  orderItems OrderItem[]
   isPaid     Boolean     @default(false)
   phone      String      @default("")
   address    String      @default("")

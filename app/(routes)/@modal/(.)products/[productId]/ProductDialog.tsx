@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import Currency from '@/components/shared/Currency'
 import { Button } from '@/components/ui/button'
+import AddToCart from '@/components/home/product/AddToCart'
 
 interface pageProps {
   product: SingleProductFullStructure
@@ -60,6 +61,9 @@ const ProductDialog: FC<pageProps> = ({ product }) => {
               {product.price && <Currency value={+product?.price} />}
               تومان
             </div>
+          </div>
+          <div className="w-full">
+            <AddToCart product={product} />
           </div>
           <Button
             onClick={() => window.location.assign(`/products/${product.id}`)}

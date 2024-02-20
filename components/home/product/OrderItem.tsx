@@ -37,17 +37,17 @@ const OrderItem: FC<OrderItemProps> = ({ product, total }) => {
                 <h3 className="text-sm">
                   <Link
                     href={`/products/${product.id}`}
-                    className="font-medium text-gray-700 hover:text-gray-800"
+                    className="font-medium text-xl text-primary"
                   >
                     {product.title}
                   </Link>
                 </h3>
-                <p className="mt-1 text-sm text-gray-500">
+                <p className="mt-1 text-sm text-muted-foreground">
                   {product.writer.map((writer) => writer.name)}
                   {product.writer.length > 1 ? '...' : ''}
                 </p>
                 {product.translator ? (
-                  <p className="mt-1 text-sm text-gray-500">
+                  <p className="mt-1 text-sm text-muted-foreground">
                     {' '}
                     {product.translator[0].name}
                     {product.translator.length > 1 ? '...' : ''}{' '}
