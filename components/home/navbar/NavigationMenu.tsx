@@ -134,7 +134,7 @@ export function DesktopNavigationMenu({
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <Link href="/order" legacyBehavior passHref>
+          <Link href="/cart" legacyBehavior passHref>
             <NavigationMenuLink
               className={cn(
                 navigationMenuTriggerStyle(),

@@ -44,7 +44,10 @@ async function Navbar({}: Props) {
         contributors={contributors}
         billboards={billboards}
       />
-      <div className=" flex gap-x-4 items-center justify-between mr-auto ">
+      <div className="relative w-full ">
+        <FloatingNav navItems={navItems} />
+      </div>
+      <div className=" flex gap-x-4 items-center justify-between mr-auto ml-4 ">
         <Link
           href={'/dashboard'}
           className={cn(buttonVariants({ variant: 'outline' }))}
@@ -52,9 +55,6 @@ async function Navbar({}: Props) {
           دشبورد
         </Link>
         {/* <ThemeToggle /> */}
-      </div>
-      <div className="relative w-full ">
-        <FloatingNav navItems={navItems} />
       </div>
     </div>
   )
