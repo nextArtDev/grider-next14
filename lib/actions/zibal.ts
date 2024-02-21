@@ -122,6 +122,7 @@ export async function verifyZibal({
         },
         data: {
           isPaid: true,
+          RefID: res.RefID,
         },
       })
       // console.log(update)
