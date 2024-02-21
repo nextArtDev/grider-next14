@@ -56,11 +56,13 @@ export async function getZibal({
     //   console.log(res)
     if (res.status === 100) {
       const { authority, url } = res
+      // console.log({ authority, url })
 
       const order = await prisma.order.create({
         data: {
           storeId: process.env.STORE_ID!,
           isPaid: false,
+          Authority: authority,
           orderItems: {
             create: productIds.map((productId: string) => ({
               product: {
@@ -72,8 +74,8 @@ export async function getZibal({
           },
         },
       })
-
-      return { authority, url, orderId: order.id }
+      // console.log(order)
+      return { authority, url }
     }
   } catch (error) {
     console.log(error)
@@ -102,23 +104,27 @@ export async function verifyZibal({
   amount: number
   Authority: string
 }) {
+  // console.log({ amount, Authority })
   try {
     const res = await zarinpal.PaymentVerification({
       Amount: amount, // In Tomans
       Authority,
     })
+    // console.log(res)
     if (res.status !== 100) {
-      toast.error('کد شناسایی تکراری است!')
+      // toast.error('کد شناسایی تکراری است!')
+      // console.log(res.status)
+      return null
     } else {
-      //   const update = await prisma.order.update({
-      //     where: {
-      //       id: orderId,
-      //     },
-      //     data: {
-      //       isPaid: true,
-      //     },
-      //   })
-      //   console.log(update)
+      const update = await prisma.order.update({
+        where: {
+          Authority,
+        },
+        data: {
+          isPaid: true,
+        },
+      })
+      // console.log(update)
       return res.RefID
     }
     //   .then((response) => {

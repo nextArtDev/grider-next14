@@ -45,7 +45,7 @@ const Basket: FC<BasketProps> = ({}) => {
             })}
           </ul>
           <Separator />
-          <Summary basketTotal={basketTotal} />
+          <Summary />
         </div>
       </div>
     </div>

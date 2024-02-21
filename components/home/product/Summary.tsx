@@ -1,44 +1,58 @@
 'use client'
 import Currency from '@/components/shared/Currency'
 import { getZibal, verifyZibal } from '@/lib/actions/zibal'
+import { getCartTotal, groupById } from '@/lib/utils'
 import { useCartStore } from '@/store'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { FC, useEffect } from 'react'
 import { toast } from 'sonner'
 
 interface SummaryProps {
-  basketTotal: string
+  // basketTotal: string
 }
 
-const Summary: FC<SummaryProps> = ({ basketTotal }) => {
+const Summary: FC<SummaryProps> = ({}) => {
   const searchParams = useSearchParams()
+  const router = useRouter()
   const [cart, removeAll] = useCartStore((state) => [
     state.cart,
     state.removeAll,
   ])
 
-  // console.log(cart)
+  const basketTotal = getCartTotal(cart)
+
+  // console.log(basketTotal)
 
   const ZibalVerification = async (amount: number, Authority: string) => {
-    const res = await verifyZibal({ amount: +basketTotal, Authority })
-    console.log(res)
+    const RefID = await verifyZibal({ amount, Authority })
+    // console.log(res)
+    if (RefID && RefID > 0) {
+      toast.success(`پرداخت شما با شماره پیگیری ${RefID} موفقیت آمیز بود!`)
+      // console.log(RefID)
+
+      removeAll()
+      router.push('/cart')
+    }
   }
 
   useEffect(() => {
     if (searchParams.get('Status') === 'OK') {
-      toast.success('پرداخت موفقیت آمیز بود!')
       const Authority = searchParams.get('Authority')
+      if (Authority) {
+        const basketTotal = getCartTotal(cart)
 
-      const res = ZibalVerification(Number(basketTotal), Authority!)
-      console.log(res)
+        // console.log(basketTotal)
+        const res = ZibalVerification(Number(basketTotal), Authority!)
+      }
+
       // removeAll()
     }
 
     if (searchParams.get('Status') === 'NOK') {
       toast.error('مشکلی پیش آمده!')
     }
-  }, [searchParams, removeAll])
+  }, [searchParams, removeAll, basketTotal])
 
   const onCheckout = async () => {
     const res = await getZibal({

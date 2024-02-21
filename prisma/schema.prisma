@@ -281,6 +281,7 @@ model Review {
 model Order {
   id         String      @id @default(uuid())
   storeId    String
+  Authority  String?     @unique @db.Text
   store      Store       @relation("StoreToOrder", fields: [storeId], references: [id])
   orderItems OrderItem[]
   isPaid     Boolean     @default(false)
