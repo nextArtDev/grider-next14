@@ -16,12 +16,14 @@ const RenderTag: FC<RenderTagProps> = ({
   showCount,
 }) => {
   return (
-    <Link href={`/tags/${id}`} className="flex items-center gap-2 ">
-      <Badge className="rounded-md border-none bg-gray-600 px-4 py-2 uppercase dark:bg-gray-300 dark:text-gray-900">
+    <Link href={`/social/tags/${id}`} className="flex items-center gap-2 ">
+      <Badge className="rounded-md border-none px-4 py-2 uppercase">
         {name}
       </Badge>
       {showCount && (
-        <p className="ml-32 mr-auto text-gray-500">{totalQuestions}</p>
+        <p className="ml-32 mr-auto text-secondary-foreground/70">
+          {totalQuestions}
+        </p>
       )}
     </Link>
   )
