@@ -26,6 +26,7 @@ import { SearchParamsProps } from '@/types/social'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import SearchIcon from '../../../../../public/assets/icons/search.svg'
+import { Pen, PenLine, PenSquare, PenTool } from 'lucide-react'
 // import SearchIcon from '/public/assets/icons/search.svg'
 
 export const metadata: Metadata = {
@@ -92,16 +93,20 @@ export default async function Home({ searchParams }: SearchParamsProps) {
   return (
     <>
       <div className="flex w-full flex-col-reverse justify-between gap-4 sm:flex-row sm:items-center ">
-        <h1 className="font-bold text-gray-100  ">همه سوالات</h1>
-        <Link href={'/ask-question'} className="flex justify-end max-sm:w-full">
-          <Button className="min-h-[46px] bg-gradient-to-tr from-slate-600 via-slate-800 to-slate-400 px-4 py-3 text-gray-200 shadow-inner shadow-slate-400  ">
-            سوال بپرسید
+        <h1 className="font-bold text-xl lg:text-2xl ">همه موضوعات</h1>
+        <Link href={'/social/ask-question'} className="flex justify-end ">
+          <Button
+            variant={'destructive'}
+            className="min-h-[46px] pr-2 py-3 pl-4 flex gap-x-1 "
+          >
+            <PenTool className="pb-1.5 -rotate-90 " />
+            <p className="underline underline-offset-[6px] ">طرح موضوع</p>
           </Button>
         </Link>
       </div>
       <div className="mt-11 flex flex-col justify-between gap-5 max-sm:flex-col sm:items-center ">
         <LocalSearchbar
-          route="/"
+          route="/social"
           iconPosition="left"
           imgSrc={SearchIcon}
           placeholder="جست‌وجوی سوالات"
