@@ -47,7 +47,7 @@ const questions = [
     upvotes: 10,
     views: 100,
     answers: 2,
-    createdAt: '2023-09-01T12:00:00.000z',
+    created_at: '2023-09-01T12:00:00.000z',
   },
   {
     id: 2,
@@ -57,10 +57,10 @@ const questions = [
       { id: 2, name: 'TailwindCSS' },
     ],
     author: 'John Doe',
-    upvotes: 14000.5,
-    views: 100,
+    upvotes: 14000000.5,
+    views: 10,
     answers: 2,
-    createdAt: '2023-09-01T12:00:00.000z',
+    created_at: '2023-09-01T12:00:00.000z',
   },
 ]
 export default async function Home({ searchParams }: SearchParamsProps) {
@@ -151,13 +151,10 @@ export default async function Home({ searchParams }: SearchParamsProps) {
             ))
           ) : (
             <NoResult
-              title="سوالی برای نمایش وجود ندارد"
-              description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident
-        quibusdam tempora veritatis id facere animi sequi ipsam adipisci, error
-        repudiandae, repellendus debitis omnis ab iusto, explicabo quia quod
-        quos. Corporis."
+              title="بحثی برای نمایش وجود ندارد"
+              description=""
               link="/social/ask-question"
-              linkTitle="سوال بپرسید"
+              linkTitle="بحث مطرح کنید"
             />
           )}
         </div>

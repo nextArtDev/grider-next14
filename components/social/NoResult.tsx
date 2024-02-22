@@ -20,7 +20,7 @@ const NoResult: FC<NoResultProps> = ({
   linkTitle,
 }) => {
   return (
-    <section className=" mt-10 flex w-full flex-col items-center justify-center text-slate-300 ">
+    <section className=" mt-10 py-8 flex w-full flex-col items-center justify-center ">
       <Image
         src={darkIllustration.src}
         alt="no results"
@@ -35,7 +35,7 @@ const NoResult: FC<NoResultProps> = ({
         height={200}
         className="flex object-contain dark:hidden "
       />
-      <h2 className="mt-4 text-2xl font-bold text-slate-200 ">{title}</h2>
+      <h2 className="mt-4 text-2xl font-bold ">{title}</h2>
       <p className="my-3.5 max-w-md">{description}</p>
       <Link href={link} className={cn(buttonVariants(), 'metalize ')}>
         {linkTitle}

@@ -5,7 +5,7 @@ import { FC } from 'react'
 // import { formatLargeNumber, getTimestamp } from '@/lib/utils'
 // import EditDeleteAction from '../shared/EditDeleteAction'
 import { User } from '@prisma/client'
-import { getTimestamp } from '@/lib/socialUtils'
+import { formatLargeNumber, getTimestamp } from '@/lib/socialUtils'
 import EditDeleteAction from '../EditDeleteAction'
 import RenderTag from '../RenderTag'
 import Metric from '../Metric'
@@ -40,10 +40,10 @@ const QuestionCard: FC<QuestionCardProps> = ({
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
         <div>
           <span className="line-clamp-1 flex sm:hidden">
-            {/* {getTimestamp(new Date(createdAt))} */}
+            {getTimestamp(new Date(createdAt))}
             {/* {getTimestamp(createdAt)} */}
           </span>
-          <Link href={`/question/${id}`}>
+          <Link href={`/social/question/${id}`}>
             <h3 className="line-clamp-1 flex-1 text-base sm:font-semibold ">
               {title}
             </h3>
@@ -63,19 +63,20 @@ const QuestionCard: FC<QuestionCardProps> = ({
       <div className="mt-6 flex w-full flex-wrap justify-between gap-3">
         <Metric
           imgUrl={author.picture ?? '/assets/icons/user.svg'}
-          alt="User"
+          // alt="User"
+          alt={author.name}
           value={author.name}
-          // title={` - ${getTimestamp(new Date(createdAt))}`}
+          title={` - ${getTimestamp(new Date(createdAt))}`}
           textStyles="text-sm md:text-md"
-          href={`/profile/${author.id}`}
+          href={`/social/profile/${author.id}`}
           isAuthor
         />
         <div className="max-sm:flex-start flex items-center gap-3 max-sm:flex-wrap ">
           <Metric
             imgUrl="/assets/icons/like.svg"
             alt="Upvotes"
-            value={upvotes?.length}
-            // value={formatLargeNumber(upvotes)}
+            // value={upvotes?.length}
+            value={formatLargeNumber(+upvotes)}
             title="رای"
             textStyles="text-sm md:text-md"
           />
