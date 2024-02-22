@@ -21,7 +21,7 @@ const NavContent = () => {
   const pathname = usePathname()
 
   return (
-    <section className=" flex  h-full flex-col gap-6 pt-16  ">
+    <section className=" flex h-full flex-col gap-6 pt-14  ">
       {sidebarLinks.map((item) => {
         const isActive =
           (pathname.includes(item.route) && item.route.length > 1) ||
@@ -41,6 +41,7 @@ const NavContent = () => {
                 alt={item.label}
                 width={20}
                 height={20}
+                style={{ transform: 'rotateY(180deg)' }}
                 className={`${
                   isActive ? 'invert-0 dark:invert' : 'invert dark:invert-0'
                 }`}
@@ -85,7 +86,10 @@ const MobileNav: FC<MobileNavProps> = () => {
               <div className="flex flex-col gap-3 mt-4 ">
                 <SheetClose asChild>
                   <Link href={'/login'}>
-                    <Button variant={'secondary'} className="w-full px-4 py-3 ">
+                    <Button
+                      variant={'destructive'}
+                      className="w-full px-4 py-3 "
+                    >
                       <span>ورود</span>
                     </Button>
                   </Link>

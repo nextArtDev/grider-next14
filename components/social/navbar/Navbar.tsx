@@ -13,7 +13,7 @@ const Navbar = (props: Props) => {
   return (
     <nav
       dir="ltr"
-      className=" fixed z-50 flex w-full min-h-16 items-center justify-between gap-5 border-b  dark:shadow-none sm:px-12 "
+      className=" fixed z-50 flex w-full min-h-16 items-center justify-between gap-5 border-b dark:shadow-none sm:px-12 "
     >
       <div className="flex items-center justify-center  space-x-4">
         <ThemeToggle />
