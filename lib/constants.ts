@@ -85,37 +85,37 @@ export const themes = [
 export const sidebarLinks: SidebarLink[] = [
   {
     imgURL: '/assets/icons/home.svg',
-    route: '/',
+    route: '/social',
     label: 'خانه',
   },
   {
     imgURL: '/assets/icons/users.svg',
-    route: '/community',
+    route: '/social/community',
     label: 'کامیونیتی',
   },
   {
     imgURL: '/assets/icons/star.svg',
-    route: '/collection',
+    route: '/social/collection',
     label: 'کلکسیون',
   },
   {
     imgURL: '/assets/icons/suitcase.svg',
-    route: '/jobs',
+    route: '/social/jobs',
     label: 'شغلها',
   },
   {
     imgURL: '/assets/icons/tag.svg',
-    route: '/tags',
+    route: '/social/tags',
     label: 'تگها',
   },
   {
     imgURL: '/assets/icons/user.svg',
-    route: '/profile',
+    route: '/social/profile',
     label: 'پروفایل',
   },
   {
     imgURL: '/assets/icons/question.svg',
-    route: '/ask-question',
+    route: '/social/ask-question',
     label: 'سوال پرسیدن',
   },
 ]

@@ -14,9 +14,12 @@ import { FC } from 'react'
 
 import { usePathname } from 'next/navigation'
 import { sidebarLinks } from '@/lib/constants'
+import { Button } from '@/components/ui/button'
+import { useCurrentUser } from '@/hooks/use-current-user'
 
 const NavContent = () => {
   const pathname = usePathname()
+
   return (
     <section className=" flex  h-full flex-col gap-6 pt-16  ">
       {sidebarLinks.map((item) => {
@@ -27,10 +30,10 @@ const NavContent = () => {
           <SheetClose asChild key={item.route}>
             <Link
               href={item.route}
-              className={`flex items-center justify-start gap-4 rounded-lg bg-black/20  p-4 ${
+              className={`flex items-center justify-start gap-4 rounded-lg p-4 ${
                 isActive
-                  ? 'rounded-lg bg-black/60 font-semibold text-gray-200 '
-                  : 'text-gray-400'
+                  ? 'rounded-lg bg-muted-foreground text-muted font-semibold '
+                  : 'bg-muted text-muted-foreground '
               }`}
             >
               <Image
@@ -38,9 +41,11 @@ const NavContent = () => {
                 alt={item.label}
                 width={20}
                 height={20}
-                className={`invert-0`}
+                className={`${
+                  isActive ? 'invert-0 dark:invert' : 'invert dark:invert-0'
+                }`}
               />
-              <p>{item.label}</p>
+              <p className={`${isActive ? 'font-bold' : ''}`}>{item.label}</p>
             </Link>
           </SheetClose>
         )
@@ -51,6 +56,7 @@ const NavContent = () => {
 interface MobileNavProps {}
 
 const MobileNav: FC<MobileNavProps> = () => {
+  const user = useCurrentUser()
   return (
     <div className="rounded-lg bg-transparent ">
       <Sheet>
@@ -60,10 +66,10 @@ const MobileNav: FC<MobileNavProps> = () => {
             alt="menu"
             width={36}
             height={36}
-            className="text-black sm:hidden  "
+            className="cursor-pointer p-1 m-1 sm:hidden  "
           />
         </SheetTrigger>
-        <SheetContent side={'left'} className="bg-gray-900 text-white">
+        <SheetContent side={'right'} className="">
           <Link href={'/'} className="flex items-center gap-1">
             <Image src={SiteLogo} width={23} height={23} alt="DevFlow" />
             <p className="font-bold text-secondary">
@@ -74,6 +80,20 @@ const MobileNav: FC<MobileNavProps> = () => {
             <SheetClose asChild>
               <NavContent />
             </SheetClose>
+
+            {/* <SignOut> */}
+            {!user?.id && !user?.isVerified && (
+              <div className="flex flex-col gap-3 mt-4 ">
+                <SheetClose asChild>
+                  <Link href={'/login'}>
+                    <Button variant={'secondary'} className="w-full px-4 py-3 ">
+                      <span>ورود</span>
+                    </Button>
+                  </Link>
+                </SheetClose>
+              </div>
+            )}
+            {/* </SignOut> */}
           </div>
         </SheetContent>
       </Sheet>
