@@ -66,7 +66,7 @@ const MobileNav: FC<MobileNavProps> = () => {
             alt="menu"
             width={36}
             height={36}
-            className="cursor-pointer p-1 m-1 sm:hidden  "
+            className="cursor-pointer p-1 m-1 sm:hidden invert dark:invert-0 "
           />
         </SheetTrigger>
         <SheetContent side={'right'} className="">
@@ -81,7 +81,6 @@ const MobileNav: FC<MobileNavProps> = () => {
               <NavContent />
             </SheetClose>
 
-            {/* <SignOut> */}
             {!user?.id && !user?.isVerified && (
               <div className="flex flex-col gap-3 mt-4 ">
                 <SheetClose asChild>
@@ -93,7 +92,6 @@ const MobileNav: FC<MobileNavProps> = () => {
                 </SheetClose>
               </div>
             )}
-            {/* </SignOut> */}
           </div>
         </SheetContent>
       </Sheet>

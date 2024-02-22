@@ -68,7 +68,7 @@ const GlobalSearch: FC<GlobalSearchProps> = () => {
       ref={searchContainerRef}
       className="relative w-full max-w-[500px] max-lg:hidden "
     >
-      <div className=" relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4 ">
+      <div className=" relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4 bg-muted ">
         <Image
           src={Search}
           alt="Search"
@@ -79,7 +79,7 @@ const GlobalSearch: FC<GlobalSearchProps> = () => {
         <Input
           dir="rtl"
           type="text"
-          placeholder="جست‌وجوی کلی"
+          placeholder="جست‌وجو"
           value={search}
           onChange={(e) => {
             setSearch(e.target.value)
@@ -87,7 +87,7 @@ const GlobalSearch: FC<GlobalSearchProps> = () => {
             if (!isOpen) setIsOpen(true)
             if (e.target.value === '' && isOpen) setIsOpen(false)
           }}
-          className="ml-2 border-none text-slate-200 outline-none "
+          className="ml-2 border-none outline-none "
         />
       </div>
       {isOpen && <GlobalResult />}
