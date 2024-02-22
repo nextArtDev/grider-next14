@@ -2,6 +2,7 @@ import { Product } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { SingleProductFullStructure } from './queries/home/products'
+import qs from 'query-string'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -112,5 +113,54 @@ export function groupById(
       return accumulator
     },
     {}
+  )
+}
+
+interface UrlQueryParams {
+  params: string
+  key: string
+  value: string | null
+}
+
+export const fromUrlQuery = ({ params, key, value }: UrlQueryParams) => {
+  // accessing the current url
+  const currentUrl = qs.parse(params)
+  // query-string package automatically gives you the search params
+
+  // it only updates the one we want to update, while keeping everything else the same in component's useState
+  currentUrl[key] = value
+
+  return qs.stringifyUrl(
+    {
+      // base url
+      url: window.location.pathname,
+      // current url
+      query: currentUrl,
+    },
+    // options: we don't need null values
+    { skipNull: true }
+  )
+}
+
+interface RemoveUrlQueryParams {
+  params: string
+  keysToRemove: string[]
+}
+export const removeKeysFromUrlQuery = ({
+  params,
+  keysToRemove,
+}: RemoveUrlQueryParams) => {
+  const currentUrl = qs.parse(params)
+
+  keysToRemove.forEach((key) => {
+    delete currentUrl[key]
+  })
+
+  return qs.stringifyUrl(
+    {
+      url: window.location.pathname,
+      query: currentUrl,
+    },
+    { skipNull: true }
   )
 }

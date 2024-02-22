@@ -44,7 +44,6 @@ export async function getZibal({
   if (totalPrice !== amount) return null
   //   console.log('Total Price:', totalPrice)
 
-  let zarinpalUrl: string
   try {
     const res = await zarinpal.PaymentRequest({
       Amount: totalPrice,
@@ -61,6 +60,7 @@ export async function getZibal({
       const order = await prisma.order.create({
         data: {
           storeId: process.env.STORE_ID!,
+
           isPaid: false,
           Authority: authority,
           orderItems: {
