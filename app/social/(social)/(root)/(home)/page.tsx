@@ -156,7 +156,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         quibusdam tempora veritatis id facere animi sequi ipsam adipisci, error
         repudiandae, repellendus debitis omnis ab iusto, explicabo quia quod
         quos. Corporis."
-              link="/ask-question"
+              link="/social/ask-question"
               linkTitle="سوال بپرسید"
             />
           )}

@@ -40,23 +40,21 @@ const Filter: FC<FilterProps> = ({
   return (
     <article className={cn('relative', containerClasses)}>
       <Select
+        dir="rtl"
         onValueChange={(value) => handleUpdateParams(value)}
         defaultValue={paramFilter || undefined}
       >
         <SelectTrigger
           className={cn(
-            ' bg-gradient-to-tr from-slate-700 via-slate-900 to-slate-500 text-slate-200 shadow-sm shadow-slate-400 outline-none placeholder:text-slate-300',
+            ' shadow-sm outline-none bg-muted border px-5 py-2.5 ',
             otherClasses
           )}
         >
-          <div className=" line-clamp-1 flex-1 pr-4 text-right ">
+          <div className=" line-clamp-1 flex-1 pl-4 text-right">
             <SelectValue placeholder="یک فیلتر انتخاب کنید" />
           </div>
         </SelectTrigger>
-        <SelectContent
-          dir="rtl"
-          className=" bg-gradient-to-tr from-slate-700 via-slate-900 to-slate-500 text-slate-200 "
-        >
+        <SelectContent dir="rtl" className=" ">
           <SelectGroup>
             {filters.map((item) => (
               <SelectItem key={item.value} value={item.value}>

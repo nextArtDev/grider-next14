@@ -43,13 +43,8 @@ const HomeFilters: FC<HomeFiltersProps> = () => {
         <Button
           key={item.value}
           onClick={() => handleTypeClick(item.value)}
-          className={cn(
-            ' rounded-lg px-6 py-3 capitalize shadow-none',
-            active === item.value
-              ? ' bg-gradient-to-tr from-slate-600 via-gray-800 to-slate-800 shadow-inner shadow-slate-200 text-slate-200'
-              : ''
-          )}
-          // onClickCapture={() => handleTypeClick(item.value)}
+          variant={active === item.value ? 'destructive' : 'outline'}
+          className={cn(' rounded-lg px-6 py-3 capitalize shadow-none')}
         >
           {item.name}
         </Button>
