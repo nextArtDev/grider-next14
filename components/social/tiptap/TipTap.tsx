@@ -10,6 +10,7 @@ import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import FontFamily from '@tiptap/extension-font-family'
 import Highlight from '@tiptap/extension-highlight'
+import ListItem from '@tiptap/extension-list-item'
 
 interface TipTapProps {
   description: string
@@ -20,6 +21,7 @@ const TipTap: FC<TipTapProps> = ({ description, onChange }) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({}),
+      ListItem.configure({}),
       TextStyle.configure({
         HTMLAttributes: {
           class: 'text-black dark:text-white',

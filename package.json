@@ -51,6 +51,7 @@
     "@tiptap/extension-font-family": "^2.2.4",
     "@tiptap/extension-heading": "^2.2.4",
     "@tiptap/extension-highlight": "^2.2.4",
+    "@tiptap/extension-list-item": "^2.2.4",
     "@tiptap/extension-text-align": "^2.2.4",
     "@tiptap/extension-text-style": "^2.2.4",
     "@tiptap/pm": "^2.2.4",

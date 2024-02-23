@@ -116,17 +116,11 @@ export async function getQuestions(params: GetQuestionsParams) {
 
 export async function createQuestion(params: CreateQuestionParams) {
   try {
-    // connectToDatabase()
     const user = await currentUser()
-    const { title, content, tags, authorId, path } = params
-    // console.log({ title, content, tags, authorId, path })
     if (!user) return
 
-    // const question = await Question.create({
-    //   title,
-    //   content,
-    //   author,
-    // })
+    const { title, content, tags, authorId, path } = params
+    // console.log({ title, content, tags, authorId, path })
     const question = await prisma.question.create({
       data: {
         title,
@@ -180,33 +174,6 @@ export async function createQuestion(params: CreateQuestionParams) {
       data: { reputation: { increment: 5 } },
     })
 
-    // Create the tags or get them if they already exist
-
-    // for (const tag of tags) {
-    //   const existingTag = await Tag.findOneAndUpdate(
-    //     { name: { $regex: new RegExp(`^${tag}$`, 'i') } },
-    //     { $setOnInsert: { name: tag }, $push: { questions: question.id } },
-    //     { upsert: true, new: true }
-    //   )
-    //   tagDocuments.push(existingTag.id)
-    // }
-
-    // await Question.findOneAndUpdate(question.id, {
-    //   $push: { tags: { $each: tagDocuments } },
-    // })
-
-    // create an interaction record for the user's ask_question action
-
-    // await Interaction.create({
-    //   user: author,
-    //   action: 'ask_question',
-    //   question: question.id,
-    //   tags: tagDocuments,
-    // })
-    // Increment author's reputation by +5 for creating a question
-
-    // await User.findByIdAndUpdate(author, { $inc: { reputation: 5 } })
-
     revalidatePath(path)
   } catch (error) {
     console.log(error)
@@ -239,7 +206,10 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
           select: {
             id: true,
             name: true,
-            picture: true,
+            // picture: true,
+          },
+          include: {
+            image: { select: { url: true } },
           },
         },
         answers: true,

@@ -342,10 +342,11 @@ model Question {
 
   tags Tag[]
 
-  usersWhoSaved User[]  @relation("UserWhoSaved")
-  userId        String?
+  usersWhoSaved User[] @relation("UserWhoSaved")
 
   Interaction Interaction[]
+
+  @@index([authorId])
 }
 
 // https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#mongodb
