@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation'
 
 interface PaginationProps {
   pageNumber: number
-  isNext: boolean
+  isNext?: boolean
 }
 
 const Pagination: FC<PaginationProps> = ({ pageNumber = 1, isNext }) => {

@@ -80,6 +80,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
 
     const users = await prisma.user.findMany({
       where: query,
+      include: { image: { select: { url: true } } },
       skip: skipAmount,
       take: pageSize,
       orderBy: sortOptions,
@@ -98,6 +99,7 @@ export async function getAllUsers(params: GetAllUsersParams) {
     throw error
   }
 }
+
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
   try {
     // connectToDatabase()

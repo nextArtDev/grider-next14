@@ -10,7 +10,8 @@ interface UserCardProps {
   user: {
     id: string
     phone: string
-    picture?: string
+    // picture?: string
+    image: { url: string } | null
     name: string
     // username: string
   }
@@ -24,13 +25,13 @@ const UserCard: FC<UserCardProps> = async ({ user }) => {
       href={`/profile/${user.id}`}
       className="max-xs:min-w-full xs:w-[260px] w-full"
     >
-      <article className="flex w-full flex-col items-center justify-center rounded-2xl border bg-white/20 p-4">
+      <article className="flex w-full flex-col items-center justify-center rounded-2xl border p-4">
         <Image
-          src={user.picture ?? '/assets/icons/user.svg'}
-          alt="user profile picture"
-          width={user.picture ? 100 : 40}
-          height={user.picture ? 100 : 40}
-          className=" rounded-full border border-white p-1 "
+          src={user.image?.url ?? '/assets/icons/user.svg'}
+          alt={user.name}
+          width={50}
+          height={50}
+          className=" rounded-2xl border"
         />
 
         <div className="mt-4 text-center">
