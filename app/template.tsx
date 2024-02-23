@@ -4,8 +4,9 @@ import { ReactNode } from 'react'
 export default function Template({ children }: { children: ReactNode }) {
   return (
     <MotionDiv
-      initial={{ y: 20, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      className="overflow-hidden"
+      initial={{ x: '100%', opacity: 0 }}
+      animate={{ x: 0, opacity: 1 }}
       transition={{ type: 'spring', duration: 1 }}
     >
       {children}

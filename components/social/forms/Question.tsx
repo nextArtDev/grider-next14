@@ -21,7 +21,7 @@ import { QuestionSchema } from '@/lib/social-validations'
 import Image from 'next/image'
 // import { createQuestion, editQuestion } from '@/lib/actions/question.action'
 import { useRouter, usePathname } from 'next/navigation'
-import { Loader } from 'lucide-react'
+import { Loader, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import Tiptap from '../tiptap/TipTap'
 // import { useTheme } from '@/context/ThemeProvider'
@@ -131,7 +131,7 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className=" flex w-full flex-col gap-10 text-slate-300 "
+          className=" flex w-full flex-col gap-10  "
         >
           <FormField
             control={form.control}
@@ -139,19 +139,14 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col">
                 <FormLabel>
-                  عنوان سوال <span className="text-rose-500">*</span>
+                  عنوان موضوع <span className="text-rose-500">*</span>
                 </FormLabel>
                 <FormControl className="mt-3.5">
-                  <Input
-                    className="min-h-[56px] border text-slate-700 "
-                    {...field}
-                  />
+                  <Input className="min-h-[56px] border" {...field} />
                 </FormControl>
-                <FormDescription className="mt-2.5">
-                  {/* Be specific and imagine you&apos;re asking a question to
-                  another person. */}
-                  سوالات خود را از دیگران بپرسید.
-                </FormDescription>
+                {/* <FormDescription className="mt-2.5">
+                  عنوان موضوع
+                </FormDescription> */}
                 <FormMessage className="text-red-500" />
               </FormItem>
             )}
@@ -162,7 +157,7 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3 ">
                 <FormLabel>
-                  جزئیات مشکل خودتان را بیان کنید.
+                  بیان جزئیات موضوع
                   {/* Detailed explanation of your problem{' '} */}
                   <span className="text-rose-500">*</span>
                 </FormLabel>
@@ -214,7 +209,7 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
                 <FormDescription className="mt-2.5">
                   {/* Introduce the problem and expand on what you put in the title.
                   Minimum 20 characters. */}
-                  مشکلتان را در حداقل 20 حرف توضیح دهید.
+                  موضوع را در حداقل 20 حرف توضیح دهید.
                 </FormDescription>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -232,17 +227,18 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
                   <>
                     <Input
                       disabled={type === 'Edit'}
-                      className="min-h-[56px] border text-slate-700 dark:text-inherit "
+                      className="min-h-[56px] border "
                       // {...field}
                       onKeyDown={(e) => handleInputKeyDown(e, field)}
                       placeholder="اضافه کردن تگ..."
                     />
                     {field.value.length > 0 && (
-                      <div className="flex-start mt-2.5 gap-2.5">
+                      <div className="flex mt-2.5 gap-2.5">
                         {field.value.map((tag: any) => (
                           <Badge
                             key={tag}
-                            className=" flex items-center justify-center gap-2 rounded-md border-none bg-slate-400 px-4 py-2 capitalize hover:bg-slate-600 "
+                            variant={'secondary'}
+                            className=" flex items-center  justify-center gap-2 rounded-md border border-muted px-4 py-2 "
                             onClick={() =>
                               type !== 'Edit'
                                 ? handleTagRemove(tag, field)
@@ -251,13 +247,14 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
                           >
                             {tag}
                             {type !== 'Edit' && (
-                              <Image
-                                src={'/assets/icons/close.svg'}
-                                alt="Close icon"
-                                width={12}
-                                height={12}
-                                className="cursor-pointer object-contain invert-0 "
-                              />
+                              // <Image
+                              //   src={'/assets/icons/close.svg'}
+                              //   alt="Close icon"
+                              //   width={12}
+                              //   height={12}
+                              //   className="cursor-pointer object-contain invert-0 dark:invert hover:scale-150"
+                              // />
+                              <Trash2 className="text-rose-500 h-4 w-4 bg-transparent cursor-pointer hover:scale-150 transition " />
                             )}
                           </Badge>
                         ))}
@@ -266,10 +263,8 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
                   </>
                 </FormControl>
                 <FormDescription className="mt-2.5">
-                  {/* Add up to 3 tags to describe what your question is about. You
-                  need to press enter to add tag. */}
-                  با حداکثر سه تگ توضیح دهید سوال شما درباره چیست. (بعد از هر تگ
-                  اینتر بزنید)
+                  با حداکثر سه تگ توضیح دهید موضوع شما درباره چیست. (بعد از هر
+                  تگ اینتر بزنید)
                 </FormDescription>
                 <FormMessage className="text-red-500" />
               </FormItem>
@@ -287,7 +282,7 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
                 <Loader className="mr-2 h-4 w-4 animate-spin " />
               </>
             ) : (
-              <>{type === 'Edit' ? 'ویرایش سوال' : 'پرسیدن سوال'}</>
+              <>{type === 'Edit' ? 'ویرایش متن' : 'ارسال'}</>
             )}
           </Button>
         </form>

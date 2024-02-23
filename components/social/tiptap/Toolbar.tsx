@@ -10,7 +10,6 @@ import {
   Heading2,
   Heading3,
   Heading4,
-  Heading5,
   Highlighter,
   AlignLeft,
   AlignRight,
@@ -32,7 +31,7 @@ const Toolbar: FC<ToolbarProps> = ({ editor }) => {
   }
 
   return (
-    <div className="border border-input bg-transparent rounded-md">
+    <div className="flex flex-wrap items-center gap-0.5 border border-input rounded-b-none bg-transparent rounded-md p-1 ">
       <Toggle
         size={'sm'}
         pressed={editor.isActive('textStyle')}

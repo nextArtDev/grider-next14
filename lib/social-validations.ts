@@ -13,7 +13,7 @@ export const QuestionSchema = z.object({
   explanation: z
     .string()
     .min(20, {
-      message: 'شما باید سوال خود را حداقل در 10 حرف توضیح دهید.',
+      message: 'شما باید موضوع خود را حداقل در 20 حرف توضیح دهید.',
     })
     .max(1080, {
       message: 'توضیحات نمی‌تواند بیش از 1080 حرف باشد.',
@@ -33,7 +33,14 @@ export const QuestionSchema = z.object({
 })
 
 export const AnswerSchema = z.object({
-  answer: z.string().min(10),
+  answer: z
+    .string()
+    .min(3, {
+      message: 'توضیحات نمی‌تواند کمتر از 3 حرف باشد.',
+    })
+    .max(1080, {
+      message: 'توضیحات نمی‌تواند بیش از 1080 حرف باشد.',
+    }),
 })
 
 export const ProfileSchema = z.object({

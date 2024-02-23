@@ -51,7 +51,8 @@ const TipTap: FC<TipTapProps> = ({ description, onChange }) => {
     // customizing editor like shadcn
     editorProps: {
       attributes: {
-        class: 'rounded-md border min-h-[150px] border-input  ',
+        class:
+          'rounded-md rounded-t-none border min-h-[150px] border-input p-4 ',
       },
     },
     onUpdate({ editor }) {
@@ -61,7 +62,7 @@ const TipTap: FC<TipTapProps> = ({ description, onChange }) => {
   })
 
   return (
-    <div className="flex flex-col justify-stretch min-h-[250px]">
+    <div className="flex flex-col justify-stretch min-h-[250px]  ">
       <Toolbar editor={editor} />
       <EditorContent editor={editor} />
     </div>
