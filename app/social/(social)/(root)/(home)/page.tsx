@@ -27,42 +27,43 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import SearchIcon from '../../../../../public/assets/icons/search.svg'
 import { Pen, PenLine, PenSquare, PenTool } from 'lucide-react'
+import { getQuestions } from '@/lib/actions/social/question.action'
 // import SearchIcon from '/public/assets/icons/search.svg'
 
 export const metadata: Metadata = {
-  title: 'Home | DevFlow',
+  title: 'DevFlow',
   description:
     'A community-driven platform for asking and answering programming questions',
 }
 
-const questions = [
-  {
-    id: 1,
-    title: 'Cascading Deletes in SQLAlchemy',
-    tags: [
-      { id: 1, name: 'python' },
-      { id: 2, name: 'sql' },
-    ],
-    author: 'John Doe',
-    upvotes: 10,
-    views: 100,
-    answers: 2,
-    created_at: '2023-09-01T12:00:00.000z',
-  },
-  {
-    id: 2,
-    title: 'How to create CSS grid',
-    tags: [
-      { id: 1, name: 'CSS' },
-      { id: 2, name: 'TailwindCSS' },
-    ],
-    author: 'John Doe',
-    upvotes: 14000000.5,
-    views: 10,
-    answers: 2,
-    created_at: '2023-09-01T12:00:00.000z',
-  },
-]
+// const questions = [
+//   {
+//     id: 1,
+//     title: 'Cascading Deletes in SQLAlchemy',
+//     tags: [
+//       { id: 1, name: 'python' },
+//       { id: 2, name: 'sql' },
+//     ],
+//     author: 'John Doe',
+//     upvotes: 10,
+//     views: 100,
+//     answers: 2,
+//     created_at: '2023-09-01T12:00:00.000z',
+//   },
+//   {
+//     id: 2,
+//     title: 'How to create CSS grid',
+//     tags: [
+//       { id: 1, name: 'CSS' },
+//       { id: 2, name: 'TailwindCSS' },
+//     ],
+//     author: 'John Doe',
+//     upvotes: 14000000.5,
+//     views: 10,
+//     answers: 2,
+//     created_at: '2023-09-01T12:00:00.000z',
+//   },
+// ]
 export default async function Home({ searchParams }: SearchParamsProps) {
   const user = await currentUser()
 
@@ -70,24 +71,24 @@ export default async function Home({ searchParams }: SearchParamsProps) {
 
   let result
   if (searchParams?.filter === 'پیشنهادی') {
-    if (!userId) {
-      //   result = await getRecommendedQuestions({
-      //     userId,
-      //     searchQuery: searchParams.q,
-      //     page: searchParams.page ? +searchParams.page : 1,
-      //   })
-    } else {
-      result = {
-        questions: [],
-        isNext: false,
-      }
-    }
+    // if (!userId) {
+    //   result = await getRecommendedQuestions({
+    //     userId,
+    //     searchQuery: searchParams.q,
+    //     page: searchParams.page ? +searchParams.page : 1,
+    //   })
+    // } else {
+    //   result = {
+    //     questions: [],
+    //     isNext: false,
+    //   }
+    // }
   } else {
-    // result = await getQuestions({
-    //   searchQuery: searchParams.q,
-    //   filter: searchParams.filter,
-    //   page: searchParams.page ? +searchParams.page : 1,
-    // })
+    result = await getQuestions({
+      searchQuery: searchParams.q,
+      filter: searchParams.filter,
+      page: searchParams.page ? +searchParams.page : 1,
+    })
   }
 
   return (
@@ -121,29 +122,15 @@ export default async function Home({ searchParams }: SearchParamsProps) {
         <HomeFilters />
 
         <div className="mt-10 flex w-full flex-col gap-6">
-          {/* {result.questions?.length ? (
-            result.questions.map((question) => (
+          {result?.questions?.length ? (
+            result?.questions.map((question) => (
               <QuestionCard
                 key={question.id}
                 id={question.id}
                 title={question.title}
                 tags={question.tags}
                 author={question.author}
-                upvotes={question.upvotes}
-                views={question.views}
-                answers={question.answers}
-                createdAt={question.created_at}
-              />
-            )) */}
-          {questions?.length ? (
-            questions.map((question) => (
-              <QuestionCard
-                key={question.id}
-                id={question.id}
-                title={question.title}
-                tags={question.tags}
-                author={question.author}
-                upvotes={question.upvotes}
+                upvotes={question.upvoters}
                 views={question.views}
                 answers={question.answers}
                 createdAt={question.created_at}

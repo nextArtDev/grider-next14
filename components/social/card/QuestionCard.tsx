@@ -9,12 +9,13 @@ import { formatLargeNumber, getTimestamp } from '@/lib/socialUtils'
 import EditDeleteAction from '../EditDeleteAction'
 import RenderTag from '../RenderTag'
 import Metric from '../Metric'
+import UserAvatar from '@/components/shared/Avatar'
 
 interface QuestionCardProps {
   id: string
   title: string
   tags: { id: number; name: string }[]
-  author: { id: string; name: string; picture?: string | null }
+  author: User & { image: { url: string } | null }
   // author: string
   upvotes: User[]
   views?: number
@@ -36,18 +37,18 @@ const QuestionCard: FC<QuestionCardProps> = ({
 }) => {
   const showActionButtons = userId && userId === author.id
   return (
-    <section className="rounded-[10px] p-9 text-slate-300 sm:px-11 ">
+    <section className="rounded-[10px] p-9  sm:px-11 ">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
-        <div>
-          <span className="line-clamp-1 flex sm:hidden">
-            {getTimestamp(new Date(createdAt))}
-            {/* {getTimestamp(createdAt)} */}
-          </span>
+        <div className="space-y-3.5">
           <Link href={`/social/question/${id}`}>
-            <h3 className="line-clamp-1 flex-1 text-base sm:font-semibold ">
+            <h3 className="line-clamp-1 flex-1 text-lg sm:font-semibold ">
               {title}
             </h3>
           </Link>
+          <span className="line-clamp-1 text-xs flex sm:hidden">
+            {getTimestamp(new Date(createdAt))}
+            {/* {getTimestamp(createdAt)} */}
+          </span>
         </div>
         {/* edit and delete action  */}
         {/* <SignedIn>
@@ -62,7 +63,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
       </div>
       <div className="mt-6 flex w-full flex-wrap justify-between gap-3">
         <Metric
-          imgUrl={author.picture ?? '/assets/icons/user.svg'}
+          imgUrl={author.image?.url ?? '/assets/icons/user.svg'}
           // alt="User"
           alt={author.name}
           value={author.name}
@@ -70,13 +71,14 @@ const QuestionCard: FC<QuestionCardProps> = ({
           textStyles="text-sm md:text-md"
           href={`/social/profile/${author.id}`}
           isAuthor
+          isAvatar
         />
         <div className="max-sm:flex-start flex items-center gap-3 max-sm:flex-wrap ">
           <Metric
             imgUrl="/assets/icons/like.svg"
             alt="Upvotes"
-            // value={upvotes?.length}
-            value={formatLargeNumber(+upvotes)}
+            value={upvotes?.length ?? 0}
+            // value={formatLargeNumber(+upvotes?.length)}
             title="رای"
             textStyles="text-sm md:text-md"
           />
@@ -91,7 +93,7 @@ const QuestionCard: FC<QuestionCardProps> = ({
           <Metric
             imgUrl="/assets/icons/eye.svg"
             alt="Views"
-            value={+views}
+            value={views ? +views : 0}
             title="مشاهده"
             textStyles="text-sm md:text-md"
           />

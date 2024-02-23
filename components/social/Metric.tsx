@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { FC } from 'react'
+import UserAvatar from '../shared/Avatar'
 
 interface MetricProps {
   imgUrl: string
@@ -10,6 +11,7 @@ interface MetricProps {
   href?: string
   textStyles?: string
   isAuthor?: boolean
+  isAvatar?: boolean
 }
 
 const Metric: FC<MetricProps> = ({
@@ -20,16 +22,21 @@ const Metric: FC<MetricProps> = ({
   value,
   href,
   isAuthor,
+  isAvatar,
 }) => {
   const metricContent = (
     <>
-      <Image
-        src={imgUrl}
-        width={16}
-        height={16}
-        alt={alt}
-        className={`object-contain ${href ? 'rounded-full' : ''}`}
-      />
+      {isAvatar ? (
+        <UserAvatar src={imgUrl} />
+      ) : (
+        <Image
+          src={imgUrl}
+          width={16}
+          height={16}
+          alt={alt}
+          className={`object-contain ${href ? 'rounded-full' : ''}`}
+        />
+      )}
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
         <span
