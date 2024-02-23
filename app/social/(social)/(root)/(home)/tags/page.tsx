@@ -23,8 +23,8 @@ async function page({ searchParams }: SearchParamsProps) {
   })
   // console.log(result.tags)
   return (
-    <div className="text-slate-200">
-      <h1 className="font-bold text-gray-100"> همه تگ‌ها</h1>
+    <div className="">
+      <h1 className="font-bold "> همه تگ‌ها</h1>
 
       <div className="mt-11 flex flex-col justify-between gap-5 max-sm:flex-col sm:items-center ">
         <LocalSearchbar
@@ -44,11 +44,13 @@ async function page({ searchParams }: SearchParamsProps) {
         {result.tags.length > 0 ? (
           result.tags.map((tag) => (
             <Link href={`/social/tags/${tag.id}`} key={tag.id} className=" ">
-              <article className="flex w-full flex-col items-center justify-center rounded-2xl border bg-slate-600 px-8 py-10 sm:w-[260px]">
-                <div className="w-fit rounded-sm bg-slate-200 px-5 py-1.5">
-                  <p className="font-semibold text-slate-700 ">{tag.name}</p>
+              <article className="flex w-full flex-col items-center justify-center rounded-2xl border bg-muted px-8 py-10 sm:w-[260px]">
+                <div className="w-fit rounded-sm px-5 py-1.5">
+                  <p className="font-semibold text-muted-foreground ">
+                    {tag.name}
+                  </p>
                 </div>
-                <p className="mt-3.5 text-slate-400 ">
+                <p className="mt-3.5 text-primary/60">
                   <span className="ml-1.5 font-semibold ">
                     {tag.questions.length}+
                   </span>

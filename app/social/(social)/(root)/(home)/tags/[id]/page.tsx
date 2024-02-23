@@ -13,6 +13,7 @@ import LocalSearchbar from '@/components/social/search/LocalSearchbar'
 import QuestionCard from '@/components/social/card/QuestionCard'
 import NoResult from '@/components/social/NoResult'
 import Pagination from '@/components/social/Pagination'
+import { Separator } from '@/components/ui/separator'
 // interface pageProps {
 //   params: { id: string }
 //   searchParams: string
@@ -28,11 +29,11 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
   // console.log(result)
   return (
     <>
-      <h1 className="font-bold text-gray-100"> {result?.tagTitle}</h1>
+      <h1 className="font-bold"> {result?.tagTitle}</h1>
 
       <div className="mt-11 w-full">
         <LocalSearchbar
-          route={`/tags/${params.id}`}
+          route={`social//tags/${params.id}`}
           iconPosition="left"
           imgSrc={SearchImage}
           placeholder="جست‌وجوی سوال تگ"
@@ -42,25 +43,24 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
         <div className="mt-10 flex w-full flex-col gap-6">
           {result?.questions?.length ? (
             result?.questions.map((question: any) => (
-              <QuestionCard
-                key={question.id}
-                id={question.id}
-                title={question.title}
-                tags={question.tags}
-                author={question.author}
-                upvotes={question.upvoters}
-                views={question.views}
-                answers={question.answers}
-                createdAt={question.created_at}
-              />
+              <div className="space-y-0.5" key={question.id}>
+                <QuestionCard
+                  id={question.id}
+                  title={question.title}
+                  tags={question.tags}
+                  author={question.author}
+                  upvotes={question.upvoters}
+                  views={question.views}
+                  answers={question.answers}
+                  createdAt={question.created_at}
+                />
+                <Separator />
+              </div>
             ))
           ) : (
             <NoResult
-              title="سوال تگی برای نمایش وجود ندارد."
-              description="Lorem ipsum dolor, sit amet consectetur adipisicing elit. Provident
-        quibusdam tempora veritatis id facere animi sequi ipsam adipisci, error
-        repudiandae, repellendus debitis omnis ab iusto, explicabo quia quod
-        quos. Corporis."
+              title=" تگی برای نمایش وجود ندارد."
+              description="موضوعی مطرح کنید"
               link="/ask-question"
               linkTitle="Ask A Question"
             />
