@@ -23,9 +23,25 @@ model User {
 
   Reviews Review[]
 
+  bio              String?
+  location         String?
+  portfolioWebsite String?
+  reputation       Int     @default(0)
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   imageId   String?
+
+  saved              Question[] @relation("UserWhoSaved")
+  upvotedQuestions   Question[] @relation("UpvotedQuestions")
+  downvotedQuestions Question[] @relation("DownvotedQuestions")
+  authoredQuestions  Question[] @relation("QuestionAuthor")
+
+  upvotedAnswers   Answer[]      @relation("UpvotedAnswers")
+  downvotedAnswers Answer[]      @relation("DownvotedAnswers")
+  authoredAnswers  Answer[]      @relation("AnswerAuthor")
+  Tag              Tag[]
+  Interaction      Interaction[]
 }
 
 enum Role {
@@ -304,4 +320,84 @@ model OrderItem {
 
   @@index([orderId])
   @@index([productId])
+}
+
+model Question {
+  id String @id @default(uuid())
+
+  title   String
+  content String
+  views   Int    @default(0)
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  upvoters   User[] @relation("UpvotedQuestions")
+  downvoters User[] @relation("DownvotedQuestions")
+
+  author   User   @relation("QuestionAuthor", fields: [authorId], references: [id])
+  authorId String
+
+  answers Answer[]
+
+  tags Tag[]
+
+  usersWhoSaved User[]  @relation("UserWhoSaved")
+  userId        String?
+
+  Interaction Interaction[]
+}
+
+// https://www.prisma.io/docs/concepts/components/prisma-schema/relations/many-to-many-relations#mongodb
+model Answer {
+  id String @id @default(uuid())
+
+  content String
+
+  upvoters   User[]   @relation("UpvotedAnswers")
+  downvoters User[]   @relation("DownvotedAnswers")
+  author     User     @relation("AnswerAuthor", fields: [authorId], references: [id])
+  authorId   String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  Question   Question @relation(fields: [questionId], references: [id])
+  questionId String
+
+  Interaction Interaction[]
+}
+
+model Tag {
+  id Int @id @default(autoincrement())
+
+  name        String  @unique
+  description String?
+
+  questions Question[]
+
+  followers User[]
+
+  created_at    DateTime     @default(now())
+  updated_at    DateTime     @updatedAt
+  Interaction   Interaction? @relation(fields: [interactionId], references: [id])
+  interactionId Int?
+}
+
+model Interaction {
+  id   Int  @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+
+  question Question @relation(fields: [questionId], references: [id])
+  answer   Answer?  @relation(fields: [answerId], references: [id])
+
+  action String
+
+  tags Tag[]
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  userId     String
+  questionId String
+  answerId   String?
 }
