@@ -25,7 +25,7 @@ export default function RootLayout({
       <ReduxProviders>
         <AuthProvider>
           <body
-            className={`${primaryFont.className} ${numericFont.className} adad min-h-screen`}
+            className={` ${primaryFont.className} ${numericFont.className} adad min-h-screen`}
           >
             <ThemeProvider
               attribute="class"

@@ -20,7 +20,7 @@ const FeaturedProducts: FC<FeaturedProductsProps> = async ({}) => {
     id: featuredProduct.id,
   }))
   return (
-    <div>
+    <div className="">
       <HorizontalScrollCarousel
         cards={cards}
         rtl={true}

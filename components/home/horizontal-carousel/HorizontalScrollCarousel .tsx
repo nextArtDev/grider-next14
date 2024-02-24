@@ -49,7 +49,7 @@ const HorizontalScrollCarousel = ({
       ref={targetRef}
       className={cn('relative h-[300vh] bg-transparent')}
     >
-      <div className="sticky top-0 flex h-screen items-center overflow-hidden  ">
+      <div className="!sticky top-0 flex h-screen items-center overflow-hidden  ">
         <GoogleGeminiEffect
           pathLengths={[
             pathLengthFirst,

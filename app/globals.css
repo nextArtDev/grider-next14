@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+.light-bg {
+  background-image: var(--light-bg);
+}
+
+.dark-bg {
+  background-image: var(--dark-bg);
+}
+.sticky {
+  position: sticky;
+  top: 0;
+}
+
 @layer components {
   .grid-option {
     @apply rounded-md p-5 h-full col-span-2 row-span-2 hover:opacity-75 border-primary  hover:border-primary-foreground;
