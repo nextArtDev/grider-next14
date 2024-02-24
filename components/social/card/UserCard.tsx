@@ -22,7 +22,7 @@ const UserCard: FC<UserCardProps> = async ({ user }) => {
   // const interactedTags = await getTopInteractedTags({})
   return (
     <Link
-      href={`/profile/${user.id}`}
+      href={`/social/profile/${user.id}`}
       className="max-xs:min-w-full xs:w-[260px] w-full"
     >
       <article className="flex w-full flex-col items-center justify-center rounded-2xl border p-4">

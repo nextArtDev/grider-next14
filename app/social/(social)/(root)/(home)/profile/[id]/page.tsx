@@ -73,7 +73,7 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
         </div>
         <div className="max-xm:w-full flex justify-end max-sm:mb-5 sm:mt-3 ">
           {userId === userInfo?.user.id && (
-            <Link href={'/profile/edit'}>
+            <Link href={'/social/profile/edit'}>
               <Button variant={'outline'}>ویرایش پروفایل</Button>
             </Link>
           )}

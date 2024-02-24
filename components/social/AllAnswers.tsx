@@ -45,7 +45,7 @@ const AllAnswers: FC<AllAnswersProps> = async ({
           <article key={answer.id} className="border-b py-10">
             <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
-                href={`/profile/${answer.author.id}`}
+                href={`/socila/profile/${answer.author.id}`}
                 className="flex flex-1 items-start gap-1 sm:items-center"
               >
                 <UserAvatar

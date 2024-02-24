@@ -300,30 +300,15 @@ export async function getUserInfo(params: GetUserByIdParams) {
 }
 export async function getUserQuestions(params: GetUserStatsParams) {
   try {
-    // connectToDatabase()
-
     const { userId, page = 1, pageSize = 10 } = params
 
     const skipAmount = (page - 1) * pageSize
-
-    // const totalQuestions = await Question.countDocuments({
-    //   author: userId,
-    // })
 
     const totalQuestions = await prisma.question.count({
       where: {
         authorId: userId,
       },
     })
-
-    // const userQuestions = await Question.find({
-    //   author: userId,
-    // })
-    //   .sort({ createdAt: -1, views: -1, upvotes: -1 })
-    //   .populate('tags', '_id name')
-    //   .populate('author', '_id userId name picture')
-    //   .skip(skipAmount)
-    //   .limit(pageSize)
 
     const userQuestions = await prisma.question.findMany({
       where: { authorId: userId },
@@ -357,23 +342,9 @@ export async function getUserQuestions(params: GetUserStatsParams) {
 }
 export async function getUserAnswers(params: GetUserStatsParams) {
   try {
-    // connectToDatabase()
-
     const { userId, page = 1, pageSize = 1 } = params
     const skipAmount = (page - 1) * pageSize
 
-    // const totalAnswers = await Answer.countDocuments({
-    //   author: userId,
-    // })
-
-    // const userAnswers = await Answer.find({
-    //   author: userId,
-    // })
-    //   .skip(skipAmount)
-    //   .limit(pageSize)
-    //   .sort({ upvotes: -1 })
-    //   .populate('question', '_id title')
-    //   .populate('author', '_id userId name picture')
     const totalAnswers = await prisma.answer.count({
       where: {
         authorId: userId,

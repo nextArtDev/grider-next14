@@ -5,19 +5,20 @@ import { FC } from 'react'
 import Pagination from './Pagination'
 import { SearchParamsProps } from '@/types/social'
 import QuestionCard from './card/QuestionCard'
+import { getUserQuestions } from '@/lib/actions/social/user.action'
 
 interface QuestionTabProps extends SearchParamsProps {
   userId: string
 }
 
 const QuestionTab: FC<QuestionTabProps> = async ({ searchParams, userId }) => {
-  // const result = await getUserQuestions({
-  //   userId,
-  //   page: searchParams.page ? +searchParams.page : 1,
-  // })
+  const result = await getUserQuestions({
+    userId,
+    page: searchParams.page ? +searchParams.page : 1,
+  })
   return (
     <>
-      {/* {result.questions.map((question) => (
+      {result.questions.map((question) => (
         <QuestionCard
           key={question.id}
           id={question.id}
@@ -30,11 +31,11 @@ const QuestionTab: FC<QuestionTabProps> = async ({ searchParams, userId }) => {
           answers={question.answers}
           createdAt={question.created_at}
         />
-      ))} */}
-      {/* <Pagination
+      ))}
+      <Pagination
         pageNumber={searchParams?.page ? +searchParams.page : 1}
         isNext={result.isNext}
-      /> */}
+      />
     </>
   )
 }

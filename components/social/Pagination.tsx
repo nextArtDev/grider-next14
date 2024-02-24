@@ -35,7 +35,7 @@ const Pagination: FC<PaginationProps> = ({ pageNumber = 1, isNext }) => {
         <p>قبلی</p>
       </Button>
       <div className="flex items-center  justify-center rounded-md bg-rose-500 px-3.5 py-2">
-        <p className="font-semibold text-slate-200 ">{pageNumber}</p>
+        <p className="font-semibold ">{pageNumber}</p>
       </div>
       <Button
         disabled={!isNext}

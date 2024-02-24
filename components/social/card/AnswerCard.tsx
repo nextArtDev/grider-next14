@@ -12,7 +12,7 @@ import Metric from '../Metric'
 
 interface AnswerCardProps {
   id: string
-  author: Partial<User>
+  author: User & { image: { url: string } | null }
   upvotes: Partial<User>[]
   question: any
   // question: Question
@@ -31,7 +31,7 @@ const AnswerCard: FC<AnswerCardProps> = ({
   const showActionButtons = userId && userId === author.id
   return (
     <Link
-      href={`/question/${question?.id}/#${id}`}
+      href={`/social/question/${question?.id}/#${id}`}
       className="rounded-[10px] px-11 py-9"
     >
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">
@@ -42,18 +42,18 @@ const AnswerCard: FC<AnswerCardProps> = ({
           <h3 className="line-clamp-1 flex  ">{question.title}</h3>
         </div>
         {/* <SignedIn>
-          {showActionButtons && <EditDeleteAction />}
+        {showActionButtons && <EditDeleteAction />}
         </SignedIn> */}
         {showActionButtons && <EditDeleteAction type="Answer" itemId={id} />}
       </div>
       <div className="mt-6 flex w-full flex-wrap justify-between gap-3">
         <Metric
-          imgUrl={author.picture || '/assets/icons/user.svg'}
+          imgUrl={author.image?.url || '/assets/icons/user.svg'}
           alt="User"
           value={author.name!}
-          // title={` - ${getTimestamp(new Date(createdAt))}`}
+          title={` - ${getTimestamp(new Date(createdAt))}`}
           textStyles="text-sm md:text-md"
-          href={`/profile/${author.id}`}
+          href={`/social/profile/${author.id}`}
           isAuthor
         />
         <div className="flex items-center justify-center gap-3">
