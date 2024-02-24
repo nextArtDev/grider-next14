@@ -81,7 +81,7 @@ const page = async ({ params, searchParams }: Props) => {
               )}
             />
           </div>
-          <h2 className="mt-3.5 w-full text-canter sm:tex-left text-lg font-semibold">
+          <h2 className="mt-3.5 w-full text-canter  text-lg font-semibold">
             {result.question.title}
           </h2>
         </div>
@@ -111,7 +111,7 @@ const page = async ({ params, searchParams }: Props) => {
         </div>
       </div>
       {/* <ParseHTML data={result?.question.content} /> */}
-      <article className="bg-muted rounded-md p-4 border border-primary/50 ">
+      <article className="bg-muted rounded-md p-4 border border-primary/30 ">
         <div dangerouslySetInnerHTML={{ __html: result?.question.content }} />
       </article>
 

@@ -2,13 +2,15 @@ import { UserCircle, UserCircle2Icon } from 'lucide-react'
 import Image from 'next/image'
 import { FC } from 'react'
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
+import { cn } from '@/lib/utils'
 
 interface AvatarProps {
   src?: string | null | undefined
   alt?: string
+  className?: string
 }
 
-const UserAvatar: FC<AvatarProps> = ({ src, alt }) => {
+const UserAvatar: FC<AvatarProps> = ({ src, alt, className }) => {
   if (src) {
     return (
       // <Image
@@ -18,7 +20,7 @@ const UserAvatar: FC<AvatarProps> = ({ src, alt }) => {
       //   width={30}
       //   height={30}
       // />
-      <Avatar>
+      <Avatar className={cn(className, '')}>
         <AvatarImage className="object-cover" src={src} alt={alt || 'Avatar'} />
         <AvatarFallback>کاربر</AvatarFallback>
       </Avatar>

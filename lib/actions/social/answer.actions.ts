@@ -9,21 +9,6 @@ import {
 } from './shared.types'
 import { revalidatePath } from 'next/cache'
 
-// export async function getQuestions(params: GetQuestionsParams) {
-//   try {
-//     connectToDatabase()
-
-//     const question = await Question.find({})
-//       .populate({ path: 'tags', model: Tag })
-//       .populate({ path: 'author', model: User })
-//       .sort({ createdAt: -1 })
-
-//     return { question }
-//   } catch (error) {
-//     console.log(error)
-//     throw error
-//   }
-// }
 export async function createAnswer(params: CreateAnswerParams) {
   try {
     const { content, author, question, path } = params
@@ -94,26 +79,17 @@ export async function getAnswers(params: GetAnswersParams) {
         break
     }
 
-    // const answers = await Answer.find({ question: questionId })
-    //   .populate({
-    //     path: 'author',
-    //     model: User,
-    //     select: '_id userId name picture',
-    //   })
-    //   .skip(skipAmount)
-    //   .limit(pageSize)
-    //   .sort(sortOptions)
-
     const answers = await prisma.answer.findMany({
       where: { questionId },
       include: {
         author: {
-          select: {
-            id: true,
-            name: true,
-            phone: true,
-            picture: true,
-          },
+          // select: {
+          //   id: true,
+          //   name: true,
+          //   phone: true,
+          //   picture: true,
+          // },
+          include: { image: { select: { url: true } } },
         },
         upvoters: true,
         downvoters: true,

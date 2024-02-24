@@ -31,7 +31,7 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
   const pathname = usePathname()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const editorRef = useRef(null)
+  // const editorRef = useRef(null)
 
   const form = useForm<z.infer<typeof AnswerSchema>>({
     resolver: zodResolver(AnswerSchema),
@@ -52,11 +52,11 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
 
       form.reset()
 
-      if (editorRef.current) {
-        const editor = editorRef.current as any
+      // if (editorRef.current) {
+      //   const editor = editorRef.current as any
 
-        editor.setContent('')
-      }
+      //   editor.setContent('')
+      // }
       router.push('/social')
     } catch (error) {
       console.log(error)

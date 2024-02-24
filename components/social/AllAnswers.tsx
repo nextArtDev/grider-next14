@@ -10,6 +10,9 @@ import Votes from './Votes'
 import Pagination from './Pagination'
 import userImage from '@/public/assets/icons/user.svg'
 import { AnswerFilters } from '@/lib/constants'
+import { getAnswers } from '@/lib/actions/social/answer.actions'
+import { getTimestamp } from '@/lib/socialUtils'
+import UserAvatar from '../shared/Avatar'
 interface AllAnswersProps {
   questionId: string
   userId: string
@@ -25,12 +28,11 @@ const AllAnswers: FC<AllAnswersProps> = async ({
   page,
   filter,
 }) => {
-  const result = [{ answers: [] }]
-  // const result = await getAnswers({
-  //   questionId,
-  //   page: page ? +page : 1,
-  //   sortBy: filter,
-  // })
+  const result = await getAnswers({
+    questionId,
+    page: page ? +page : 1,
+    sortBy: filter,
+  })
   return (
     <div className="mt-11">
       <div className="flex items-center justify-between">
@@ -39,19 +41,19 @@ const AllAnswers: FC<AllAnswersProps> = async ({
       </div>
 
       <div>
-        {/* {result.answers.map((answer) => (
+        {result.answers.map((answer) => (
           <article key={answer.id} className="border-b py-10">
             <div className="mb-8 flex flex-col-reverse justify-between gap-5 sm:flex-row sm:items-center sm:gap-2">
               <Link
                 href={`/profile/${answer.author.id}`}
                 className="flex flex-1 items-start gap-1 sm:items-center"
               >
-                <Image
-                  src={answer.author.picture ?? userImage}
-                  alt="profile"
-                  width={18}
-                  height={18}
-                  className="rounded-full object-cover max-sm:mt-0.5"
+                <UserAvatar
+                  src={answer.author.image?.url ?? userImage}
+                  alt={answer.author.name}
+                  // width={18}
+                  // height={18}
+                  className="rounded-full w-6 h-7 object-cover max-sm:mt-0.5"
                 />
                 <div className="flex flex-col sm:flex-row sm:items-center ">
                   <p className="font-semibold">{answer.author.name}</p>
@@ -77,14 +79,17 @@ const AllAnswers: FC<AllAnswersProps> = async ({
                 />
               </div>
             </div>
-            <div className=" text-right ">
+            {/* <div className=" text-right ">
               <ParseHTML data={answer.content} />
-            </div>
+            </div> */}
+            <article className="bg-muted rounded-md p-4 border border-primary/30 ">
+              <div dangerouslySetInnerHTML={{ __html: answer.content }} />
+            </article>
           </article>
-        ))} */}
+        ))}
       </div>
       <div className="mt-10 w-full">
-        {/* <Pagination pageNumber={page ? +page : 1} isNext={result.isNext} /> */}
+        <Pagination pageNumber={page ? +page : 1} isNext={result.isNext} />
       </div>
     </div>
   )
