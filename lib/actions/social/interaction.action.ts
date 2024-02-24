@@ -7,11 +7,13 @@ export async function viewQuestion(params: ViewQuestionParams) {
   try {
     const { questionId, userId } = params
 
+    // Update view count for the question
     await prisma.question.update({
       where: { id: questionId },
       data: { views: { increment: 1 } },
     })
 
+    // Check if user viewed question before
     if (userId) {
       const existingInteraction = await prisma.interaction.findFirst({
         where: {
@@ -21,6 +23,8 @@ export async function viewQuestion(params: ViewQuestionParams) {
         },
       })
       if (existingInteraction) return
+
+      // Creating interaction
       await prisma.interaction.create({
         data: {
           userId,

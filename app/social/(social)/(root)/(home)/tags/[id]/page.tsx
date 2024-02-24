@@ -36,7 +36,7 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
           route={`social//tags/${params.id}`}
           iconPosition="left"
           imgSrc={SearchImage}
-          placeholder="جست‌وجوی سوال تگ"
+          placeholder="جست‌وجوی تگ"
           otherClasses="flex-1"
         />
 
