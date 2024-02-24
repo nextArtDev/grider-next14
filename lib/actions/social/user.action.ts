@@ -216,118 +216,24 @@ export async function getUserInfo(params: GetUserByIdParams) {
 
     const { userId } = params
 
-    // const user = await User.findOne({ userId })
-
-    // if (!user) return
-
-    // const totalQuestions = await Question.countDocuments({ author: user._id })
-    // const totalAnswers = await Answer.countDocuments({ author: user._id })
-
-    // const [questionUpvotes] = await Question.aggregate([
-    //   { $match: { author: user._id } },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       upvotes: { $size: '$upvotes' },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       totalUpvotes: { $sum: '$upvotes' },
-    //     },
-    //   },
-    // ])
-
-    // const [answerUpvotes] = await Answer.aggregate([
-    //   { $match: { author: user._id } },
-    //   {
-    //     $project: {
-    //       _id: 0,
-    //       upvotes: { $size: '$upvotes' },
-    //     },
-    //   },
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       totalUpvotes: { $sum: '$upvotes' },
-    //     },
-    //   },
-    // ])
-
-    // const [questionViews] = await Answer.aggregate([
-    //   { $match: { author: user._id } },
-
-    //   {
-    //     $group: {
-    //       _id: null,
-    //       totalViews: { $sum: '$views' },
-    //     },
-    //   },
-    // ])
-
-    // const criteria = [
-    //   { type: 'QUESTION_COUNT' as BadgeCriteriaType, count: totalQuestions },
-    //   { type: 'ANSWER_COUNT' as BadgeCriteriaType, count: totalAnswers },
-    //   {
-    //     type: 'QUESTION_UPVOTES' as BadgeCriteriaType,
-    //     count: questionUpvotes?.totalUpvotes || 0,
-    //   },
-    //   {
-    //     type: 'ANSWER_UPVOTES' as BadgeCriteriaType,
-    //     count: answerUpvotes?.totalUpvotes || 0,
-    //   },
-    //   {
-    //     type: 'TOTAL_VIEWS' as BadgeCriteriaType,
-    //     count: questionViews?.totalViews || 0,
-    //   },
-    // ]
-
-    // const badgeCounts = assignBadges({ criteria })
-
     const user = await prisma.user.findUnique({
       where: {
         id: userId,
       },
+      include: { image: { select: { url: true } } },
     })
 
     if (!user) return
-
     const totalQuestions = await prisma.question.count({
       where: {
         authorId: user.id,
       },
     })
-
     const totalAnswers = await prisma.answer.count({
       where: {
         authorId: user.id,
       },
     })
-
-    // const questionUpvotes = await prisma.question.aggregate({
-    //   where: {
-    //     authorId: user.id,
-    //   },
-    //   _count: {
-
-    //     upvoters: true,
-    //     where: {
-    //       upvoters: {
-    //         some: {
-    //           id: {
-    //             in: prisma.user.findMany({
-    //               select: {
-    //                 id: true,
-    //               },
-    //             }),
-    //           },
-    //         },
-    //       },
-    //     },
-    //   },
-    // })
-
     const questionUpvotes = await prisma.question.count({
       where: {
         authorId: user.id,
@@ -336,7 +242,6 @@ export async function getUserInfo(params: GetUserByIdParams) {
         },
       },
     })
-
     const answerUpvotes = await prisma.answer.count({
       where: {
         authorId: user.id,
