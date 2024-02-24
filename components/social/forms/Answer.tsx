@@ -1,16 +1,24 @@
 'use client'
 import { FC, useRef, useState } from 'react'
-import { Form, FormControl, FormField, FormItem, FormMessage } from '../ui/form'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form'
 import { useForm } from 'react-hook-form'
 import { AnswerSchema } from '@/lib/social-validations'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Editor } from '@tinymce/tinymce-react'
-import { Button } from '../ui/button'
+import { Button } from '@/components/ui/button'
+// import { Editor } from '@tinymce/tinymce-react'
+// import { createAnswer } from '@/lib/actions/answer.actions'
+// import { useTheme } from '@/context/ThemeProvider'
 import Image from 'next/image'
-import { createAnswer } from '@/lib/actions/answer.actions'
 import { redirect, usePathname, useRouter } from 'next/navigation'
-import { useTheme } from '@/context/ThemeProvider'
+import TipTap from '../tiptap/TipTap'
+import { createAnswer } from '@/lib/actions/social/answer.actions'
 
 interface AnswerProps {
   question: string
@@ -19,7 +27,7 @@ interface AnswerProps {
 }
 
 const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
-  const { mode } = useTheme()
+  // const { mode } = useTheme()
   const pathname = usePathname()
   const router = useRouter()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -49,7 +57,7 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
 
         editor.setContent('')
       }
-      router.push('/')
+      router.push('/social')
     } catch (error) {
       console.log(error)
     } finally {
@@ -60,10 +68,10 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
     <div className="py-4">
       <div className="flex flex-col justify-between gap-5 py-4 sm:flex-row sm:items-center sm:gap-2">
         <h4 className="mx-auto py-4 text-2xl font-semibold">
-          جواب خود را اینجا بنویسید:
+          نظر خود را بنویسید
         </h4>
       </div>
-      <Button
+      {/* <Button
         variant={'outline'}
         className=" metalize gap-1.5 rounded-md bg-slate-500 px-4 py-2.5 text-slate-100 shadow-none "
         onClick={() => {}}
@@ -76,7 +84,7 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
           className="object-contain"
         />
         تولید جواب با هوش مصنوعی
-      </Button>
+      </Button> */}
       <Form {...form}>
         <form
           className="mt-6 flex w-full flex-col gap-10"
@@ -88,7 +96,8 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
             render={({ field }) => (
               <FormItem className="flex w-full flex-col gap-3 ">
                 <FormControl className="mt-3.5">
-                  <Editor
+                  <TipTap description={field.value} onChange={field.onChange} />
+                  {/* <Editor
                     apiKey={process.env.NEXT_PUBLIC_TINY_EDITOR_API_KEY}
                     // @ts-ignore
                     onInit={(evt, editor) => (editorRef.current = editor)}
@@ -124,7 +133,7 @@ const Answer: FC<AnswerProps> = ({ question, questionId, authorId }) => {
                       skin: mode === 'dark' ? 'oxide-dark' : 'oxide',
                       content_css: mode === 'dark' ? 'dark' : 'light',
                     }}
-                  />
+                  /> */}
                 </FormControl>
 
                 <FormMessage className="text-red-500" />

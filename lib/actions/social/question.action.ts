@@ -147,16 +147,7 @@ export async function createQuestion(params: CreateQuestionParams) {
 
 export async function getQuestionById(params: GetQuestionByIdParams) {
   try {
-    // await connectToDatabase()
-
     const { questionId } = params
-    // const question = await Question.findById(questionId)
-    //   .populate({ path: 'tags', model: Tag, select: 'id name' })
-    //   .populate({
-    //     path: 'author',
-    //     model: User,
-    //     select: 'id userId name picture',
-    //   })
 
     const question = await prisma.question.findFirst({
       where: { id: questionId },
@@ -168,11 +159,11 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
           },
         },
         author: {
-          select: {
-            id: true,
-            name: true,
-            // picture: true,
-          },
+          // select: {
+          //   id: true,
+          //   name: true,
+          //   // picture: true,
+          // },
           include: {
             image: { select: { url: true } },
           },

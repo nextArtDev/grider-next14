@@ -26,15 +26,8 @@ import { revalidatePath } from 'next/cache'
 // }
 export async function createAnswer(params: CreateAnswerParams) {
   try {
-    // connectToDatabase()
-
     const { content, author, question, path } = params
 
-    // const newAnswer = await Answer.create({
-    //   content,
-    //   author,
-    //   question,
-    // })
     const newAnswer = await prisma.answer.create({
       data: {
         content,
@@ -42,12 +35,7 @@ export async function createAnswer(params: CreateAnswerParams) {
         questionId: question,
       },
     })
-
     // Add the answer to the question's answers array
-
-    // const questionObject = await Question.findByIdAndUpdate(question, {
-    //   $push: { answers: newAnswer.id },
-    // })
     const questionObject = await prisma.question.update({
       where: { id: question },
       data: {
@@ -60,18 +48,6 @@ export async function createAnswer(params: CreateAnswerParams) {
       include: { tags: true },
     })
     if (!questionObject) throw Error('سوال حذف شده است.')
-    // console.log({ questionObject })
-    // console.log(questionObject.tags.map((tag) => tag.id))
-    // Update the question to push the new answer
-
-    // await Interaction.create({
-    //   user: author,
-    //   action: 'answer',
-    //   question,
-    //   answer: newAnswer.id,
-    //   tags: questionObject.tags,
-    // })
-    // await User.findByIdAndUpdate(author, { $inc: { reputation: 10 } })
     await prisma.interaction.create({
       data: {
         answerId: newAnswer.id,

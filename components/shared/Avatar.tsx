@@ -5,9 +5,10 @@ import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar'
 
 interface AvatarProps {
   src?: string | null | undefined
+  alt?: string
 }
 
-const UserAvatar: FC<AvatarProps> = ({ src }) => {
+const UserAvatar: FC<AvatarProps> = ({ src, alt }) => {
   if (src) {
     return (
       // <Image
@@ -18,7 +19,7 @@ const UserAvatar: FC<AvatarProps> = ({ src }) => {
       //   height={30}
       // />
       <Avatar>
-        <AvatarImage className="object-cover" src={src} alt="Avatar" />
+        <AvatarImage className="object-cover" src={src} alt={alt || 'Avatar'} />
         <AvatarFallback>کاربر</AvatarFallback>
       </Avatar>
     )
