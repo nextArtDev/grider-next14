@@ -102,10 +102,8 @@ export async function getAllUsers(params: GetAllUsersParams) {
 
 export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
   try {
-    // connectToDatabase()
-
     const { userId, questionId, path } = params
-    // const user = await User.findById({ userId })
+
     const user = await prisma.user.findFirst({
       where: {
         id: userId,
@@ -115,9 +113,6 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
     if (!user) {
       throw new Error('User not found')
     }
-
-    // const isQuestionSaved = user.saved.includes(questionId)
-
     const isQuestionSaved = await prisma.user.findFirst({
       where: { id: userId },
       select: {
@@ -127,38 +122,12 @@ export async function toggleSaveQuestion(params: ToggleSaveQuestionParams) {
       },
     })
 
-    // console.log(isQuestionSaved?.saved.length)
-    // if (isQuestionSaved) {
-    //   // remove question from saved
-    //   await User.findByIdAndUpdate(
-    //     userId,
-    //     { $pull: { saved: questionId } },
-    //     { new: true }
-    //   )
-    // } else {
-    //   await User.findByIdAndUpdate(
-    //     userId,
-    //     { $addToSet: { saved: questionId } },
-    //     { new: true }
-    //   )
-    // }
     if (isQuestionSaved?.saved.length) {
-      // remove question from saved
-      // await User.findByIdAndUpdate(
-      //   userId,
-      //   { $pull: { saved: questionId } },
-      //   { new: true }
-      // )
       await prisma.user.update({
         where: { id: userId },
         data: { saved: { disconnect: { id: questionId } } },
       })
     } else {
-      // await User.findByIdAndUpdate(
-      //   userId,
-      //   { $addToSet: { saved: questionId } },
-      //   { new: true }
-      // )
       await prisma.user.update({
         where: { id: userId },
         data: { saved: { connect: { id: questionId } } },

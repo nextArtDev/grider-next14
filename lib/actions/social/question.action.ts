@@ -183,26 +183,9 @@ export async function getQuestionById(params: GetQuestionByIdParams) {
 
 export async function upvoteQuestion(params: QuestionVoteParams) {
   try {
-    // connectToDatabase()
-
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params
 
     let updateQuery = {}
-
-    // if (hasupVoted) {
-    //   updateQuery = { $pull: { upvotes: userId } }
-    // } else if (hasdownVoted) {
-    //   updateQuery = {
-    //     $pull: { downvotes: userId },
-    //     $push: { upvotes: userId },
-    //   }
-    // } else {
-    //   updateQuery = {
-    //     $addToSet: {
-    //       upvotes: userId,
-    //     },
-    //   }
-    // }
     if (hasupVoted) {
       updateQuery = { upvoters: { disconnect: { id: userId } } }
     } else if (hasdownVoted) {
@@ -215,8 +198,6 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
         upvoters: { connect: { id: userId } },
       }
     }
-    // const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
-    // Update the question to reflect the vote changes
     const question = await prisma.question.update({
       where: { id: questionId },
       include: { upvoters: true },
@@ -230,15 +211,6 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
       throw new Error('Question not Found')
     }
 
-    // Increment authors reputation by +1/-1 for upvoting/revoking an upvote to a question
-    // await User.findByIdAndUpdate(userId, {
-    //   $inc: { reputation: hasupVoted ? -1 : 1 },
-    // })
-
-    // await User.findByIdAndUpdate(question.author, {
-    //   $inc: { reputation: hasupVoted ? -10 : 10 },
-    // })
-    // Increment author's reputation based on the vote action
     await prisma.user.update({
       where: { id: question.authorId },
       data: { reputation: { increment: hasupVoted ? -1 : 1 } },
@@ -251,7 +223,6 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
     })
 
     revalidatePath(path)
-    // Increment authors reputation
   } catch (error) {
     console.log(error)
     throw error
@@ -260,26 +231,10 @@ export async function upvoteQuestion(params: QuestionVoteParams) {
 
 export async function downvoteQuestion(params: QuestionVoteParams) {
   try {
-    // connectToDatabase()
-
     const { questionId, userId, hasupVoted, hasdownVoted, path } = params
 
     let updateQuery = {}
 
-    // if (hasdownVoted) {
-    //   updateQuery = { $pull: { downvote: userId } }
-    // } else if (hasdownVoted) {
-    //   updateQuery = {
-    //     $push: { downvotes: userId },
-    //     $pull: { upvotes: userId },
-    //   }
-    // } else {
-    //   updateQuery = {
-    //     $addToSet: {
-    //       downvotes: userId,
-    //     },
-    //   }
-    // }
     if (hasdownVoted) {
       updateQuery = { downvoters: { disconnect: { id: userId } } }
     } else if (hasupVoted) {
@@ -292,9 +247,7 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
         downvoters: { connect: { id: userId } },
       }
     }
-    // const question = await Question.findByIdAndUpdate(questionId, updateQuery, {
-    //   new: true,
-    // })
+
     const question = await prisma.question.update({
       where: { id: questionId },
       include: { downvoters: true },
@@ -308,13 +261,6 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
       throw new Error('Question not Found')
     }
     // Increment authors reputation
-    // await User.findByIdAndUpdate(userId, {
-    //   $inc: { reputation: hasdownVoted ? -2 : 2 },
-    // })
-
-    // await User.findByIdAndUpdate(question.author, {
-    //   $inc: { reputation: hasdownVoted ? -10 : 10 },
-    // })
     await prisma.user.update({
       where: { id: question.authorId },
       data: { reputation: { increment: hasdownVoted ? -2 : 2 } },

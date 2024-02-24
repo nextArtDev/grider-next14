@@ -6,7 +6,18 @@
 import Image from 'next/image'
 import { usePathname, useRouter } from 'next/navigation'
 import { FC, useEffect } from 'react'
-import { toast } from '../ui/use-toast'
+
+import { toggleSaveQuestion } from '@/lib/actions/social/user.action'
+import {
+  downvoteQuestion,
+  upvoteQuestion,
+} from '@/lib/actions/social/question.action'
+import {
+  downvoteAnswer,
+  upvoteAnswer,
+} from '@/lib/actions/social/answer.actions'
+import { toast } from 'sonner'
+import { viewQuestion } from '@/lib/actions/social/interaction.action'
 
 interface VotesProps {
   type: string
@@ -33,83 +44,79 @@ const Votes: FC<VotesProps> = ({
   const router = useRouter()
 
   const handleSave = async () => {
-    // await toggleSaveQuestion({
-    //   userId,
-    //   questionId: itemId,
-    //   path: pathname,
-    // })
-    toast({
-      title: `سوال ${
-        !hasSaved ? 'در کالکشن شما ذخیره شد' : 'از ذخیره‌شده‌های شما حذف شد'
-      } .`,
-      variant: !hasSaved ? 'default' : 'destructive',
+    await toggleSaveQuestion({
+      userId,
+      questionId: itemId,
+      path: pathname,
     })
+    if (!hasSaved) {
+      return toast.success('سوال در کالکشن شما ذخیره شد.')
+    } else if (hasSaved) {
+      return toast.error('سوال از کالشن شما حذف شد')
+    }
   }
   const handleVote = async (action: string) => {
-    if (!userId)
-      return toast({
-        title: 'لطفا وارد حساب خود شوید.',
-        description: 'شما برای انجام این فرایند باید حساب کاربری داشته باشید.',
-        variant: 'destructive',
-      })
+    if (!userId) return toast.error('لطفا وارد حساب خود شوید.')
     if (action === 'upvote') {
       if (type === 'Question') {
-        // await upvoteQuestion({
-        //   questionId: itemId,
-        //   userId: userId,
-        //   hasdownVoted,
-        //   hasupVoted,
-        //   path: pathname,
-        // })
+        await upvoteQuestion({
+          questionId: itemId,
+          userId: userId,
+          hasdownVoted,
+          hasupVoted,
+          path: pathname,
+        })
       } else if (type === 'Answer') {
-        // await upvoteAnswer({
-        //   answerId: itemId,
-        //   userId: userId,
-        //   hasdownVoted,
-        //   hasupVoted,
-        //   path: pathname,
-        // })
+        await upvoteAnswer({
+          answerId: itemId,
+          userId: userId,
+          hasdownVoted,
+          hasupVoted,
+          path: pathname,
+        })
       }
 
       // todo: show a toast
-      return toast({
-        title: `رای مثبت ${!hasupVoted ? 'اعمال شد' : 'حذف شد'}`,
-        variant: !hasupVoted ? 'default' : 'destructive',
-      })
+      if (!hasupVoted) {
+        return toast.success('رای مثبت شما اعمال شد.')
+      } else if (hasupVoted) {
+        return toast.error('رای مثبت شما حذف شد.')
+      }
     }
     if (action === 'downvote') {
       if (type === 'Question') {
-        // await downvoteQuestion({
-        //   questionId: itemId,
-        //   userId,
-        //   hasdownVoted,
-        //   hasupVoted,
-        //   path: pathname,
-        // })
+        await downvoteQuestion({
+          questionId: itemId,
+          userId,
+          hasdownVoted,
+          hasupVoted,
+          path: pathname,
+        })
       } else if (type === 'Answer') {
-        // await downvoteAnswer({
-        //   answerId: itemId,
-        //   userId,
-        //   hasdownVoted,
-        //   hasupVoted,
-        //   path: pathname,
-        // })
+        await downvoteAnswer({
+          answerId: itemId,
+          userId,
+          hasdownVoted,
+          hasupVoted,
+          path: pathname,
+        })
       }
 
       // todo: show a toast
-      return toast({
-        title: `رای منفی ${!hasdownVoted ? 'اعمال شد' : 'حذف شد'}`,
-        variant: !hasdownVoted ? 'default' : 'destructive',
-      })
+      if (!hasdownVoted) {
+        return toast.success('رای منفی شما اعمال شد.')
+      } else if (hasdownVoted) {
+        return toast.error('رای منفی شما حذف شد.')
+      }
     }
   }
 
   // Views: When some one viewed, whenever Vote component loads
   useEffect(() => {
-    // viewQuestion({
-    //   questionId: itemId,
-    //   userId: userId || undefined,
-    // })
+    viewQuestion({
+      questionId: itemId,
+      userId: userId || undefined,
+    })
   }, [itemId, userId, pathname, router])
 
   return (
