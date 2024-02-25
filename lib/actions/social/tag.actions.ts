@@ -153,13 +153,6 @@ export async function getQuestionsByTagId(params: GetQuestionsByTagIdParams) {
 
 export async function getTopPopularTags() {
   try {
-    // connectToDatabase()
-
-    // const popularTags = await Tag.aggregate([
-    //   { $project: { name: 1, numberOfQuestions: { $size: '$questions' } } },
-    //   { $sort: { numberOfQuestions: -1 } },
-    //   { $limit: 5 },
-    // ])
     // Get the top 5 popular tags based on the number of questions
     const populars = await prisma.tag.findMany({
       where: {
@@ -174,14 +167,6 @@ export async function getTopPopularTags() {
           _count: 'desc',
         },
       },
-
-      // select: {
-      //   name: true,
-      //   questions: true,
-      //   // {
-      //   //   _count: true,
-      //   // },
-      // },
     })
 
     // Map the result to include the name and the number of questions

@@ -413,15 +413,6 @@ export async function editQuestion(params: EditQuestionParams) {
 
 export async function getHotQuestions() {
   try {
-    // connectToDatabase()
-
-    // const hotQuestions = await Question.find({})
-    //   .sort({
-    //     views: -1,
-    //     upvotes: -1,
-    //   })
-    //   .limit(5)
-
     const hotQuestions = await prisma.question.findMany({
       orderBy: [{ upvoters: { _count: 'desc' } }, { views: 'desc' }],
       take: 5,

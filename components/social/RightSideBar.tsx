@@ -6,41 +6,43 @@ import RenderTag from './RenderTag'
 // import { getHotQuestions } from '@/lib/actions/question.action'
 // import { getTopPopularTags } from '@/lib/actions/tag.actions'
 import { ChevronLeft } from 'lucide-react'
+import { getHotQuestions } from '@/lib/actions/social/question.action'
+import { getTopPopularTags } from '@/lib/actions/social/tag.actions'
 interface RightSideBarProps {}
 
-const hotQuestions = [
-  {
-    id: 1,
-    title:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
-  },
-  {
-    id: 2,
-    title:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
-  },
-  {
-    id: 3,
-    title:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
-  },
-  {
-    id: 4,
-    title:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
-  },
-]
+// const hotQuestions = [
+//   {
+//     id: 1,
+//     title:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
+//   },
+//   {
+//     id: 2,
+//     title:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
+//   },
+//   {
+//     id: 3,
+//     title:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
+//   },
+//   {
+//     id: 4,
+//     title:
+//       'Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit, necessitatibus?',
+//   },
+// ]
 
-const PopularTags = [
-  { id: '1', name: 'javascript', totalQuestios: 5 },
-  { id: '2', name: 'nextjs', totalQuestios: 5 },
-  { id: '3', name: 'nodejs', totalQuestios: 4 },
-  { id: '4', name: 'threejs', totalQuestios: 2 },
-  { id: '5', name: 'mongodb', totalQuestios: 5 },
-]
+// const PopularTags = [
+//   { id: '1', name: 'javascript', totalQuestios: 5 },
+//   { id: '2', name: 'nextjs', totalQuestios: 5 },
+//   { id: '3', name: 'nodejs', totalQuestios: 4 },
+//   { id: '4', name: 'threejs', totalQuestios: 2 },
+//   { id: '5', name: 'mongodb', totalQuestios: 5 },
+//  ]
 const RightSideBar: FC<RightSideBarProps> = async () => {
-  // const hotQuestions = await getHotQuestions()
-  // const PopularTags = await getTopPopularTags()
+  const hotQuestions = await getHotQuestions()
+  const PopularTags = await getTopPopularTags()
 
   // console.log(PopularTags)
 
@@ -75,8 +77,8 @@ const RightSideBar: FC<RightSideBarProps> = async () => {
               key={tag.id}
               id={tag.id.toString()}
               name={tag.name}
-              // totalQuestions={tag.numberOfQuestions}
-              totalQuestions={tag.totalQuestios}
+              totalQuestions={tag.numberOfQuestions}
+              // totalQuestions={tag.totalQuestios}
               showCount
             />
           ))}
