@@ -14,9 +14,9 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { FC, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import * as z from 'zod'
-import { Textarea } from '../ui/textarea'
+import { Textarea } from '@/components/ui/textarea'
 import { usePathname, useRouter } from 'next/navigation'
-import { updateUser } from '@/lib/actions/user.action'
+import { updateUser } from '@/lib/actions/social/user.action'
 
 interface ProfileProps {
   userId: string
@@ -28,7 +28,7 @@ const Profile: FC<ProfileProps> = ({ userId, user }) => {
   const router = useRouter()
   const pathname = usePathname()
   const parsedUser = JSON.parse(user)
-
+  // console.log(parsedUser)
   // 1. Define your form.
   const form = useForm<z.infer<typeof ProfileSchema>>({
     resolver: zodResolver(ProfileSchema),
@@ -83,7 +83,7 @@ const Profile: FC<ProfileProps> = ({ userId, user }) => {
                 <Input
                   placeholder="نام"
                   {...field}
-                  className="bg-slate-400 min-h-[56px] border placeholder:text-slate-800"
+                  className=" min-h-[56px] border "
                 />
               </FormControl>
 
@@ -123,7 +123,7 @@ const Profile: FC<ProfileProps> = ({ userId, user }) => {
                   type="url"
                   placeholder="وبسایت"
                   {...field}
-                  className="bg-slate-400 min-h-[56px] border placeholder:text-slate-800"
+                  className=" min-h-[56px] border "
                 />
               </FormControl>
 
@@ -136,12 +136,12 @@ const Profile: FC<ProfileProps> = ({ userId, user }) => {
           name="location"
           render={({ field }) => (
             <FormItem className="space-y-3.5">
-              <FormLabel>موقعیت</FormLabel>
+              <FormLabel>آدرس</FormLabel>
               <FormControl>
                 <Input
                   placeholder="آدرس"
                   {...field}
-                  className="bg-slate-400 min-h-[56px] border placeholder:text-slate-800"
+                  className="min-h-[56px] border "
                 />
               </FormControl>
 
@@ -159,7 +159,7 @@ const Profile: FC<ProfileProps> = ({ userId, user }) => {
                 <Textarea
                   placeholder="بیوگرافی"
                   {...field}
-                  className="bg-slate-400 min-h-[56px] border placeholder:text-slate-800"
+                  className=" min-h-[56px] border"
                 />
               </FormControl>
 

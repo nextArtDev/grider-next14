@@ -50,7 +50,24 @@ export const ProfileSchema = z.object({
   // })
   // .max(50),
   // username: z.string().min(5).max(50),
-  bio: z.optional(z.string().min(10).max(150)),
-  portfolioWebsite: z.optional(z.string().url()),
-  location: z.optional(z.string().min(3).max(50)),
+  bio: z.string().max(150).optional(),
+  portfolioWebsite: z.string().optional(),
+  // portfolioWebsite: z
+  //   .string()
+  //   .refine(
+  //     (value) => {
+  //       return (
+  //         value === null ||
+  //         value.trim() === '' ||
+  //         /^https?:\/\/\S+$/.test(value)
+  //       )
+  //     },
+  //     {
+  //       message: 'آدرس وبسایت معتبر نیست!',
+  //     }
+  //   )
+  //   .transform((value) => {
+  //     return value === null || value.trim() === '' ? null : value
+  //   }),
+  location: z.string().max(50).optional(),
 })

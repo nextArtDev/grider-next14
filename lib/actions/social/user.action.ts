@@ -24,6 +24,13 @@ export async function getUserByID(params: any) {
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
+      select: {
+        name: true,
+        bio: true,
+        location: true,
+        portfolioWebsite: true,
+        role: true,
+      },
     })
     return user
   } catch (error) {
