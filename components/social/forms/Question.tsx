@@ -24,7 +24,10 @@ import { useRouter, usePathname } from 'next/navigation'
 import { Loader, Trash2 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import Tiptap from '../tiptap/TipTap'
-import { createQuestion } from '@/lib/actions/social/question.action'
+import {
+  createQuestion,
+  editQuestion,
+} from '@/lib/actions/social/question.action'
 // import { useTheme } from '@/context/ThemeProvider'
 
 interface QuestionProps {
@@ -65,12 +68,12 @@ const Question: FC<QuestionProps> = ({ userId, type, questionDetails }) => {
     try {
       // console.log(values)
       if (type === 'Edit') {
-        // await editQuestion({
-        //   questionId: parsedQuestionDetails.question.id,
-        //   title: values.title,
-        //   content: values.explanation,
-        //   path: pathname,
-        // })
+        await editQuestion({
+          questionId: parsedQuestionDetails.question.id,
+          title: values.title,
+          content: values.explanation,
+          path: pathname,
+        })
         router.push(`/social/question/${parsedQuestionDetails.question.id}`)
       } else {
         await createQuestion({

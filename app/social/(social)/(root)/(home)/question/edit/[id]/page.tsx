@@ -22,7 +22,7 @@ const page: FC<ParamsProps> = async ({ params }) => {
 
   return (
     <>
-      <h1 className="text-xl font-bold">ویرایش موضوع</h1>
+      <h1 className="text-xl font-bold">ویرایش بحث</h1>
       <div className="mt-9">
         <Question
           type="Edit"
