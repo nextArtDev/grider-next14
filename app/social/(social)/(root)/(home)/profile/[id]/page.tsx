@@ -104,10 +104,15 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
             <QuestionTab
               searchParams={searchParams}
               userId={userInfo.user.id}
+              userRole={userInfo.user.role}
             />
           </TabsContent>
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
-            <AnswerTab searchParams={searchParams} userId={userInfo.user.id} />
+            <AnswerTab
+              searchParams={searchParams}
+              userId={userInfo.user.id}
+              userRole={userInfo.user.role}
+            />
           </TabsContent>
         </Tabs>
       </div>

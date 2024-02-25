@@ -18,6 +18,7 @@ interface AnswerCardProps {
   // question: Question
   createdAt: Date
   userId?: string
+  role?: string
 }
 
 const AnswerCard: FC<AnswerCardProps> = ({
@@ -27,8 +28,9 @@ const AnswerCard: FC<AnswerCardProps> = ({
   question,
   createdAt,
   userId,
+  role,
 }) => {
-  const showActionButtons = userId && userId === author.id
+  const showActionButtons = (userId && userId === author.id) || role === 'ADMIN'
   return (
     <Link
       href={`/social/question/${question?.id}/#${id}`}

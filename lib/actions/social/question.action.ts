@@ -281,48 +281,7 @@ export async function downvoteQuestion(params: QuestionVoteParams) {
 
 export async function deleteQuestion(params: DeleteQuestionParams) {
   try {
-    // connectToDatabase()
-
     const { questionId, path } = params
-
-    // await Question.deleteOne({ id: questionId })
-    // await Answer.deleteMany({ question: questionId })
-    // await Interaction.deleteMany({ question: questionId })
-    // await Tag.updateMany(
-    //   { questions: questionId },
-    //   { $pull: { questions: questionId } }
-    // )
-
-    // const tagsToDisconnect = [{ id: 'tag_id_1' }, { id: 'tag_id_2' }] // Replace with actual tag IDs
-
-    // const tagIds = tagsToDisconnect.map((tag) => tag.id)
-
-    // const questionUpdate = await prisma.question.update({
-    //   where: { id: questionId },
-    //   data: {
-    //     tags: {
-    //       disconnect: tagIds.map((id) => ({ id })),
-    //     },
-    //   },
-    // })
-    // const questionId = 'your_question_id'
-    // const tagsToDisconnect = ['tag_id_1', 'tag_id_2']
-    // // Replace with actual tag IDs
-
-    // const questionUpdate = await
-    // prisma.question.update({
-    //   where: {
-    //     id: questionId,
-    //   },
-
-    //   data: {
-    //     tags: {
-    //       disconnect: tagsToDisconnect.map((tagId) => ({
-    //         id: tagId,
-    //       })),
-    //     },
-    //   },
-    // })
 
     // TAGS
 
@@ -363,11 +322,6 @@ export async function deleteQuestion(params: DeleteQuestionParams) {
     //   where: { id: { in: answersToDisconnect?.map((t) => t.id) } },
     //   include: { Question: { select: { id: true } } },
     // })
-    // // console.log(answersQuestions.map((answersQuestion) => answersQuestion.id))
-
-    // const answerIds = answersQuestions.map(
-    //   (answersQuestion) => answersQuestion.id
-    // )
 
     // const questionAnswerUpdate = await prisma.question.update({
     //   where: { id: questionId },

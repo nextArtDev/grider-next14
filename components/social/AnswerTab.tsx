@@ -6,12 +6,18 @@ import Pagination from './Pagination'
 import AnswerCard from './card/AnswerCard'
 import { SearchParamsProps } from '@/types/social'
 import { getUserAnswers } from '@/lib/actions/social/user.action'
+import { Role } from '@prisma/client'
 
 interface AnswerTabProps extends SearchParamsProps {
   userId: string
+  userRole: Role
 }
 
-const AnswerTab: FC<AnswerTabProps> = async ({ userId, searchParams }) => {
+const AnswerTab: FC<AnswerTabProps> = async ({
+  userId,
+  searchParams,
+  userRole,
+}) => {
   const result = await getUserAnswers({
     userId,
     page: searchParams.page ? +searchParams.page : 1,
@@ -27,6 +33,7 @@ const AnswerTab: FC<AnswerTabProps> = async ({ userId, searchParams }) => {
           author={item.author}
           upvotes={item.upvoters}
           createdAt={item.created_at}
+          role={userRole}
         />
       ))}
       <Pagination

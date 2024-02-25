@@ -22,6 +22,7 @@ interface QuestionCardProps {
   answers: Array<object>
   createdAt: Date
   userId?: string
+  role?: string
 }
 
 const QuestionCard: FC<QuestionCardProps> = ({
@@ -34,8 +35,9 @@ const QuestionCard: FC<QuestionCardProps> = ({
   answers,
   createdAt,
   userId,
+  role,
 }) => {
-  const showActionButtons = userId && userId === author.id
+  const showActionButtons = (userId && userId === author.id) || role === 'ADMIN'
   return (
     <section className="rounded-[10px] p-9  sm:px-11 ">
       <div className="flex flex-col-reverse items-start justify-between gap-5 sm:flex-row">

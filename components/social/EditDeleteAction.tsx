@@ -1,4 +1,6 @@
 'use client'
+import { deleteAnswer } from '@/lib/actions/social/answer.actions'
+import { deleteQuestion } from '@/lib/actions/social/question.action'
 // import { deleteAnswer } from '@/lib/actions/answer.actions'
 // import { deleteQuestion } from '@/lib/actions/question.action'
 import Image from 'next/image'
@@ -14,18 +16,18 @@ const EditDeleteAction: FC<EditDeleteActionProps> = ({ type, itemId }) => {
   const pathname = usePathname()
   const router = useRouter()
   const handleEdit = () => {
-    router.push(`/question/edit/${itemId}`)
+    router.push(`/social/question/edit/${itemId}`)
   }
   const handleDelete = async () => {
     if (type === 'Question') {
       // Delete question
-      // await deleteQuestion({ questionId: itemId, path: pathname })
+      await deleteQuestion({ questionId: itemId, path: pathname })
     } else if (type === 'Answer') {
       // Delete answer
-      // await deleteAnswer({
-      //   answerId: itemId,
-      //   path: pathname,
-      // })
+      await deleteAnswer({
+        answerId: itemId,
+        path: pathname,
+      })
     }
   }
   return (

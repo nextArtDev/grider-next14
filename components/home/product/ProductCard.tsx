@@ -26,7 +26,11 @@ const ProductCard: FC<ProductCardProps> = ({ products }) => {
 
         <div className=" mx-4 grid grid-cols-1 sm:mx-0 md:grid-cols-3 lg:grid-cols-4">
           {products.map((product) => (
-            <Link key={product.id} href={`/products/${product.id}`}>
+            <Link
+              scroll={false}
+              key={product.id}
+              href={`/products/${product.id}`}
+            >
               <FlipCover
                 url={product.images?.[0].url}
                 title={product.title}
