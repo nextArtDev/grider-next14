@@ -93,6 +93,23 @@ export const getAllProducts = cache(
     }
 
     let orderByOptions: any = {}
+    switch (filter) {
+      case 'newest':
+        orderByOptions = { createdAt: 'desc' }
+        break
+      case 'ordered':
+        orderByOptions = {
+          orderItems: {
+            _count: 'desc',
+          },
+        }
+        break
+      case 'ordered':
+        orderByOptions = { createdAt: 'asc' }
+        break
+      default:
+        break
+    }
 
     const products = prisma.product.findMany({
       where: {
@@ -104,10 +121,9 @@ export const getAllProducts = cache(
         writer: { select: { name: true } },
         translator: { select: { name: true } },
         category: true,
+        Reviews: true,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
+      orderBy: orderByOptions,
     })
 
     return products

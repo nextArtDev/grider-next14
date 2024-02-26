@@ -8,9 +8,11 @@ import { HomePageFilters } from '@/lib/constants'
 import { Button } from '@/components/ui/button'
 import { fromUrlQuery } from '@/lib/socialUtils'
 
-interface HomeFiltersProps {}
+interface HomeFiltersProps {
+  filters: { name: string; value: string }[]
+}
 
-const HomeFilters: FC<HomeFiltersProps> = () => {
+const HomeFilters: FC<HomeFiltersProps> = ({ filters }) => {
   const searchParams = useSearchParams()
   const router = useRouter()
 
@@ -30,7 +32,7 @@ const HomeFilters: FC<HomeFiltersProps> = () => {
       const newUrl = fromUrlQuery({
         params: searchParams.toString(),
         key: 'filter',
-        value: item.toLowerCase(),
+        value: item,
       })
       router.push(newUrl, { scroll: false })
     }
@@ -39,7 +41,7 @@ const HomeFilters: FC<HomeFiltersProps> = () => {
   // const isActive = 'frequent'
   return (
     <section className="mt-10 hidden flex-wrap gap-3 md:flex">
-      {HomePageFilters.map((item) => (
+      {filters.map((item) => (
         <Button
           key={item.value}
           onClick={() => handleTypeClick(item.value)}

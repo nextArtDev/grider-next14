@@ -240,3 +240,45 @@ export const GlobalSearchFilters = [
     value: 'tag',
   },
 ]
+
+export const ProductPageFilters = [
+  {
+    name: 'پرفروشترین',
+    value: 'ordered',
+  },
+  {
+    name: 'جدیدترین',
+    value: 'newest',
+  },
+  {
+    name: 'پیشنهادی',
+    value: 'recommended',
+  },
+  // {
+  //   name: 'محبوبترین',
+  //   value: 'popular',
+  // },
+  {
+    name: 'قدیمی‌ترین',
+    value: 'oldest',
+  },
+]
+
+export const WebsiteSearchFilters = [
+  {
+    name: 'عنوان کتاب',
+    value: 'book_title',
+  },
+  {
+    name: 'نویسنده',
+    value: 'writer',
+  },
+  {
+    name: 'دسته‌بندی',
+    value: 'billboard',
+  },
+  {
+    name: 'ناشر',
+    value: 'publisher',
+  },
+]

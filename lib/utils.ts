@@ -1,4 +1,4 @@
-import { Product } from '@prisma/client'
+import { Product, Review } from '@prisma/client'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { SingleProductFullStructure } from './queries/home/products'
@@ -163,4 +163,19 @@ export const removeKeysFromUrlQuery = ({
     },
     { skipNull: true }
   )
+}
+// Calculate average ratings for each product
+export const productsAverageRating = (
+  products: Product & { Reviews: Review[] }[]
+) => {
+  const productsWithAvgRating = products.map((product) => {
+    const totalRating = product.Reviews.reduce(
+      (acc, review) => acc + review.rating,
+      0
+    )
+    const avgRating = totalRating / product.Reviews.length
+    return { avgRating }
+  })
+  // Sort products by average rating in descending order
+  productsWithAvgRating.sort((a, b) => b.avgRating - a.avgRating)
 }

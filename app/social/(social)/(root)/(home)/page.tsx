@@ -119,7 +119,7 @@ export default async function Home({ searchParams }: SearchParamsProps) {
           containerClasses="hidden max-md:flex"
         />
 
-        <HomeFilters />
+        <HomeFilters filters={HomePageFilters} />
 
         <div className="mt-10 flex w-full flex-col gap-6">
           {result?.questions?.length ? (
