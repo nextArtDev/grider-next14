@@ -65,6 +65,12 @@ export type ContributorWithImage = Contributor & {
   image: { url: string } | null
 }
 
+interface Query {
+  OR?: {
+    name?: { contains: string }
+    bio?: { contains: string }
+  }[]
+}
 export const getAllContributorsWithoutRole = cache(
   ({
     page = 1,
@@ -80,7 +86,7 @@ export const getAllContributorsWithoutRole = cache(
     // orderBy?: OrderByType
   }): Promise<ContributorWithImage[] | null> => {
     const skipAmount = (page - 1) * pageSize
-    const query: any = {} // This will be used to build the Prisma query
+    const query: Query = {} // This will be used to build the Prisma query
 
     if (searchQuery) {
       query.OR = [

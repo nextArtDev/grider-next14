@@ -52,6 +52,15 @@ export const getFeaturedProducts = cache(
     return products
   }
 )
+interface Query {
+  OR?: {
+    title?: { contains: string }
+    subTitle?: { contains: string }
+    description?: { contains: string }
+    originalTitle?: { contains: string }
+  }[]
+}
+
 export const getAllProducts = cache(
   ({
     page = 1,
@@ -72,7 +81,7 @@ export const getAllProducts = cache(
     | null
   > => {
     const skipAmount = (page - 1) * pageSize
-    const query: any = {} // This will be used to build the Prisma query
+    const query: Query = {} // This will be used to build the Prisma query
 
     if (searchQuery) {
       query.OR = [

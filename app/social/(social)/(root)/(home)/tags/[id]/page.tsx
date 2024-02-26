@@ -33,7 +33,7 @@ const page: FC<URLProps> = async ({ params, searchParams }) => {
 
       <div className="mt-11 w-full">
         <LocalSearchbar
-          route={`social//tags/${params.id}`}
+          route={`/social/tags/${params.id}`}
           iconPosition="left"
           imgSrc={SearchImage}
           placeholder="جست‌وجوی تگ"

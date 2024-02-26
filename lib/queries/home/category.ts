@@ -13,6 +13,12 @@ export type CategoryFullStructure = CategoryWithImage & {
   products: ProductWithImages[] | null
 }
 
+interface Query {
+  OR?: {
+    name?: { contains: string }
+    description?: { contains: string }
+  }[]
+}
 export const getAllCategories = cache(
   ({
     page = 1,
@@ -28,7 +34,7 @@ export const getAllCategories = cache(
     // orderBy?: OrderByType
   }): Promise<CategoryFullStructure[] | null> => {
     const skipAmount = (page - 1) * pageSize
-    const query: any = {} // This will be used to build the Prisma query
+    const query: Query = {} // This will be used to build the Prisma query
 
     if (searchQuery) {
       query.OR = [
