@@ -66,10 +66,35 @@ export type ContributorWithImage = Contributor & {
 }
 
 export const getAllContributorsWithoutRole = cache(
-  (): Promise<ContributorWithImage[] | null> => {
+  ({
+    page = 1,
+    pageSize = 10,
+    searchQuery,
+    filter,
+  }: // orderBy,
+  {
+    page?: number
+    pageSize?: number
+    searchQuery?: string
+    filter?: string
+    // orderBy?: OrderByType
+  }): Promise<ContributorWithImage[] | null> => {
+    const skipAmount = (page - 1) * pageSize
+    const query: any = {} // This will be used to build the Prisma query
+
+    if (searchQuery) {
+      query.OR = [
+        { name: { contains: searchQuery } },
+        { bio: { contains: searchQuery } },
+      ]
+    }
+
+    let orderByOptions: any = {}
+
     const contributors = prisma.contributor.findMany({
       where: {
         storeId: process.env.STORE_ID,
+        AND: query,
       },
       include: {
         image: { select: { url: true } },

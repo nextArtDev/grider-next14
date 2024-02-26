@@ -53,15 +53,42 @@ export const getFeaturedProducts = cache(
   }
 )
 export const getAllProducts = cache(
-  (): Promise<
+  ({
+    page = 1,
+    pageSize = 10,
+    searchQuery,
+    filter,
+  }: // orderBy,
+  {
+    page?: number
+    pageSize?: number
+    searchQuery?: string
+    filter?: string
+    // orderBy?: OrderByType
+  }): Promise<
     | (ProductWithImages & { category: Category } & {
         writer: Partial<Contributor>[]
       } & { translator: Partial<Contributor>[] })[]
     | null
   > => {
+    const skipAmount = (page - 1) * pageSize
+    const query: any = {} // This will be used to build the Prisma query
+
+    if (searchQuery) {
+      query.OR = [
+        { title: { contains: searchQuery } },
+        { subTitle: { contains: searchQuery } },
+        { description: { contains: searchQuery } },
+        { originalTitle: { contains: searchQuery } },
+      ]
+    }
+
+    let orderByOptions: any = {}
+
     const products = prisma.product.findMany({
       where: {
         storeId: process.env.STORE_ID,
+        AND: query,
       },
       include: {
         images: { select: { url: true } },

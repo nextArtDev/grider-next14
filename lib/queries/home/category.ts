@@ -14,10 +14,34 @@ export type CategoryFullStructure = CategoryWithImage & {
 }
 
 export const getAllCategories = cache(
-  (): Promise<CategoryFullStructure[] | null> => {
+  ({
+    page = 1,
+    pageSize = 10,
+    searchQuery,
+    filter,
+  }: // orderBy,
+  {
+    page?: number
+    pageSize?: number
+    searchQuery?: string
+    filter?: string
+    // orderBy?: OrderByType
+  }): Promise<CategoryFullStructure[] | null> => {
+    const skipAmount = (page - 1) * pageSize
+    const query: any = {} // This will be used to build the Prisma query
+
+    if (searchQuery) {
+      query.OR = [
+        { name: { contains: searchQuery } },
+        { description: { contains: searchQuery } },
+      ]
+    }
+
+    let orderByOptions: any = {}
     const categories = prisma.category.findMany({
       where: {
         storeId: process.env.STORE_ID,
+        AND: query,
       },
       include: {
         image: { select: { url: true } },

@@ -1,9 +1,12 @@
 import ContributorList from '@/components/home/contributors/ContributorList'
 import { getAllContributorsWithoutRole } from '@/lib/queries/home/contributors'
+import { SearchParamsProps } from '@/types/social'
 import React from 'react'
 
-async function page() {
-  const contributors = await getAllContributorsWithoutRole()
+async function page({ searchParams }: SearchParamsProps) {
+  const contributors = await getAllContributorsWithoutRole({
+    searchQuery: searchParams.q,
+  })
   if (!contributors)
     return (
       <p className="w-full h-full flex items-center justify-center text-muted text-2xl">
