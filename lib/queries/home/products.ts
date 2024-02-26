@@ -155,3 +155,31 @@ export const getProductsByCategoryId = cache(
     return products
   }
 )
+
+// Popular Products
+
+export async function getPopularProducts() {
+  try {
+    // Get the top 7 popular tags based on the number of questions
+    const popular = await prisma.product.findMany({
+      where: {},
+      take: 7,
+      include: {
+        images: { select: { url: true } },
+      },
+      orderBy: {
+        orderItems: {
+          _count: 'desc',
+        },
+      },
+    })
+
+    // Map the result to include the name and the number of questions
+
+    return popular
+  } catch (error) {
+    console.log(error)
+
+    throw error
+  }
+}
