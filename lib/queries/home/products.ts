@@ -61,8 +61,17 @@ interface Query {
   }[]
 }
 
+export type ProductsWithImageAndPage = {
+  products:
+    | (ProductWithImages & { category: Category } & {
+        writer: Partial<Contributor>[]
+      } & { translator: Partial<Contributor>[] })[]
+    | null
+  isNext: boolean
+}
+
 export const getAllProducts = cache(
-  ({
+  async ({
     page = 1,
     pageSize = 10,
     searchQuery,
@@ -74,12 +83,7 @@ export const getAllProducts = cache(
     searchQuery?: string
     filter?: string
     // orderBy?: OrderByType
-  }): Promise<
-    | (ProductWithImages & { category: Category } & {
-        writer: Partial<Contributor>[]
-      } & { translator: Partial<Contributor>[] })[]
-    | null
-  > => {
+  }): Promise<ProductsWithImageAndPage> => {
     const skipAmount = (page - 1) * pageSize
     const query: Query = {} // This will be used to build the Prisma query
 
@@ -111,7 +115,7 @@ export const getAllProducts = cache(
         break
     }
 
-    const products = prisma.product.findMany({
+    const products = await prisma.product.findMany({
       where: {
         storeId: process.env.STORE_ID,
         AND: query,
@@ -124,9 +128,15 @@ export const getAllProducts = cache(
         Reviews: true,
       },
       orderBy: orderByOptions,
+      take: pageSize,
+      skip: skipAmount,
     })
 
-    return products
+    const totalProducts = await prisma.product.count({ where: query })
+
+    const isNext = totalProducts > skipAmount + products.length
+
+    return { products: products, isNext }
   }
 )
 

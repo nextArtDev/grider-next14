@@ -65,6 +65,11 @@ export type ContributorWithImage = Contributor & {
   image: { url: string } | null
 }
 
+export type ContributorWithImageAndPage = {
+  contributors: ContributorWithImage[] | null
+  isNext: boolean
+}
+
 interface Query {
   OR?: {
     name?: { contains: string }
@@ -72,9 +77,9 @@ interface Query {
   }[]
 }
 export const getAllContributorsWithoutRole = cache(
-  ({
+  async ({
     page = 1,
-    pageSize = 10,
+    pageSize = 6,
     searchQuery,
     filter,
   }: // orderBy,
@@ -84,7 +89,7 @@ export const getAllContributorsWithoutRole = cache(
     searchQuery?: string
     filter?: string
     // orderBy?: OrderByType
-  }): Promise<ContributorWithImage[] | null> => {
+  }): Promise<ContributorWithImageAndPage> => {
     const skipAmount = (page - 1) * pageSize
     const query: Query = {} // This will be used to build the Prisma query
 
@@ -97,7 +102,7 @@ export const getAllContributorsWithoutRole = cache(
 
     let orderByOptions: any = {}
 
-    const contributors = prisma.contributor.findMany({
+    const contributors = await prisma.contributor.findMany({
       where: {
         storeId: process.env.STORE_ID,
         AND: query,
@@ -108,9 +113,16 @@ export const getAllContributorsWithoutRole = cache(
       orderBy: {
         name: 'asc',
       },
+      take: pageSize,
+      skip: skipAmount,
     })
 
-    return contributors
+    const totalContributors = await prisma.contributor.count({ where: query })
+
+    const isNext = totalContributors > skipAmount + contributors.length
+    // const contributorsToReturn = isNext ? contributors.slice(3) : contributors
+
+    return { contributors: contributors, isNext: isNext }
   }
 )
 
