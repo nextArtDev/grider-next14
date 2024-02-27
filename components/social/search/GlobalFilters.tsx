@@ -43,7 +43,7 @@ const GlobalFilters: FC<GlobalFiltersProps> = ({ filters }) => {
   return (
     <div className=" flex items-center gap-5 px-5">
       <div className="flex items-center gap-6">
-        <p className="font-semibold">نوع:</p>
+        <p className="font-semibold">فیلتر:</p>
         {filters.map((item) => (
           <Button
             key={item.value}

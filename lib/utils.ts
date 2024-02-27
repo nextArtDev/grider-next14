@@ -65,6 +65,25 @@ export function translateSize(input: string): string {
 
   return translationMap[input]
 }
+export function translateGlobalSocialFilterType(input: string): string {
+  const translationMap: { [key: string]: string } = {
+    question: 'سوال',
+    answer: 'جواب',
+    user: 'کاربر',
+    tag: 'تگ',
+  }
+
+  return translationMap[input]
+}
+export function translateGlobalHomeSearchFiltersType(input: string): string {
+  const translationMap: { [key: string]: string } = {
+    product: 'کتاب',
+    contributor: 'نویسنده/مترجم',
+    category: 'دسته‌بندی',
+  }
+
+  return translationMap[input]
+}
 
 export function getFarsiBoolean(value: boolean): string {
   return value ? 'بلی' : 'خیر'

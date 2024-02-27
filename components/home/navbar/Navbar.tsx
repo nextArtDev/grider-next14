@@ -11,6 +11,7 @@ import { HomeIcon, User } from 'lucide-react'
 
 import { FloatingNav } from '@/components/shared/FloatingNavbar'
 import { LuLogIn } from 'react-icons/lu'
+import GlobalSearch from '@/components/social/search/GlobalSearch'
 
 type Props = {}
 const navItems = [
@@ -40,6 +41,9 @@ async function Navbar({}: Props) {
   return (
     <div className="flex justify-between items-center">
       <MobileMenu billboards={billboards} />
+      <div className="relative">
+        <GlobalSearch social={false} />
+      </div>
       <DesktopNavigationMenu
         contributors={contributors}
         billboards={billboards}

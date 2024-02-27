@@ -5,8 +5,16 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { FC, useEffect, useState } from 'react'
 import GlobalFilters from './GlobalFilters'
-import { globalSearch } from '@/lib/actions/social/general.action'
+import {
+  globalHomeSearch,
+  globalSearch,
+} from '@/lib/actions/social/general.action'
 import { GlobalHomeSearchFilters, GlobalSearchFilters } from '@/lib/constants'
+import {
+  translateGlobalHomeSearchFiltersType,
+  translateGlobalSocialFilterType,
+} from '@/lib/utils'
+import { ScrollArea } from '@/components/ui/scroll-area'
 // import { globalSearch } from '@/lib/actions/general.action'
 
 interface GlobalResultProps {
@@ -17,9 +25,9 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
   const searchParams = useSearchParams()
 
   const [result, setResult] = useState([
-    { type: 'question', id: 1, title: 'Next.js' },
-    { type: 'tag', id: 1, title: 'Nextjs' },
-    { type: 'user', id: 1, title: 'jsm' },
+    // { type: 'question', id: 1, title: 'Next.js' },
+    // { type: 'tag', id: 1, title: 'Nextjs' },
+    // { type: 'user', id: 1, title: 'jsm' },
   ])
   const [isLoading, setIsLoading] = useState(false)
 
@@ -32,7 +40,9 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
       setIsLoading(true)
       try {
         // Everything Everywhere all at once
-        const res = await globalSearch({ query: global, type })
+        const res = social
+          ? await globalSearch({ query: global, type })
+          : await globalHomeSearch({ query: global, type })
         setResult(JSON.parse(res))
       } catch (error) {
         console.log(error)
@@ -60,30 +70,30 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
       }
     } else {
       switch (type) {
-        case 'products':
+        case 'product':
           return `/products/${id}`
-        case 'contributors':
+        case 'contributor':
           return `/contributors/${id}`
         case 'category':
-          return `/category/${id}`
+          return `/categories/${id}`
 
         default:
-          return '/social'
+          return '/'
       }
     }
   }
 
   return (
-    <div
+    <ScrollArea
       dir="rtl"
-      className="absolute left-12 z-10 mt-3 w-[90%] rounded-xl bg-slate-500 py-5 shadow-sm "
+      className="absolute left-12 z-10 mt-3 w-[90%] rounded-xl bg-black/20 dark:bg-white/30 backdrop-blur-3xl  py-5 shadow-sm"
     >
       <p className="px-5">
         <GlobalFilters
           filters={social ? GlobalSearchFilters : GlobalHomeSearchFilters}
         />
       </p>
-      <div className="my-5 h-[1px] bg-slate-400 " />
+      <div className="my-5 h-[1px] bg-muted " />
       <div className="space-y-5">
         <p className="px-5">بهترین نتایج</p>
         {isLoading ? (
@@ -92,7 +102,7 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
             <p className="animate-pulse">جست‌وجوی همه</p>
           </div>
         ) : (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 ">
             {result.length > 0 ? (
               result.map((item: any, index: number) => (
                 <Link
@@ -109,7 +119,13 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
                   />
                   <div className="flex flex-col">
                     <p className="line-clamp-1">{item.title}</p>
-                    {/* <p className="mt-1 font-bold">{item.type}</p> */}
+                    <p className="mt-1 text-muted font-bold">
+                      در{' '}
+                      {social
+                        ? translateGlobalSocialFilterType(item.type)
+                        : translateGlobalHomeSearchFiltersType(item.type)}{' '}
+                      ها
+                    </p>
                   </div>
                 </Link>
               ))
@@ -121,7 +137,7 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
           </div>
         )}
       </div>
-    </div>
+    </ScrollArea>
   )
 }
 

@@ -243,11 +243,11 @@ export const GlobalSearchFilters = [
 export const GlobalHomeSearchFilters = [
   {
     name: 'کتاب',
-    value: 'products',
+    value: 'product',
   },
   {
     name: 'نویسنده/مترجم',
-    value: 'contributors',
+    value: 'contributor',
   },
   {
     name: 'دسته‌بندی',
