@@ -13,6 +13,7 @@ import { FloatingNav } from '@/components/shared/FloatingNavbar'
 import { LuLogIn } from 'react-icons/lu'
 import GlobalSearch from '@/components/social/search/GlobalSearch'
 import { GlobalSearchDriver } from '@/components/shared/GlobalSearchDriver'
+import { Navbar as NavbarDemo } from '@/components/shared/NavbarMenuDemo'
 
 type Props = {}
 const navItems = [
@@ -46,6 +47,7 @@ async function Navbar({}: Props) {
         contributors={contributors}
         billboards={billboards}
       />
+      <NavbarDemo className="top-2" />
       <div className="relative w-full ">
         <FloatingNav navItems={navItems} />
       </div>

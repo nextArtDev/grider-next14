@@ -68,7 +68,7 @@ export function GlobalSearchDriver() {
           />
         </Button>
       </DrawerTrigger>
-      <DrawerContent className="bg-black/5 dark:bg-white/20 backdrop-blur-3xl">
+      <DrawerContent className="bg-black/5 dark:bg-white/20 backdrop-blur-sm">
         {/* <div className="mx-auto w-full max-w-sm">
           <DrawerHeader>
             <DrawerTitle>Move Goal</DrawerTitle>
