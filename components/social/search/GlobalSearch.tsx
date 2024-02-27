@@ -68,7 +68,8 @@ const GlobalSearch: FC<GlobalSearchProps> = ({ social }) => {
   return (
     <div
       ref={searchContainerRef}
-      className="relative w-full max-w-[500px] max-lg:hidden "
+      className="relative w-full max-w-[500px]"
+      // className="relative w-full max-w-[500px] max-lg:hidden "
     >
       <div className=" relative flex min-h-[56px] grow items-center gap-1 rounded-xl px-4 bg-muted ">
         <Image

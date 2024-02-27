@@ -28,7 +28,7 @@ export async function globalSearch(params: SearchParams) {
         //@ts-ignore
         const queryResults = await model.findMany({
           where: { [searchField]: regexQuery },
-          take: 8,
+          take: 3,
         })
 
         results.push(
@@ -106,7 +106,7 @@ export async function globalHomeSearch(params: SearchParams) {
         //@ts-ignore
         const queryResults = await model.findMany({
           where: { [searchField]: regexQuery },
-          take: 8,
+          take: 3,
         })
 
         results.push(

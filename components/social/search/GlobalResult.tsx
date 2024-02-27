@@ -84,9 +84,9 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
   }
 
   return (
-    <ScrollArea
+    <div
       dir="rtl"
-      className="absolute left-12 z-10 mt-3 w-[90%] rounded-xl bg-black/20 dark:bg-white/30 backdrop-blur-3xl  py-5 shadow-sm"
+      className="absolute left-0 z-10 mt-3 w-full rounded-xl bg-muted-foreground/90  backdrop-blur-3xl py-5 shadow-sm"
     >
       <p className="px-5">
         <GlobalFilters
@@ -137,7 +137,7 @@ const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
           </div>
         )}
       </div>
-    </ScrollArea>
+    </div>
   )
 }
 

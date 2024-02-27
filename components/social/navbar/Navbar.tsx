@@ -13,7 +13,7 @@ const Navbar = (props: Props) => {
   return (
     <nav
       dir="ltr"
-      className=" fixed z-50 flex w-full min-h-16 bg-primary/10 backdrop-blur-3xl items-center justify-between gap-5 border-b dark:shadow-none sm:px-12 "
+      className=" fixed z-50 flex w-full h-16 min-h-16 bg-primary/10 backdrop-blur-3xl items-center justify-between gap-5 border-b dark:shadow-none sm:px-12 "
     >
       <div className="flex items-center justify-center  space-x-4">
         <ThemeToggle />
@@ -24,7 +24,7 @@ const Navbar = (props: Props) => {
           </p>
         </Link>
       </div>
-      <div className="relative">
+      <div className="min-w-[350px]">
         <GlobalSearch social={true} />
       </div>
       <div className="flex-between gap-5">

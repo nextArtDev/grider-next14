@@ -12,6 +12,7 @@ import { HomeIcon, User } from 'lucide-react'
 import { FloatingNav } from '@/components/shared/FloatingNavbar'
 import { LuLogIn } from 'react-icons/lu'
 import GlobalSearch from '@/components/social/search/GlobalSearch'
+import { GlobalSearchDriver } from '@/components/shared/GlobalSearchDriver'
 
 type Props = {}
 const navItems = [
@@ -39,11 +40,8 @@ async function Navbar({}: Props) {
   const contributors = await getAllContributors()
   // console.log(contributors)
   return (
-    <div className="flex justify-between items-center">
+    <div className="flex w-full items-center max-h-14 ">
       <MobileMenu billboards={billboards} />
-      <div className="relative">
-        <GlobalSearch social={false} />
-      </div>
       <DesktopNavigationMenu
         contributors={contributors}
         billboards={billboards}
@@ -51,6 +49,7 @@ async function Navbar({}: Props) {
       <div className="relative w-full ">
         <FloatingNav navItems={navItems} />
       </div>
+      <GlobalSearchDriver />
       <div className=" flex gap-x-4 items-center justify-between mr-auto ml-4 ">
         <Link
           href={'/dashboard'}

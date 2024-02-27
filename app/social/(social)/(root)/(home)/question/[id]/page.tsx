@@ -24,7 +24,7 @@ import Answer from '@/components/social/forms/Answer'
 import UserAvatar from '@/components/shared/Avatar'
 type Props = {
   params: { id: string }
-  searchParams: string
+  searchParams: { [key: string]: string | undefined }
 }
 
 const page = async ({ params, searchParams }: Props) => {
@@ -130,7 +130,7 @@ const page = async ({ params, searchParams }: Props) => {
         questionId={result.question.id}
         userId={userId}
         totalAnswers={result.question.answers.length}
-        page={searchParams?.page}
+        page={searchParams?.page ? +searchParams.page : 1}
         filter={searchParams?.filter}
       />
       <Answer
