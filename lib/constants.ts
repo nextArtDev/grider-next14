@@ -240,6 +240,20 @@ export const GlobalSearchFilters = [
     value: 'tag',
   },
 ]
+export const GlobalHomeSearchFilters = [
+  {
+    name: 'کتاب',
+    value: 'products',
+  },
+  {
+    name: 'نویسنده/مترجم',
+    value: 'contributors',
+  },
+  {
+    name: 'دسته‌بندی',
+    value: 'category',
+  },
+]
 
 export const ProductPageFilters = [
   {

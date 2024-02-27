@@ -19,12 +19,12 @@ const Navbar = (props: Props) => {
         <ThemeToggle />
         <Link href={'/'} className="flex items-center gap-1">
           <Image src={SiteLogo} width={23} height={23} alt="DevFlow" />
-          <p className=" font-bold text-white/50 max-sm:hidden ">
+          <p className=" font-bold text-primary/50 max-sm:hidden ">
             Dev <span className="text-secondary">Overflow</span>{' '}
           </p>
         </Link>
       </div>
-      <GlobalSearch />
+      <GlobalSearch social={true} />
       <div className="flex-between gap-5">
         <MobileNav />
       </div>

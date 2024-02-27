@@ -5,11 +5,15 @@ import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { FC, useEffect, useState } from 'react'
 import GlobalFilters from './GlobalFilters'
+import { globalSearch } from '@/lib/actions/social/general.action'
+import { GlobalHomeSearchFilters, GlobalSearchFilters } from '@/lib/constants'
 // import { globalSearch } from '@/lib/actions/general.action'
 
-interface GlobalResultProps {}
+interface GlobalResultProps {
+  social?: boolean
+}
 
-const GlobalResult: FC<GlobalResultProps> = () => {
+const GlobalResult: FC<GlobalResultProps> = ({ social }) => {
   const searchParams = useSearchParams()
 
   const [result, setResult] = useState([
@@ -28,8 +32,8 @@ const GlobalResult: FC<GlobalResultProps> = () => {
       setIsLoading(true)
       try {
         // Everything Everywhere all at once
-        // const res = await globalSearch({ query: global, type })
-        // setResult(JSON.parse(res))
+        const res = await globalSearch({ query: global, type })
+        setResult(JSON.parse(res))
       } catch (error) {
         console.log(error)
       } finally {
@@ -40,18 +44,32 @@ const GlobalResult: FC<GlobalResultProps> = () => {
     if (global) fetchResult()
   }, [global, type])
   const renderLink = (type: string, id: string) => {
-    switch (type) {
-      case 'question':
-        return `/question/${id}`
-      case 'answer':
-        return `/question/${id}`
-      case 'user':
-        return `/profile/${id}`
-      case 'tag':
-        return `/tags/${id}`
+    if (social) {
+      switch (type) {
+        case 'question':
+          return `/social/question/${id}`
+        case 'answer':
+          return `/social/question/${id}`
+        case 'user':
+          return `/social/profile/${id}`
+        case 'tag':
+          return `/social/tags/${id}`
 
-      default:
-        return '/'
+        default:
+          return '/social'
+      }
+    } else {
+      switch (type) {
+        case 'products':
+          return `/products/${id}`
+        case 'contributors':
+          return `/contributors/${id}`
+        case 'category':
+          return `/category/${id}`
+
+        default:
+          return '/social'
+      }
     }
   }
 
@@ -61,7 +79,9 @@ const GlobalResult: FC<GlobalResultProps> = () => {
       className="absolute left-12 z-10 mt-3 w-[90%] rounded-xl bg-slate-500 py-5 shadow-sm "
     >
       <p className="px-5">
-        <GlobalFilters />
+        <GlobalFilters
+          filters={social ? GlobalSearchFilters : GlobalHomeSearchFilters}
+        />
       </p>
       <div className="my-5 h-[1px] bg-slate-400 " />
       <div className="space-y-5">

@@ -6,9 +6,11 @@ import { Input } from '@/components/ui/input'
 import { fromUrlQuery, removeKeysFromUrlQuery } from '@/lib/utils'
 import { usePathname, useSearchParams, useRouter } from 'next/navigation'
 import GlobalResult from './GlobalResult'
-interface GlobalSearchProps {}
+interface GlobalSearchProps {
+  social?: boolean
+}
 
-const GlobalSearch: FC<GlobalSearchProps> = () => {
+const GlobalSearch: FC<GlobalSearchProps> = ({ social }) => {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -90,7 +92,7 @@ const GlobalSearch: FC<GlobalSearchProps> = () => {
           className="ml-2 border-none outline-none "
         />
       </div>
-      {isOpen && <GlobalResult />}
+      {isOpen && <GlobalResult social={social} />}
     </div>
   )
 }

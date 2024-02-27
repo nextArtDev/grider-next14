@@ -7,9 +7,14 @@ import { cn } from '@/lib/utils'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { FC, useState } from 'react'
 
-interface GlobalFiltersProps {}
+interface GlobalFiltersProps {
+  filters: {
+    name: string
+    value: string
+  }[]
+}
 
-const GlobalFilters: FC<GlobalFiltersProps> = () => {
+const GlobalFilters: FC<GlobalFiltersProps> = ({ filters }) => {
   const router = useRouter()
   const searchParams = useSearchParams()
 
@@ -39,7 +44,7 @@ const GlobalFilters: FC<GlobalFiltersProps> = () => {
     <div className=" flex items-center gap-5 px-5">
       <div className="flex items-center gap-6">
         <p className="font-semibold">نوع:</p>
-        {GlobalSearchFilters.map((item) => (
+        {filters.map((item) => (
           <Button
             key={item.value}
             onClick={() => handleTypeClick(item.value)}
