@@ -120,20 +120,7 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
     const { answerId, userId, hasupVoted, hasdownVoted, path } = params
 
     let updateQuery = {}
-    // if (hasupVoted) {
-    //   updateQuery = { $pull: { upvotes: userId } }
-    // } else if (hasdownVoted) {
-    //   updateQuery = {
-    //     $pull: { downvotes: userId },
-    //     $push: { upvotes: userId },
-    //   }
-    // } else {
-    //   updateQuery = {
-    //     $addToSet: {
-    //       upvotes: userId,
-    //     },
-    //   }
-    // }
+
     if (hasupVoted) {
       updateQuery = { upvoters: { disconnect: { id: userId } } }
     } else if (hasdownVoted) {
@@ -146,20 +133,7 @@ export async function upvoteAnswer(params: AnswerVoteParams) {
         upvoters: { connect: { id: userId } },
       }
     }
-    // const answer = await Answer.findByIdAndUpdate(answerId, updateQuery, {
-    //   new: true,
-    // })
 
-    // if (!answer) {
-    //   throw new Error('Answer not Found')
-    // }
-    // // Increment authors reputation
-    // await User.findByIdAndUpdate(userId, {
-    //   $inc: { reputation: hasupVoted ? -2 : 2 },
-    // })
-    // await User.findByIdAndUpdate(answer.author, {
-    //   $inc: { reputation: hasupVoted ? -10 : 10 },
-    // })
     // Update the question to reflect the vote changes
     const answer = await prisma.answer.update({
       where: { id: answerId },

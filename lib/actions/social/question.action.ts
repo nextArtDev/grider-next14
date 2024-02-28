@@ -136,7 +136,7 @@ export async function createQuestion(params: CreateQuestionParams) {
     // Increment author's reputation by +5 for creating a question
     await prisma.user.update({
       where: { id: authorId },
-      data: { reputation: { increment: 5 } },
+      data: { reputation: { increment: 20 } },
     })
 
     revalidatePath(path)
