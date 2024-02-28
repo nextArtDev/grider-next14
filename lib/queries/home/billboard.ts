@@ -2,13 +2,14 @@ import { prisma } from '@/lib/prisma'
 import { Billboard } from '@prisma/client'
 import { cache } from 'react'
 
+export type BillboardsWithImagesAndCategories = Billboard & {
+  image: { url: string } | null
+} & {
+  categories: { id: string; name: string }[]
+}
+
 export const getBillboardsWithCategories = cache(
-  (): Promise<
-    | (Billboard & { image: { url: string } | null } & {
-        categories: { id: string; name: string }[]
-      })[]
-    | null
-  > => {
+  (): Promise<BillboardsWithImagesAndCategories[] | null> => {
     const billboards = prisma.billboard.findMany({
       where: {
         storeId: process.env.STORE_ID,

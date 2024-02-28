@@ -43,15 +43,15 @@ async function Navbar({}: Props) {
   return (
     <div className="flex w-full items-center max-h-14 ">
       <MobileMenu billboards={billboards} />
-      <DesktopNavigationMenu
+      {/* <DesktopNavigationMenu
         contributors={contributors}
         billboards={billboards}
-      />
-      <NavbarDemo className="top-2" />
+      /> */}
+      <NavbarDemo className="top-1 hidden md:block " billboards={billboards} />
       <div className="relative w-full ">
         <FloatingNav navItems={navItems} />
       </div>
-      <GlobalSearchDriver />
+
       <div className=" flex gap-x-4 items-center justify-between mr-auto ml-4 ">
         <Link
           href={'/dashboard'}
