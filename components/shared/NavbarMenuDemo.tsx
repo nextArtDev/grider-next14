@@ -7,6 +7,7 @@ import { GlobalSearchDriver } from './GlobalSearchDriver'
 import { Search } from 'lucide-react'
 import ButtonBorderMagic from './ButtonBorderMagic'
 import Link from 'next/link'
+import { buttonVariants } from '../ui/button'
 
 // export function NavbarDemo() {
 //   return (
@@ -63,10 +64,25 @@ export function Navbar({ className, billboards }: NavbarProps) {
             <HoveredLink href="/enterprise">Enterprise</HoveredLink> */}
           </div>
         </MenuItem>
-        {/* <GlobalSearchDriver /> */}
-        {/* <Link href={'social'}>
+
+        <div className="flex justify-self-end gap-x-2 mr-12 ">
+          <Link
+            href={'/dashboard'}
+            className={cn(buttonVariants({ variant: 'secondary' }), 'my-0')}
+          >
+            دشبورد
+          </Link>
+          <Link
+            href={'/social'}
+            className={cn(buttonVariants({ variant: 'destructive' }), 'my-0')}
+          >
+            شبکه اجتماعی
+          </Link>
+          {/* <GlobalSearchDriver /> */}
+          {/* <Link href={'social'}>
           <ButtonBorderMagic>شبکه اجتماعی</ButtonBorderMagic>
         </Link> */}
+        </div>
       </Menu>
     </div>
   )

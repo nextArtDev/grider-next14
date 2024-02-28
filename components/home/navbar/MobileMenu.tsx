@@ -1,5 +1,7 @@
+'use client'
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetDescription,
   SheetHeader,
@@ -7,11 +9,17 @@ import {
   SheetTrigger,
 } from '@/components/ui/sheet'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-
+import Hamburger from '@/public/assets/icons/hamburger.svg'
 import { Menu } from 'lucide-react'
 import { Button } from '../../ui/button'
 import { cn } from '@/lib/utils'
 import { Billboard } from '@prisma/client'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
+import { currentUser } from '@/lib/auth'
+import { useCurrentUser } from '@/hooks/use-current-user'
+import { homeSidebarLinks } from '@/lib/constants'
 
 const navigation = {
   categories: [
@@ -143,58 +151,47 @@ interface MobileMenuProps {
 function MobileMenu({ billboards }: MobileMenuProps) {
   // console.log(billboards.map((bi) => bi.categories))
   // console.log(billboards)
+  const user = useCurrentUser()
+
   return (
     <div className="md:hidden z-50">
       <Sheet>
-        <SheetTrigger asChild className="m-2">
-          <Button className="" variant={'ghost'}>
-            <Menu />
-          </Button>
+        <SheetTrigger asChild>
+          <Image
+            src={Hamburger}
+            alt="menu"
+            width={36}
+            height={36}
+            className="cursor-pointer p-1 m-1 md:hidden invert dark:invert-0 "
+          />
         </SheetTrigger>
-        <SheetContent>
-          {/* <SheetHeader>
-            <SheetTitle>Are you absolutely sure?</SheetTitle>
-            <SheetDescription>
-              This action cannot be undone. This will permanently delete your
-              account and remove your data from our servers.
-            </SheetDescription>
-          </SheetHeader> */}
-          <Tabs dir="rtl" defaultValue="men" className="w-full  ">
-            <TabsList
-              // key={billboard.label}
-              className="mt-4 flex justify-around w-full "
-            >
-              {billboards?.map((billboard) => (
-                <TabsTrigger
-                  value={billboard.label}
-                  key={billboard.label}
-                  className={
-                    cn()
-                    //   'flex-1 whitespace-nowrap border-b-2 px-1 py-4 text-base font-medium'
-                    // selected
-                    //   ? 'border-indigo-600 text-indigo-600'
-                    //   : 'border-transparent text-gray-900',
-                  }
-                >
-                  {billboard.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+        <SheetContent side={'right'} className="">
+          <Link href={'/'} className="flex items-center gap-1">
+            {/* <Image src={SiteLogo} width={23} height={23} alt="DevFlow" /> */}
+            <p className="font-bold text-secondary">
+              Dev <span className="text-primary">Overflow</span>{' '}
+            </p>
+          </Link>
+          <div>
+            <SheetClose asChild>
+              <NavContent />
+            </SheetClose>
 
-            {billboards?.map((billboard) => {
-              return billboard.categories.map((category) => (
-                <TabsContent
-                  key={category.id}
-                  value={billboard.label}
-                  className=""
-                >
-                  <div key={category.id} className="w-full">
-                    {category.name}
-                  </div>
-                </TabsContent>
-              ))
-            })}
-          </Tabs>
+            {!user?.id && !user?.isVerified && (
+              <div className="flex flex-col gap-3 mt-4 ">
+                <SheetClose asChild>
+                  <Link href={'/login'}>
+                    <Button
+                      variant={'destructive'}
+                      className="w-full px-4 py-3 "
+                    >
+                      <span>ورود</span>
+                    </Button>
+                  </Link>
+                </SheetClose>
+              </div>
+            )}
+          </div>
         </SheetContent>
       </Sheet>
     </div>
@@ -202,3 +199,41 @@ function MobileMenu({ billboards }: MobileMenuProps) {
 }
 
 export default MobileMenu
+
+const NavContent = () => {
+  const pathname = usePathname()
+
+  return (
+    <section className=" flex h-full flex-col gap-6 pt-14  ">
+      {homeSidebarLinks.map((item) => {
+        const isActive =
+          // (pathname.includes(item.route) && item.route.length > 1) ||
+          pathname === item.route
+        return (
+          <SheetClose asChild key={item.route}>
+            <Link
+              href={item.route}
+              className={`flex items-center justify-start gap-4 rounded-lg p-4 ${
+                isActive
+                  ? 'rounded-lg bg-muted-foreground text-muted font-semibold '
+                  : 'bg-muted text-muted-foreground '
+              }`}
+            >
+              <Image
+                src={item.imgURL}
+                alt={item.label}
+                width={20}
+                height={20}
+                style={{ transform: 'rotateY(180deg)' }}
+                className={`${
+                  isActive ? 'invert-0 dark:invert' : 'invert dark:invert-0'
+                }`}
+              />
+              <p className={`${isActive ? 'font-bold' : ''}`}>{item.label}</p>
+            </Link>
+          </SheetClose>
+        )
+      })}
+    </section>
+  )
+}

@@ -41,26 +41,21 @@ async function Navbar({}: Props) {
   const contributors = await getAllContributors()
   // console.log(contributors)
   return (
-    <div className="flex w-full items-center max-h-14 ">
+    <div className="flex w-full items-center  ">
       <MobileMenu billboards={billboards} />
       {/* <DesktopNavigationMenu
         contributors={contributors}
         billboards={billboards}
       /> */}
       <NavbarDemo className="top-1 hidden md:block " billboards={billboards} />
-      <div className="relative w-full ">
+      <div className="relative w-full max-h-14">
         <FloatingNav navItems={navItems} />
       </div>
 
-      <div className=" flex gap-x-4 items-center justify-between mr-auto ml-4 ">
-        <Link
-          href={'/dashboard'}
-          className={cn(buttonVariants({ variant: 'outline' }))}
-        >
-          دشبورد
-        </Link>
-        {/* <ThemeToggle /> */}
-      </div>
+      {/* <div className=" flex gap-x-4 items-center justify-between mr-auto ml-4 ">
+
+      </div> */}
+      {/* <ThemeToggle /> */}
     </div>
   )
 }

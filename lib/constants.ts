@@ -296,3 +296,41 @@ export const WebsiteSearchFilters = [
     value: 'publisher',
   },
 ]
+
+export const homeSidebarLinks: SidebarLink[] = [
+  {
+    imgURL: '/assets/icons/home.svg',
+    route: '/',
+    label: 'خانه',
+  },
+  {
+    imgURL: '/assets/icons/users.svg',
+    route: '/products',
+    label: 'کتاب‌ها',
+  },
+  {
+    imgURL: '/assets/icons/star.svg',
+    route: '/categories',
+    label: 'دسته‌بندی‌ها',
+  },
+  {
+    imgURL: '/assets/icons/suitcase.svg',
+    route: '/billboards',
+    label: 'گروه‌ها',
+  },
+  {
+    imgURL: '/assets/icons/tag.svg',
+    route: '/about-us',
+    label: 'درباره ما',
+  },
+  {
+    imgURL: '/assets/icons/user.svg',
+    route: '/connect-us',
+    label: 'ارتباط با ما',
+  },
+  // {
+  //   imgURL: '/assets/icons/question.svg',
+  //   route: '/social/ask-question',
+  //   label: 'سوال پرسیدن',
+  // },
+]
