@@ -10,9 +10,11 @@ import { User } from '@prisma/client'
 import Image from 'next/image'
 import { FC, useEffect, useState } from 'react'
 import NoPic from '../../../public/images/no-profile.webp'
+import RateStar from '../RateStar'
 
 interface ContributorProfileProps {
   contributor: ContributorFullStructure
+  rate: number | null
   user: (User & { image: { url: string } | null }) | null
   beforeRated?: {
     rating: number
@@ -21,6 +23,7 @@ interface ContributorProfileProps {
 
 const ContributorProfile: FC<ContributorProfileProps> = ({
   contributor,
+  rate,
   beforeRated,
   user,
 }) => {
@@ -56,7 +59,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
     return null
   }
   return (
-    <section className="flex flex-col">
+    <section className="pt-12 flex flex-col">
       <div className="p-4 max-w-7xl flex items-center justify-evenly flex-col md:flex-row gap-4">
         {/* <BackgroundGradient className="w-[250px] h-[250px] rounded-[22px] max-w-sm">
         <Image
@@ -67,14 +70,19 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
           className="object-contain"
         />
       </BackgroundGradient> */}
-        <Card className="relative flex-shrink-0 w-80 h-80 overflow-hidden ">
-          <Image
-            fill
-            src={contributor.image?.url || NoPic.src}
-            alt={contributor.name}
-            className="object-cover"
-          />
-        </Card>
+        <div className="flex flex-col gap-2">
+          <Card className="relative py-4  flex-shrink-0 w-80 h-80 overflow-hidden ">
+            <Image
+              fill
+              src={contributor.image?.url || NoPic.src}
+              alt={contributor.name}
+              className="object-cover"
+            />
+          </Card>
+          {contributor.Reviews.length > 0 && rate && (
+            <RateStar rate={rate} reviewCounts={contributor.Reviews.length} />
+          )}
+        </div>
         <div className="">
           <span>
             {' '}

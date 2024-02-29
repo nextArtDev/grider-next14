@@ -18,6 +18,7 @@ const RateStar: FC<RateStarProps> = ({ rate, reviewCounts, className }) => {
       )}
     >
       <Rating
+        dir="ltr"
         value={rate}
         readOnly
         precision={0.5}

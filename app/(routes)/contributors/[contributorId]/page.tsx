@@ -13,13 +13,13 @@ interface pageProps {
 
 const page: FC<pageProps> = async ({ params: { contributorId } }) => {
   const contributor = await getContributorById({ id: contributorId })
-  if (!contributor) return notFound()
+  if (!contributor.contributor) return notFound()
 
   const user = await currentUser()
   const beforeRated = await prisma.review.findFirst({
     where: {
       userId: user?.id,
-      contributorId: contributor.id,
+      contributorId: contributor.contributor.id,
     },
     select: {
       rating: true,
@@ -35,11 +35,12 @@ const page: FC<pageProps> = async ({ params: { contributorId } }) => {
   return (
     <div>
       <ContributorProfile
-        contributor={contributor}
+        contributor={contributor.contributor}
         user={userWithPic}
         beforeRated={beforeRated}
+        rate={contributor.rate}
       />
-      <RelatedProducts contributor={contributor} />
+      <RelatedProducts contributor={contributor.contributor} />
     </div>
   )
 }

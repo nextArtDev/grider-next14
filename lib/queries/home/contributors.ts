@@ -136,9 +136,13 @@ export type ContributorFullStructure = ContributorWithImage & {
   illustrator: ProductWithImages[]
   Reviews: ReviewsWithUserAndImage[]
 }
+export type ContributorWithRatingAndPicture = {
+  contributor: ContributorFullStructure | null
+  rate: number | null
+}
 export const getContributorById = cache(
-  ({ id }: { id: string }): Promise<ContributorFullStructure | null> => {
-    const contributor = prisma.contributor.findFirst({
+  async ({ id }: { id: string }): Promise<ContributorWithRatingAndPicture> => {
+    const contributor = await prisma.contributor.findFirst({
       where: {
         storeId: process.env.STORE_ID,
         id,
@@ -158,7 +162,17 @@ export const getContributorById = cache(
         name: 'asc',
       },
     })
+    const productAverageRating = await prisma.review.aggregate({
+      where: {
+        storeId: process.env.STORE_ID,
+        contributorId: id,
+      },
+      _avg: {
+        rating: true,
+      },
+    })
+    // console.log(productAverageRating._avg.rating)
 
-    return contributor
+    return { contributor, rate: productAverageRating._avg.rating }
   }
 )

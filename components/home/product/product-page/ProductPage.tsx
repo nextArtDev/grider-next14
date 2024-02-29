@@ -1,4 +1,3 @@
-'use client'
 import FlipCover from '@/components/home/product/3d-cover/FlipCover'
 import { SingleProductFullStructure } from '@/lib/queries/home/products'
 import { cn, formatter } from '@/lib/utils'
