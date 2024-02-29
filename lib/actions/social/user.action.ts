@@ -16,11 +16,7 @@ import { prisma } from '@/lib/prisma'
 
 export async function getUserByID(params: any) {
   try {
-    // connectToDatabase()
-
     const { userId } = params
-
-    // const user = await User.findOne({ userId })
 
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -41,8 +37,6 @@ export async function getUserByID(params: any) {
 }
 export async function getAllUsers(params: GetAllUsersParams) {
   try {
-    // connectToDatabase()
-
     const { page = 1, pageSize = 20, filter, searchQuery } = params
     const skipAmount = (page - 1) * pageSize
 
@@ -65,25 +59,14 @@ export async function getAllUsers(params: GetAllUsersParams) {
         break
     }
 
-    // const query: FilterQuery<typeof User> = {}
     const query: any = {}
 
-    // if (searchQuery) {
-    //   query.$or = [
-    //     { title: { $regex: new RegExp(searchQuery, 'i') } },
-    //     { username: { $regex: new RegExp(searchQuery, 'i') } },
-    //   ]
-    // }
     if (searchQuery) {
       query.OR = [
         { name: { contains: searchQuery } },
         { phone: { contains: searchQuery } },
       ]
     }
-    // const users = await User.find(query)
-    //   .skip(skipAmount)
-    //   .limit(pageSize)
-    //   .sort(sortOptions)
 
     const users = await prisma.user.findMany({
       where: query,
@@ -219,8 +202,6 @@ export async function getSavedQuestions(params: GetSavedQuestionsParams) {
 }
 export async function getUserInfo(params: GetUserByIdParams) {
   try {
-    // connectToDatabase()
-
     const { userId } = params
 
     const user = await prisma.user.findUnique({
