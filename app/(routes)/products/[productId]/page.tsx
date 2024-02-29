@@ -17,13 +17,13 @@ interface pageProps {
 const page: FC<pageProps> = async ({ params: { productId } }) => {
   const product = await getProductById({ id: productId })
 
-  if (!product) return notFound()
+  if (!product.product) return notFound()
 
   const user = await currentUser()
   const beforeRated = await prisma.review.findFirst({
     where: {
       userId: user?.id,
-      productId: product.id,
+      productId: product.product.id,
     },
     select: {
       rating: true,
@@ -32,7 +32,7 @@ const page: FC<pageProps> = async ({ params: { productId } }) => {
 
   const relatedBooks = await getProductsByCategoryId({
     id: productId,
-    categoryId: product.categoryId,
+    categoryId: product.product.categoryId,
   })
 
   const userWithPic = await prisma.user.findFirst({
@@ -43,11 +43,14 @@ const page: FC<pageProps> = async ({ params: { productId } }) => {
   return (
     <section className="flex flex-col">
       <ProductPage
-        product={product}
+        product={product.product}
         user={userWithPic}
         beforeRated={beforeRated}
+        rate={product.rate}
       />
-      {product.description && <AboutBook description={product.description} />}
+      {product?.product.description && (
+        <AboutBook description={product?.product.description} />
+      )}
       <RelatedBooks products={relatedBooks} />
     </section>
   )

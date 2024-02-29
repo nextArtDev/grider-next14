@@ -157,10 +157,14 @@ export type SingleProductFullStructure = ProductWithImages & {
   category: Category
   Reviews: ReviewsWithUserAndImage[]
 }
+export type ProductWithRatingAndPicture = {
+  product: SingleProductFullStructure | null
+  rate: number | null
+}
 
 export const getProductById = cache(
-  ({ id }: { id: string }): Promise<SingleProductFullStructure | null> => {
-    const product = prisma.product.findFirst({
+  async ({ id }: { id: string }): Promise<ProductWithRatingAndPicture> => {
+    const product = await prisma.product.findFirst({
       where: {
         storeId: process.env.STORE_ID,
         id,
@@ -176,8 +180,17 @@ export const getProductById = cache(
         },
       },
     })
-
-    return product
+    const productAverageRating = await prisma.review.aggregate({
+      where: {
+        storeId: process.env.STORE_ID,
+        productId: id,
+      },
+      _avg: {
+        rating: true,
+      },
+    })
+    // console.log(productAverageRating._avg.rating)
+    return { product, rate: productAverageRating._avg.rating }
   }
 )
 
