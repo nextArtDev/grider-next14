@@ -74,7 +74,7 @@ const MobileNav: FC<MobileNavProps> = () => {
           <Link href={'/'} className="flex items-center gap-1">
             <Image src={SiteLogo} width={23} height={23} alt="DevFlow" />
             <p className="font-bold text-secondary">
-              Dev <span className="text-primary">Overflow</span>{' '}
+              کتاب <span className="text-primary">فردا</span>{' '}
             </p>
           </Link>
           <div>
