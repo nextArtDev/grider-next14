@@ -10,12 +10,14 @@ import { Badge } from '@/components/ui/badge'
 import Currency from '@/components/shared/Currency'
 import { Button } from '@/components/ui/button'
 import AddToCart from '@/components/home/product/AddToCart'
+import RateStar from '@/components/home/RateStar'
 
 interface pageProps {
+  rate: number | null
   product: SingleProductFullStructure
 }
 
-const ProductDialog: FC<pageProps> = ({ product }) => {
+const ProductDialog: FC<pageProps> = ({ product, rate }) => {
   const router = useRouter()
   const onDismiss = () => {
     router.back()
@@ -36,6 +38,9 @@ const ProductDialog: FC<pageProps> = ({ product }) => {
             <p className="text-sm text-muted-foreground font-semibold md:text-base ">
               {product.subTitle}
             </p>
+            {product.Reviews.length > 0 && rate && (
+              <RateStar rate={rate} reviewCounts={product.Reviews.length} />
+            )}
             <div className="flex items-center gap-4">
               <p>نویسنده:</p>
               {product.writer.map((writer) => (

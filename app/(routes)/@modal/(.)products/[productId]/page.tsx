@@ -11,11 +11,11 @@ const InterceptingProduct: FC<pageProps> = async ({
   params: { productId },
 }) => {
   const product = await getProductById({ id: productId })
-  if (!product) return notFound()
+  if (!product.product) return notFound()
 
   return (
     <div>
-      <ProductDialog product={product} />
+      <ProductDialog product={product.product} rate={product.rate} />
     </div>
   )
 }

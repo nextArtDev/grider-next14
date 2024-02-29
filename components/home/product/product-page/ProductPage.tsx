@@ -51,7 +51,7 @@ const ProductPage: FC<ProductPageProps> = ({
           </p>
           <div className="flex items-center gap-2">
             <p>نویسنده:</p>
-            {product?.writer?.map((writer) => (
+            {product?.writer.map((writer) => (
               <Link href={`/contributors/${writer.id}`} key={writer.id}>
                 <Badge className="px-6 ml-6 text-base ">{writer.name}</Badge>
               </Link>

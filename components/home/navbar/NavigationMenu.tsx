@@ -15,7 +15,7 @@ import {
   navigationMenuTriggerStyle,
 } from '@/components/ui/navigation-menu'
 import { Billboard, Contributor, Product } from '@prisma/client'
-import { ShoppingBasket } from 'lucide-react'
+import { ShoppingBasket, ShoppingCart } from 'lucide-react'
 import { AppDispatch, useAppSelector } from '@/redux/store'
 import { useCartStore } from '@/store'
 const components: { title: string; href: string; description: string }[] = [
@@ -141,8 +141,9 @@ export function DesktopNavigationMenu({
                 'relative flex items-center space-x-2'
               )}
             >
-              <ShoppingBasket size={20} />
+              {/* <ShoppingBasket size={20} /> */}
               {/* <p>{total}</p> */}
+              <ShoppingCart size={20} />
               <p className="text-rose-500 absolute -top-1 right-[35%] border rounded-full border-rose-400 text-center dark:border-rose-300 w-[16px] h-[16px] ">
                 {cart.length}
               </p>

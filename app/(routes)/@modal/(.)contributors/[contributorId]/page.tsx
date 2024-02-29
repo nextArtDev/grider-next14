@@ -12,11 +12,14 @@ const InterceptingContributor: FC<pageProps> = async ({
 }) => {
   const contributor = await getContributorById({ id: contributorId })
 
-  if (!contributor) return notFound()
+  if (!contributor.contributor) return notFound()
 
   return (
     <div>
-      <ContributorDrawer contributor={contributor} />
+      <ContributorDrawer
+        contributor={contributor.contributor}
+        rate={contributor.rate}
+      />
     </div>
   )
 }

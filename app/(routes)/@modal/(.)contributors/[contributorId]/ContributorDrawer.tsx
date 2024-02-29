@@ -9,10 +9,11 @@ import { ContributorFullStructure } from '@/lib/queries/home/contributors'
 import { useRouter } from 'next/navigation'
 
 interface pageProps {
+  rate: number | null
   contributor: ContributorFullStructure
 }
 
-const ContributorDrawer: FC<pageProps> = ({ contributor }) => {
+const ContributorDrawer: FC<pageProps> = ({ contributor, rate }) => {
   const router = useRouter()
   const onDismiss = () => {
     router.back()
@@ -29,7 +30,11 @@ const ContributorDrawer: FC<pageProps> = ({ contributor }) => {
       >
         <ScrollArea className="max-h-[80vh]">
           <DrawerContent className=" ">
-            <ContributorProfile contributor={contributor} user={null} />
+            <ContributorProfile
+              rate={rate}
+              contributor={contributor}
+              user={null}
+            />
             {/* <RelatedProducts contributor={contributor} /> */}
             <Button
               className="mb-4 w-1/2 mx-auto "

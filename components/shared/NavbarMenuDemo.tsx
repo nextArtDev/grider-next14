@@ -1,13 +1,14 @@
 'use client'
-import { cn } from '@/lib/utils'
+import { cn, getCartTotal } from '@/lib/utils'
 import React, { useState } from 'react'
 import { HoveredLink, Menu, MenuItem, ProductItem } from './NavbarMenu'
 import { BillboardsWithImagesAndCategories } from '@/lib/queries/home/billboard'
 import { GlobalSearchDriver } from './GlobalSearchDriver'
-import { Search } from 'lucide-react'
+import { Search, ShoppingCart } from 'lucide-react'
 import ButtonBorderMagic from './ButtonBorderMagic'
 import Link from 'next/link'
 import { buttonVariants } from '../ui/button'
+import { useCartStore } from '@/store'
 
 // export function NavbarDemo() {
 //   return (
@@ -25,6 +26,9 @@ interface NavbarProps {
 }
 export function Navbar({ className, billboards }: NavbarProps) {
   const [active, setActive] = useState<string | null>(null)
+  const cart = useCartStore((state) => state.cart)
+
+  const total = getCartTotal(cart)
   return (
     <div
       className={cn('fixed top-10 inset-x-0 max-w-2xl mx-auto z-50', className)}
@@ -66,6 +70,12 @@ export function Navbar({ className, billboards }: NavbarProps) {
         </MenuItem>
 
         <div className="flex justify-self-end gap-x-2 mr-12 ">
+          <Link href="/cart" className="relative flex items-center space-x-2">
+            <ShoppingCart size={30} className="mt-2" />
+            <p className="text-rose-500 absolute top-0 right-1.5 rounded-full text-center dark:border-rose-300 ">
+              {cart.length}
+            </p>
+          </Link>
           <Link
             href={'/dashboard'}
             className={cn(buttonVariants({ variant: 'secondary' }), 'my-0')}
