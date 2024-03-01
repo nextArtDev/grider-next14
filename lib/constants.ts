@@ -304,12 +304,17 @@ export const homeSidebarLinks: SidebarLink[] = [
     label: 'خانه',
   },
   {
-    imgURL: '/assets/icons/users.svg',
+    imgURL: '/assets/icons/social.svg',
+    route: '/socisl',
+    label: 'شبکه اجتماعی',
+  },
+  {
+    imgURL: '/assets/icons/book.svg',
     route: '/products',
     label: 'کتاب‌ها',
   },
   {
-    imgURL: '/assets/icons/star.svg',
+    imgURL: '/assets/icons/category.svg',
     route: '/categories',
     label: 'دسته‌بندی‌ها',
   },
@@ -319,18 +324,18 @@ export const homeSidebarLinks: SidebarLink[] = [
     label: 'گروه‌ها',
   },
   {
-    imgURL: '/assets/icons/tag.svg',
+    imgURL: '/assets/icons/location.svg',
     route: '/about-us',
     label: 'درباره ما',
   },
   {
-    imgURL: '/assets/icons/user.svg',
+    imgURL: '/assets/icons/contact.svg',
     route: '/connect-us',
     label: 'ارتباط با ما',
   },
-  // {
-  //   imgURL: '/assets/icons/question.svg',
-  //   route: '/social/ask-question',
-  //   label: 'سوال پرسیدن',
-  // },
+  {
+    imgURL: '/assets/icons/question.svg',
+    route: '/dashboard',
+    label: 'داشبورد',
+  },
 ]

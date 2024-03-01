@@ -15,6 +15,7 @@ import RateStar from '../RateStar'
 interface ContributorProfileProps {
   contributor: ContributorFullStructure
   rate: number | null
+  drawer?: boolean
   user: (User & { image: { url: string } | null }) | null
   beforeRated?: {
     rating: number
@@ -26,6 +27,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
   rate,
   beforeRated,
   user,
+  drawer,
 }) => {
   // const splitedName = contributor.name.split(' ').map((word,i)=>
   // return []
@@ -116,7 +118,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
       </LampContainer> */}
       </div>
       <Separator />
-      {!beforeRated && (
+      {!beforeRated && !drawer && (
         <div className="py-12 px-4 ">
           <h2 className="text-xl font-semibold">
             نظر خود راجع به {contributor.name} را ثبت کنید.
@@ -128,7 +130,7 @@ const ContributorProfile: FC<ContributorProfileProps> = ({
           />
         </div>
       )}
-      <ListRating reviews={contributor.Reviews} />
+      {!drawer && <ListRating reviews={contributor.Reviews} />}
     </section>
   )
 }

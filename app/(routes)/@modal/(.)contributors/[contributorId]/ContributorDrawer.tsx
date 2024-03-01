@@ -34,6 +34,7 @@ const ContributorDrawer: FC<pageProps> = ({ contributor, rate }) => {
               rate={rate}
               contributor={contributor}
               user={null}
+              drawer={true}
             />
             {/* <RelatedProducts contributor={contributor} /> */}
             <Button
