@@ -3,15 +3,13 @@ import { ReactNode } from 'react'
 
 export default function Template({ children }: { children: ReactNode }) {
   return (
-    // <MotionDiv
-    //   className="overflow-hidden"
-    //   initial={{ x: '100%', opacity: 0 }}
-    //   animate={{ x: 0, opacity: 1 }}
-    //   transition={{ type: 'spring', duration: 1 }}
-
-    // >
-    <div>{children}</div>
-
-    // </MotionDiv>
+    <MotionDiv
+      className=""
+      initial={{ y: '-50%', opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ type: 'spring', duration: 1 }}
+    >
+      <div>{children}</div>
+    </MotionDiv>
   )
 }
